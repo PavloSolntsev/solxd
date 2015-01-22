@@ -15,3 +15,19 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
 
 
 }
+
+Cell Unitcell::cell(Unitcell::SpaceType type)
+{
+    switch(type)
+    {
+        case DIRECTSPACE:
+            return _direc_cell;
+        case RESIPROCAL:
+            return _rp_cell;
+    }
+}
+
+double Unitcell::volume()
+{
+    return
+}

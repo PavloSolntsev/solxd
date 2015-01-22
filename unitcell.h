@@ -1,61 +1,64 @@
 #ifndef UNITCELL_H
 #define UNITCELL_H
 
+class Cell{
+public:
+    Cell():a(1),b(1),c(1),alpha(90),beta(90),gama(90){}
+
+    double a()const{return _a;}
+    double b()const{return _b;}
+    double c()const{return _c;}
+
+    double alpha()const{return _alpha;}
+    double beta()const{return _beta;}
+    double gama()const{return _gama;}
+
+
+private:
+    double _a;
+    double _b;
+    double _c;
+    double _alpha;
+    double _beta;
+    double _gama;
+};
+
+
+
 class Unitcell
 {
 public:
     enum CellType{
-        Primitive,
-        Acentered,
-        Bcentered,
-        Ccentered,
-        Icentered,
-        Fcentered,
-        Hexahonal,
-        Trihonal,
-        Rhombohydral
+        PRIMITIVE,
+        ACEMTERED,
+        BCENTERED,
+        CCENTERED,
+        ICENTERED,
+        FCENTERED,
+        HEXAGONAL,
+        TRIGONAL,
+        RHOMBOHIDRAL
     };
     enum SpaceType{
-        DirectSpace,
-        ReciprocalSpace
+        DIRECTSPACE,
+        RESIPROCAL
     };
 
     Unitcell(double acell, double bcell, double ccell, double alphacell, double betacell, double gammacell, CellType type = Primitive);
 
-    inline double a(void)const{return _acell;}
-    inline double b(void)const{return _bcell;}
-    inline double c(void)const{return _ccell;}
-    inline double alpha(void)const{return _alpha;}
-    inline double beta(void)const{return _beta;}
-    inline double gama(void)const{return _gama;}
-
-    inline double arp(void)const{return _arpcell;}
-    inline double brp(void)const{return _brpcell;}
-    inline double crp(void)const{return _crpcell;}
-    inline double alpharp(void)const{return _alpharp;}
-    inline double betarp(void)const{return _betarp;}
-    inline double gamarp(void)const{return _gamarp;}
-
+    Cell cell(SpaceType type = DIRECTSPACE);
+    double volume(void);
 
     inline CellType Brave(void)const{return _type;}
+
+
 private:
 // Direct Space constants
-    double _acell;
-    double _bcell;
-    double _ccell;
-    double _alpha;
-    double _beta;
-    double _gama;
-
+    Cell _direc_cell;
 
 //Reci[rocal space constants
-    double _arpcell;
-    double _brpcell;
-    double _crpcell;
-    double _alpharp;
-    double _betarp;
-    double _gamarp;
-
+    Cell _rp_cell;
+// Cell type
     CellType _type;
 };
 
