@@ -6,33 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>659</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>29</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
+   <addaction name="actionIndex_Files"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionIndex_Files">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/index.png</normaloff>
+     <normalon>:/icons/icons/index.png</normalon>icons/index.png</iconset>
+   </property>
+   <property name="text">
+    <string>Index Files</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

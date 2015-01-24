@@ -15,10 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     crystfile.cpp \
-    unitcell.cpp
+    unitcell.cpp \
+    settings.cpp
 
 HEADERS  += mainwindow.h \
     crystfile.h \
-    unitcell.h
+    unitcell.h \
+    settings.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settings.ui
+
+RESOURCES += \
+    icons.qrc
