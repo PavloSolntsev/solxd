@@ -18,6 +18,7 @@ public:
 
 public slots:
     void indexDatabase();
+    void runSettings();
     
 private:
     Ui::MainWindow *ui;

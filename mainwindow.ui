@@ -22,6 +22,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionIndex_Files"/>
+   <addaction name="actionSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionIndex_Files">
@@ -37,8 +38,22 @@
     <string>Ctrl+I</string>
    </property>
   </action>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/settings.png</normaloff>:/icons/icons/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

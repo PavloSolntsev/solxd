@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
+    connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     dia = NULL;
 }
 
@@ -20,8 +21,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::indexDatabase()
 {
-    dia = new Settings();
-    dia->show();
     std::cout << "Hello World!" << std::endl;
 
+}
+
+void MainWindow::runSettings()
+{
+    dia = new Settings();
+    dia->show();
 }
