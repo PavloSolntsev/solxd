@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -108,62 +108,6 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout4">
-      <item>
-       <widget class="QLabel" name="labelPath4">
-        <property name="text">
-         <string>Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineeditPath4"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonAdd4">
-        <property name="text">
-         <string>Add</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonDelete4">
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout5">
-      <item>
-       <widget class="QLabel" name="labelPath5">
-        <property name="text">
-         <string>Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEditPath"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonAdd5">
-        <property name="text">
-         <string>Add</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonDelete5">
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="horizontalLayout6">
       <item>
        <widget class="QPushButton" name="pushButtonOk">
@@ -185,45 +129,14 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButtonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>Settings</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>453</x>
-     <y>305</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>167</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonAdd1</sender>
-   <signal>clicked()</signal>
-   <receiver>Settings</receiver>
-   <slot>addPath1()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>459</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>605</x>
-     <y>54</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>addPath1()</slot>
   <slot>addPath2()</slot>
   <slot>addPath3()</slot>
   <slot>addPath4()</slot>
   <slot>addPath5()</slot>
+  <slot>ok_button_clicked()</slot>
+  <slot>deletePath1()</slot>
  </slots>
 </ui>

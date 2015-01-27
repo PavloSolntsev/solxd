@@ -21,7 +21,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     crystfile.h \
     unitcell.h \
-    settings.h
+    settings.h \
+    solXd.h
 
 FORMS    += mainwindow.ui \
     settings.ui
