@@ -14,19 +14,27 @@ class Settings : public QWidget
 {
     Q_OBJECT
     
+    struct PathLabel{
+        QString path;
+        QString label;
+    };
 public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
     void sync();
+    QString dbpath(void)const{return pathDB;}
+    QStringList indexpath(void)const{return listpath;}
 
 public slots:
     void addPath1();
     void addPath2();
     void addPath3();
+    void addDBPath();
 
     void deletePath1();
     void deletePath2();
     void deletePath3();
+    void deleteDBPath();
 
     void ok_button_clicked();
     
@@ -37,6 +45,9 @@ private:
     QString path1;
     QString path2;
     QString path3;
+    QString pathDB;
+
+    QStringList listpath;
 
 };
 
