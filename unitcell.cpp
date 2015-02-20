@@ -5,13 +5,14 @@
 #define RAD2DEG(x) x*180/M_PI
 #define DEG2RAD(x) x*M_PI/180
 
-Cell::Cell(double acell, double bcell, double ccell, double alphacell, double betacell, double gamacell):
+Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, double betacell, double gamacell,CellType type):
     _a(acell),
     _b(bcell),
     _c(ccell),
     _alpha(alphacell),
     _beta(betacell),
-    _gama(gamacell)
+    _gama(gamacell),
+    _type(type)
 {
     alcos = cos(RAD2DEG(_alpha));
     becos = cos(RAD2DEG(_beta));
@@ -25,8 +26,7 @@ Cell::Cell(double acell, double bcell, double ccell, double alphacell, double be
     _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
 }
 
-
-Cell Cell::reciprocal()
+const Unitcell &Unitcell::reciprocal()
 {
     double ra = _b*_c*alsin/_volume;
     double rb = _a*_c*besin/_volume;
@@ -36,17 +36,13 @@ Cell Cell::reciprocal()
     double rbecos = (alcos*gacos-becos)/(alsin*gasin);
     double rgacos = (alcos*becos-gacos)/(alsin*besin);
 
-    return Cell(ra,rb,rc,RAD2DEG(acos(ralcos)),RAD2DEG(acos(rbecos)),RAD2DEG(acos(rgacos)));
+    return Unitcell(ra,rb,rc,RAD2DEG(acos(ralcos)),RAD2DEG(acos(rbecos)),RAD2DEG(acos(rgacos)));
 }
 
-
-
-Unitcell::Unitcell()
-{
-}
-
+/*
 Unitcell::Unitcell(Cell &cell, Unitcell::CellType type):
     Cell(cell),
     _type(type)
 {
 }
+*/

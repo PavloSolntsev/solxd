@@ -2,8 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QDirIterator>
 #include <QDebug>
-
 #include <iostream>
+#include "crystfile.h"
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,6 +22,7 @@ MainWindow::~MainWindow()
     delete dia;
 }
 
+
 void MainWindow::indexDatabase()
 {
 // Read database folder path
@@ -34,37 +36,58 @@ void MainWindow::indexDatabase()
     delete set;
     int row;
 
+    QMap<QString,FileType> filetypemap;
+
+    filetypemap["ins"] = INS;
+    filetypemap["res"] = RES;
+    filetypemap["cis"] = CIF;
+
+    QList<Crystfile> database;
+
+    ui->listWidget->clear();
+
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
+
     for(QStringList::Iterator it=searchfolders.begin();it!=searchfolders.end();it++)
     {
         QDirIterator dirIt(*it,QDirIterator::Subdirectories);
         while (dirIt.hasNext()) {
             dirIt.next();
-            if (QFileInfo(dirIt.filePath()).isFile())
-            {
-                if (QFileInfo(dirIt.filePath()).suffix() == "res")
-                {
-                    searchresults.append(dirIt.filePath());
-                    ui->listWidget->insertItem(row++,dirIt.filePath());
-                }
-                if (QFileInfo(dirIt.filePath()).suffix() == "ins")
-                {
-                    searchresults.append(dirIt.filePath());
-                    ui->listWidget->insertItem(row++,dirIt.filePath());
-                }
-                if (QFileInfo(dirIt.filePath()).suffix() == "cif")
-                {
-                    searchresults.append(dirIt.filePath());
-                    ui->listWidget->insertItem(row++,dirIt.filePath());
-                }
 
+            if (dirIt.fileInfo().isFile())
+              {
+//                qDebug() << dirIt.next();
+                QString suffix = dirIt.fileInfo().suffix().toLower();
 
+                if (suffix == "ins" || suffix == "res" || suffix == "cif")
+                {
+                    database.push_back(Crystfile(filetypemap[suffix],dirIt.filePath()));
+                    searchresults.append(dirIt.filePath());
+//                    ui->listWidget->insertItem(row++,dirIt.filePath());
+                    ui->listWidget->addItem(dirIt.filePath());
+                }
             }
-        }
-    }
+        } // end while
+    } // end for loop
+
+
 }
 
 void MainWindow::runSettings()
 {
     dia = new Settings();
     dia->show();
+}
+
+void MainWindow::openfile(QListWidgetItem *iteam)
+{
+    qDebug() << "open file function is working ok";
+    qDebug() << iteam->text();
+
+    QString program = "/home/pavlo/bin/mercury";
+    QStringList arguments;
+    arguments << iteam->text();
+
+    QProcess *myProcess = new QProcess(this);
+    myProcess->start(program, arguments);
 }
