@@ -34,7 +34,7 @@ void MainWindow::indexDatabase()
     QStringList searchresults;
 
     delete set;
-    int row;
+//    int row;
 
     QMap<QString,FileType> filetypemap;
 
@@ -62,7 +62,7 @@ void MainWindow::indexDatabase()
                 if (suffix == "ins" || suffix == "res" || suffix == "cif")
                 {
                     database.push_back(Crystfile(filetypemap[suffix],dirIt.filePath()));
-                    searchresults.append(dirIt.filePath());
+//                    searchresults.append(dirIt.filePath());
 //                    ui->listWidget->insertItem(row++,dirIt.filePath());
                     ui->listWidget->addItem(dirIt.filePath());
                 }

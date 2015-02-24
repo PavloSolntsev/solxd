@@ -5,14 +5,13 @@
 #define RAD2DEG(x) x*180/M_PI
 #define DEG2RAD(x) x*M_PI/180
 
-Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, double betacell, double gamacell,CellType type):
+Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, double betacell, double gamacell):
     _a(acell),
     _b(bcell),
     _c(ccell),
     _alpha(alphacell),
     _beta(betacell),
-    _gama(gamacell),
-    _type(type)
+    _gama(gamacell)
 {
     alcos = cos(RAD2DEG(_alpha));
     becos = cos(RAD2DEG(_beta));
@@ -26,7 +25,7 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
     _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
 }
 
-const Unitcell &Unitcell::reciprocal()
+const Unitcell Unitcell::reciprocal()
 {
     double ra = _b*_c*alsin/_volume;
     double rb = _a*_c*besin/_volume;
@@ -38,11 +37,3 @@ const Unitcell &Unitcell::reciprocal()
 
     return Unitcell(ra,rb,rc,RAD2DEG(acos(ralcos)),RAD2DEG(acos(rbecos)),RAD2DEG(acos(rgacos)));
 }
-
-/*
-Unitcell::Unitcell(Cell &cell, Unitcell::CellType type):
-    Cell(cell),
-    _type(type)
-{
-}
-*/

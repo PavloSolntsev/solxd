@@ -11,23 +11,19 @@ CIF
 enum CellType{
     UNKNOWN,
     PRIMITIVE,
-    ACEMTERED,
-    BCENTERED,
-    CCENTERED,
     ICENTERED,
+    RHOMBOHIDRAL,
     FCENTERED,
-    HEXAGONAL,
-    TRIGONAL,
-    RHOMBOHIDRAL
+    ACENTERED,
+    BCENTERED,
+    CCENTERED
 };
-
-
 
 class Unitcell{
 public:
 
-    Unitcell():_a(1),_b(1),_c(1),_alpha(90),_beta(90),_gama(90),_type(UNKNOWN){} // Default constructor
-    Unitcell(double acell,double bcell,double ccell,double alphacell,double betacell,double gamacell,CellType type=PRIMITIVE);
+    Unitcell():_a(1),_b(1),_c(1),_alpha(90),_beta(90),_gama(90){} // Default constructor
+    Unitcell(double acell,double bcell,double ccell,double alphacell,double betacell,double gamacell);
 
     virtual ~Unitcell(){}
 
@@ -42,15 +38,10 @@ public:
 
     inline double volume(void)const{return _volume;}
 
-    const Unitcell &reciprocal(void);
-    inline CellType Brave(void)const{return _type;}
+    const Unitcell reciprocal(void);
 
 // Set functions
-    void setCellType(CellType type){_type = type;}
-
-
-
-private:
+protected:
     double _a;
     double _b;
     double _c;
@@ -66,8 +57,6 @@ private:
     double alsin;
     double besin;
     double gasin;
-
-    CellType _type;
 
 };
 /*
