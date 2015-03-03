@@ -10,22 +10,25 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SolXD
 TEMPLATE = app
-
+INCLUDEPATH += /home/pavlo/progs/cctbx_sources \
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     crystfile.cpp \
     unitcell.cpp \
-    settings.cpp
+    settings.cpp \
+    searchform.cpp
 
 HEADERS  += mainwindow.h \
     crystfile.h \
     unitcell.h \
     settings.h \
-    solXd.h
+    solXd.h \
+    searchform.h
 
 FORMS    += mainwindow.ui \
-    settings.ui
+    settings.ui \
+    searchform.ui
 
 RESOURCES += \
     icons.qrc

@@ -337,3 +337,32 @@ bool Crystfile::findBrave(const CellType &ctype)
     else
         return false;
 }
+
+QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
+{
+    out << crfile._path
+        << (int)crfile._type
+        << crfile._ctype
+        << crfile._wavelength
+        << crfile._center
+        << crfile.sfacarray
+        << crfile.unitarray;
+    return out;
+}
+
+QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
+{
+    int a,b;
+    in >> crfile._path
+        >> a
+        >> b
+        >> crfile._wavelength
+        >> crfile._center
+        >> crfile.sfacarray
+        >> crfile.unitarray;
+
+    crfile._type = static_cast<FileType>(a);
+    crfile._ctype = static_cast<CellType>(b);
+
+    return in;
+}

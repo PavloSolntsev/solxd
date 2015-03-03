@@ -18,6 +18,10 @@ Settings::Settings(QWidget *parent) :
     connect(ui->pushButtonDelete3,SIGNAL(clicked()),this,SLOT(deletePath3()));
     connect(ui->pushButtonDBDelete,SIGNAL(clicked()),this,SLOT(deleteDBPath()));
 
+    connect(ui->lineeditPath1,SIGNAL(textChanged(QString)),this,SLOT(path1manualchange(QString)));
+    connect(ui->lineeditPath2,SIGNAL(textChanged(QString)),this,SLOT(path2manualchange(QString)));
+    connect(ui->lineeditPath3,SIGNAL(textChanged(QString)),this,SLOT(path3manualchange(QString)));
+
     connect(ui->pushButtonOk,SIGNAL(clicked()),this,SLOT(ok_button_clicked()));
     connect(ui->pushButtonCancel,SIGNAL(clicked()),this,SLOT(close()));
 
@@ -50,6 +54,8 @@ Settings::Settings(QWidget *parent) :
         pathDB = settings->value("PathDB").toString();
         ui->lineEditDB->setText(pathDB);
     }
+    else
+        ui->lineEditDB->setText(QDir::homePath());
 
 }
 
@@ -156,3 +162,4 @@ void Settings::deleteDBPath()
     pathDB.clear();
     settings->remove("PathDB");
 }
+

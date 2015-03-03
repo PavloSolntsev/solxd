@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SearchForm</class>
+ <widget class="QWidget" name="SearchForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>618</width>
+    <height>409</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Search Creterea</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Unit Cell</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>a, A</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_cellA">
+            <property name="text">
+             <string>1.0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>alpha, deg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineEdit_alpha">
+            <property name="text">
+             <string>90</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>b, A</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_cellB">
+            <property name="text">
+             <string>1.0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>beta, deg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineEdit_beta">
+            <property name="text">
+             <string>90</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>c, A</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_cellC">
+            <property name="text">
+             <string>1.0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>gamma, deg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="lineEdit_gama">
+            <property name="text">
+             <string>90</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>DeltaCell, %</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_deltacell">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_redcell">
+            <property name="text">
+             <string>Reduce cell?</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_lattype">
+            <item>
+             <property name="text">
+              <string>Select lattice type</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Primitive</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>I-centered</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rhombohidral</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F-centered</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A-centered</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B-centered</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>C-centered</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Additional Experimental Parameters</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Wavelength, A</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineEdit_8"/>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Presented elements</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineEdit_9"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="pushButton_start">
+       <property name="text">
+        <string>&amp;Start</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>groupBox</zorder>
+  <zorder>pushButton_start</zorder>
+  <zorder>pushButton_cancel</zorder>
+  <zorder>pushButton_cancel</zorder>
+  <zorder></zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>horizontalSpacer</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

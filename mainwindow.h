@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "unitcell.h"
 #include <QListWidget>
+#include "searchform.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,10 +24,13 @@ public slots:
     void indexDatabase();
     void runSettings();
     void openfile(QListWidgetItem*iteam);
+    void startSearch();
 
 private:
     Ui::MainWindow *ui;
     Settings *dia;
+    SearchForm *sform;
+    QString DBpath;
 
 
 

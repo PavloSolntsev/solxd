@@ -36,6 +36,10 @@ public slots:
     void deletePath3();
     void deleteDBPath();
 
+    void path1manualchange(const QString &a){path1 = a;}
+    void path2manualchange(const QString &a){path2 = a;}
+    void path3manualchange(const QString &a){path3 = a;}
+
     void ok_button_clicked();
     
 private:

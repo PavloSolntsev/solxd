@@ -29,6 +29,7 @@
    </attribute>
    <addaction name="actionIndex_Files"/>
    <addaction name="actionSettings"/>
+   <addaction name="actionStart"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionIndex_Files">
@@ -54,6 +55,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/start.png</normaloff>:/icons/icons/start.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start search within Database&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
  </widget>
