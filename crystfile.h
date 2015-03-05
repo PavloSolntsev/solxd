@@ -17,9 +17,16 @@ public:
  *
 */
     bool findCell(const Unitcell &cell, const double &error);
-    bool findWL(const double &wl);
+    bool findWL(const double &wl,const double &error);
     bool findSfac(const QString &sfac);
     bool findBrave(const CellType &ctype);
+    bool findCellA(const double &cellA,const double &error);
+    bool findCellB(const double &cellB,const double &error);
+    bool findCellC(const double &cellC,const double &error);
+    bool findCellAlpha(const double &cellAlpha,const double &error);
+    bool findCellBeta(const double &cellBeta,const double &error);
+    bool findCellGamma(const double &cellGamma,const double &error);
+
 
     const QString &getPath()const {return _path;}
     const FileType &getFileType()const{return _type;}

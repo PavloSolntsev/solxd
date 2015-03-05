@@ -24,6 +24,7 @@ Settings::Settings(QWidget *parent) :
 
     connect(ui->pushButtonOk,SIGNAL(clicked()),this,SLOT(ok_button_clicked()));
     connect(ui->pushButtonCancel,SIGNAL(clicked()),this,SLOT(close()));
+    connect(ui->spinBox_iconsize,SIGNAL(valueChanged(int)),parent,SLOT(setToolbarIcons(int)));
 
     settings = new QSettings( QSettings::IniFormat, QSettings::UserScope ,PROGRAM_NAME,PROGRAM_NAME ,this);
 
@@ -57,6 +58,12 @@ Settings::Settings(QWidget *parent) :
     else
         ui->lineEditDB->setText(QDir::homePath());
 
+    if (settings->contains("ToolBarSize")) {
+        toolbarsize = settings->value("ToolBarSize").toInt();
+        ui->spinBox_iconsize->setValue(toolbarsize);
+        emit toolbarIconsChanged(toolbarsize);
+    }
+
 }
 
 Settings::~Settings()
@@ -87,6 +94,12 @@ void Settings::ok_button_clicked()
     }
     if(!pathDB.isEmpty())
         settings->setValue("PathDB", pathDB);
+
+    int tbsize(ui->spinBox_iconsize->value());
+
+    if (tbsize != toolbarsize)
+        settings->setValue("ToolBarSize",tbsize);
+
 
     settings->sync();
     close();

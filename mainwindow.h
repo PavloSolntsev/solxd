@@ -25,12 +25,15 @@ public slots:
     void runSettings();
     void openfile(QListWidgetItem*iteam);
     void startSearch();
+    void outputResults(const QList<Crystfile> &);
+    void setToolbarIcons(const int &);
 
 private:
     Ui::MainWindow *ui;
     Settings *dia;
     SearchForm *sform;
     QString DBpath;
+
 
 
 

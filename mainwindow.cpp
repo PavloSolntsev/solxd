@@ -6,6 +6,7 @@
 #include "crystfile.h"
 #include <QProcess>
 #include <QFile>
+#include <QInputDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,11 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-
     dia = NULL;
     sform = NULL;
     Settings *set = new Settings(this);
     DBpath = QDir(set->dbpath()).filePath("solxd.database");
+// Read information about Toolbar icon size
+    ui->mainToolBar->setIconSize(QSize(set->getToolbarSize(),set->getToolbarSize()));
+    connect(set,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
     delete set;
 
 }
@@ -39,17 +42,29 @@ void MainWindow::indexDatabase()
 
     Settings *set = new Settings(this);
     DBpath = QDir(set->dbpath()).filePath("solxd.database");
+
+    if (QFile(DBpath).exists()) {
+        try {
+            if (!QFile::remove(DBpath))
+                throw "Can't delete database file";
+            else
+                qDebug() << "File: " << DBpath << " was succefully deleted";
+        } catch (const char *a) {
+            qDebug() << a;
+        }
+    }
+
     QStringList searchfolders = set->indexpath();
     delete set;
 
-    qDebug() << "DB file is " << DBpath;
+//    qDebug() << "DB file is " << DBpath;
  //   QStringList searchresults;
 
     QMap<QString,FileType> filetypemap;
 
     filetypemap["ins"] = INS;
     filetypemap["res"] = RES;
-    filetypemap["cis"] = CIF;
+    filetypemap["cif"] = CIF;
 
 //    QList<Crystfile> database;
 
@@ -61,9 +76,10 @@ void MainWindow::indexDatabase()
     DBFile.open(QIODevice::WriteOnly);
     QDataStream out(&DBFile);
 
-    out << (quint32)0xA0B0C0D0;
-    out << (qint32)123;
-    out.setVersion(QDataStream::Qt_4_6);
+    out << quint32(0x12345678);
+    out << quint16(out.version());
+
+    out.setVersion(out.version());
 /**
  * 123 corresponds QDataStream::Qt_4_8
  *
@@ -116,8 +132,30 @@ void MainWindow::openfile(QListWidgetItem *iteam)
 
 void MainWindow::startSearch()
 {
-    sform = new SearchForm(this);
-    sform->setWindowFlags(Qt::Window);
-    sform->setDBfile(DBpath);
-    sform->show();
+    if (sform != NULL) {
+        sform->show();
+    } else {
+        sform = new SearchForm(this);
+        connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
+        sform->setWindowFlags(Qt::Window);
+        sform->setDBfile(DBpath);
+        sform->show();
+    }
 }
+
+void MainWindow::outputResults(const QList<Crystfile> &res)
+{
+    ui->listWidget->clear();
+    for (QList<Crystfile>::const_iterator it = res.begin(); it != res.end(); ++it) {
+        ui->listWidget->addItem(it->getPath());
+    }
+    ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
+
+}
+
+void MainWindow::setToolbarIcons(const int &i)
+{
+    ui->mainToolBar->setIconSize(QSize(i,i));
+    ui->mainToolBar->update();
+}
+

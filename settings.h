@@ -24,6 +24,7 @@ public:
     void sync();
     QString dbpath(void)const{return pathDB;}
     QStringList indexpath(void)const{return listpath;}
+    const int &getToolbarSize(void)const{return toolbarsize;}
 
 public slots:
     void addPath1();
@@ -41,7 +42,9 @@ public slots:
     void path3manualchange(const QString &a){path3 = a;}
 
     void ok_button_clicked();
-    
+signals:
+    void toolbarIconsChanged(const int &);
+
 private:
     Ui::Settings *ui;
     QSettings *settings;
@@ -52,6 +55,8 @@ private:
     QString pathDB;
 
     QStringList listpath;
+
+    int toolbarsize;
 
 };
 

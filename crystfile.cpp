@@ -2,6 +2,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QMessageBox>
+#include <QDebug>
 
 
 Crystfile::Crystfile():
@@ -24,6 +25,8 @@ Crystfile::Crystfile(FileType type, const QString &path)
     switch (_type) {
     case INS:
     case RES:
+//        qDebug() << "Before parseINS";
+//        qDebug() << "Path is " << _path;
         parseINS();
         break;
     case CIF:
@@ -89,18 +92,9 @@ bool Crystfile::findCell(const Unitcell &cell, const double &error)
 
 }
 
-bool Crystfile::findWL(const double &wl)
-{
-    if(abs(_wavelength - wl) < 0.001)
-        return true;
-    else
-        return false;
-
-}
-
 bool Crystfile::findSfac(const QString &sfac)
 {
-    if(sfacarray.contains(sfac))
+    if(sfacarray.contains(sfac.toLower()))
         return true;
     else
         return false;
@@ -122,6 +116,7 @@ void Crystfile::parseINS()
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
+//        qDebug() << "ParseINS \n" << line;
 
         if (line.indexOf("cell",0,Qt::CaseInsensitive) == 0)
         {
@@ -154,7 +149,7 @@ void Crystfile::parseINS()
                 _center = true;
             }
 
-            a = abs(a);
+            a = qAbs(a);
 
             switch (a) {
             case 1:
@@ -194,7 +189,7 @@ void Crystfile::parseINS()
 
             buffer >> temp;
 
-            while (buffer.status()) {
+            while (!buffer.atEnd()) {
                 buffer >> a;
                 sfacarray.push_back(a.toLower());
             }
@@ -212,13 +207,17 @@ void Crystfile::parseINS()
 
             buffer >> temp;
 
-            while (buffer.status()) {
+            while (buffer.atEnd()) {
                 buffer >> a;
                 unitarray.push_back(a);
             }
 
             unitcheck = true;
+            continue;
+        }
 
+        if(cellcheck && lattcheck && sfaccheck && unitcheck)
+        {
             int index = unitarray.indexOf(0);
             while(index > 0)
             {
@@ -227,11 +226,8 @@ void Crystfile::parseINS()
                 index = unitarray.indexOf(0);
             }
 
-            continue;
-        }
-
-        if(cellcheck && lattcheck && sfaccheck && unitcheck)
             break;
+        }
     }
 
     file.close();
@@ -257,6 +253,7 @@ void Crystfile::parseCIF()
             QString temp;
             buffer >> temp >> a;
             this->_a = a;
+//            qDebug() << "ParseCIF line is:\n" << line;
         }
 
         if (line.indexOf("_cell_length_b",0,Qt::CaseInsensitive) == 0)
@@ -318,11 +315,6 @@ void Crystfile::parseCIF()
             buffer >> temp >> a;
             this->_wavelength = a;
         }
-
-
-
-
-
     }
 
     file.close();
@@ -338,6 +330,64 @@ bool Crystfile::findBrave(const CellType &ctype)
         return false;
 }
 
+bool Crystfile::findWL(const double &wl, const double &error)
+{
+    if(100*qAbs(_wavelength - wl) < error*_wavelength)
+        return true;
+    else
+        return false;
+}
+
+bool Crystfile::findCellA(const double &cellA, const double &error)
+{
+    if(100*qAbs(_a - cellA) < error*_a)
+        return true;
+    else
+        return false;
+}
+
+bool Crystfile::findCellB(const double &cellB, const double &error)
+{
+    if(100*qAbs(_b - cellB) < error*_b)
+        return true;
+    else
+        return false;
+}
+
+bool Crystfile::findCellC(const double &cellC, const double &error)
+{
+    if(100*qAbs(_c - cellC) < error*_c)
+        return true;
+    else
+        return false;
+}
+
+bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error)
+{
+    if(100*qAbs(_alpha - cellAlpha) < error*_alpha)
+        return true;
+    else
+        return false;
+
+}
+
+bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
+{
+    if(100*qAbs(_beta - cellBeta) < error*_beta)
+        return true;
+    else
+        return false;
+
+}
+
+bool Crystfile::findCellGamma(const double &cellGamma, const double &error)
+{
+    if(100*qAbs(_gama - cellGamma) < error*_gama)
+        return true;
+    else
+        return false;
+}
+
 QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
 {
     out << crfile._path
@@ -346,7 +396,13 @@ QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
         << crfile._wavelength
         << crfile._center
         << crfile.sfacarray
-        << crfile.unitarray;
+        << crfile.unitarray
+        << crfile.a()
+        << crfile.b()
+        << crfile.c()
+        << crfile.alpha()
+        << crfile.beta()
+        << crfile.gama();
     return out;
 }
 
@@ -359,7 +415,13 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
         >> crfile._wavelength
         >> crfile._center
         >> crfile.sfacarray
-        >> crfile.unitarray;
+        >> crfile.unitarray
+        >> crfile._a
+        >> crfile._b
+        >> crfile._c
+        >> crfile._alpha
+        >> crfile._beta
+        >> crfile._gama;
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);
