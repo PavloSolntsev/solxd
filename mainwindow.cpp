@@ -100,7 +100,7 @@ void MainWindow::indexDatabase()
                     QString filepath = dirIt.filePath();
 //                    database.push_back(Crystfile(filetypemap[suffix],filepath));
                     out << Crystfile(filetypemap[suffix],filepath);
-                    ui->statusBar->showMessage(filepath);
+                    ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
                     ui->listWidget->addItem(filepath);
                 }
             }
