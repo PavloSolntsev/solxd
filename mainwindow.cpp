@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QFile>
 #include <QInputDialog>
+#include <QListWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
     dia = NULL;
     sform = NULL;
     Settings *set = new Settings(this);
@@ -24,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->setIconSize(QSize(set->getToolbarSize(),set->getToolbarSize()));
     connect(set,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
     delete set;
-
+    ui->listWidget->setMouseTracking(true);
 }
 
 MainWindow::~MainWindow()
@@ -99,9 +101,15 @@ void MainWindow::indexDatabase()
                 {
                     QString filepath = dirIt.filePath();
 //                    database.push_back(Crystfile(filetypemap[suffix],filepath));
-                    out << Crystfile(filetypemap[suffix],filepath);
                     ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
-                    ui->listWidget->addItem(filepath);
+                    Crystfile crf(filetypemap[suffix],filepath);
+                    out << crf;
+                    QVariant qv;
+                    qv.setValue(crf);
+                    QListWidgetItem *listiteam = new QListWidgetItem();
+                    listiteam->setText(filepath);
+                    listiteam->setData(Qt::UserRole,qv);
+                    ui->listWidget->addItem(listiteam);
                 }
             }
         } // end while
@@ -147,7 +155,13 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
 {
     ui->listWidget->clear();
     for (QList<Crystfile>::const_iterator it = res.begin(); it != res.end(); ++it) {
-        ui->listWidget->addItem(it->getPath());
+        QVariant qv;
+        qv.setValue(*it);
+        QListWidgetItem *listiteam = new QListWidgetItem();
+        listiteam->setText(it->getPath());
+        listiteam->setData(Qt::UserRole,qv);
+        ui->listWidget->addItem(listiteam);
+//        ui->listWidget->addItem(it->getPath());
     }
     ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
 
@@ -157,5 +171,13 @@ void MainWindow::setToolbarIcons(const int &i)
 {
     ui->mainToolBar->setIconSize(QSize(i,i));
     ui->mainToolBar->update();
+}
+
+void MainWindow::popupinformation(QListWidgetItem *item)
+{
+    QVariant *qvr = new QVariant(item->data(Qt::UserRole));
+    Crystfile crfile(qvr->value<Crystfile>());
+    item->setToolTip(QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama()));
+    qDebug() << "Bingo";
 }
 

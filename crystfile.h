@@ -3,7 +3,9 @@
 #include "unitcell.h"
 #include <QString>
 #include <QList>
+#include <QMetaType>
 //#include <cctbx/uctbx/fast_minimum_reduction.h>
+
 
 class Crystfile : public Unitcell
 {
@@ -60,5 +62,7 @@ private:
     void parseINS();
     void parseCIF();
 };
+
+Q_DECLARE_METATYPE(Crystfile)
 
 #endif // CRYSTFILE_H
