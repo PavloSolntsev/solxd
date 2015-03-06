@@ -61,7 +61,7 @@ void SearchForm::startSearch()
 
     const double error(ui->lineEdit_error->text().toDouble());
 
-    while (in.atEnd()) {
+    while (!in.atEnd()) {
         QList<bool> boolresults;
         Crystfile crfile;
         in >> crfile;

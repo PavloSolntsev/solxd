@@ -118,7 +118,7 @@ void Crystfile::parseINS()
         QString line = inp.readLine();
 //        qDebug() << "ParseINS \n" << line;
 
-        if (line.indexOf("cell",0,Qt::CaseInsensitive) == 0)
+        if (line.startsWith("cell",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -137,7 +137,7 @@ void Crystfile::parseINS()
             continue;
         }
 
-        if (line.indexOf("latt",0,Qt::CaseInsensitive) == 0)
+        if (line.startsWith("latt",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -180,25 +180,46 @@ void Crystfile::parseINS()
             continue;
         }
 
-        if (line.indexOf("sfac",0,Qt::CaseInsensitive) == 0)
+        if (line.startsWith("sfac",Qt::CaseInsensitive) && !sfaccheck)
         {
             QTextStream buffer(&line);
-
             QString a;
-            QString temp;
+//            QString temp;
 
-            buffer >> temp;
+            if (!line.contains('=')) { // Normal SFAC  C Cu CL N O
+                buffer >> a; // Reading SFAC keyword
+                while (!buffer.atEnd()) {
+                    buffer >> a;
+                    if (a.isEmpty()) {
+                        continue;
+                    }
+                    if (a == "?") {
+                        sfaccheck = true;
+                        break;
+                    }
 
-            while (!buffer.atEnd()) {
-                buffer >> a;
+                    sfacarray.push_back(a.toLower());
+                }
+                sfaccheck = true;
+                continue;
+            }
+            else
+            { // SFAC with scatering factors
+                buffer >> a; // Reading SFAC keyword
+                buffer >> a; // Reading element
+                if (a.isEmpty()) {
+                    continue;
+                }
+
                 sfacarray.push_back(a.toLower());
             }
-
-            sfaccheck = true;
-            continue;
         }
 
-        if (line.indexOf("unit",0,Qt::CaseInsensitive) == 0)
+        if (line.startsWith("END",Qt::CaseInsensitive)) {
+            sfaccheck = true; // There is no way SFAC group behind this point
+        }
+
+        if (line.startsWith("unit",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
