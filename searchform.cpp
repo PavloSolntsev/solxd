@@ -127,18 +127,27 @@ void SearchForm::startSearch()
             QString line(ui->lineEdit_elements->text());
             QTextStream sfacin(&line,QIODevice::ReadOnly);
             QString buffer;
-            bool res(false);
-            while(sfacin.atEnd())
+            QList<bool> localcheck;
+            while(!sfacin.atEnd())
             {
                 sfacin >> buffer;
+                if (!buffer.isSimpleText()) {
+                    continue;
+                }
 //                qDebug() << "Checking for " << buffer << " elements";
-                res = crfile.findSfac(buffer);
+
+                if (crfile.findSfac(buffer))
+                    localcheck.push_back(true);
+                else
+                    localcheck.push_back(false);
             }
 
-            if (res)
+            if (!localcheck.contains(false)) {
                 boolresults.push_back(true);
+            }
             else
                 boolresults.push_back(false);
+
         }
         if (!boolresults.contains(false))
         {

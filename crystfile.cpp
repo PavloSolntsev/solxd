@@ -184,12 +184,13 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
             QString a;
-//            QString temp;
+            buffer >> a; // Reading SFAC keyword
+            //            QString temp;
 
             if (!line.contains('=')) { // Normal SFAC  C Cu CL N O
-                buffer >> a; // Reading SFAC keyword
                 while (!buffer.atEnd()) {
                     buffer >> a;
+
                     if (a.isEmpty()) {
                         continue;
                     }
@@ -197,6 +198,7 @@ void Crystfile::parseINS()
                         sfaccheck = true;
                         break;
                     }
+//                    qDebug() << "reading SFAC " << a;
 
                     sfacarray.push_back(a.toLower());
                 }
@@ -205,7 +207,6 @@ void Crystfile::parseINS()
             }
             else
             { // SFAC with scatering factors
-                buffer >> a; // Reading SFAC keyword
                 buffer >> a; // Reading element
                 if (a.isEmpty()) {
                     continue;
