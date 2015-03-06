@@ -2,6 +2,6 @@
 #define SOLXD_H
 
 #define PROGRAM_NAME "solXd"
-#define PROGRAM_VERSION 1
+#define PROGRAM_VERSION 2
 
 #endif // SOLXD_H
