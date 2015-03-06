@@ -224,14 +224,17 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
 
-            double a;
+//            double a;
             QString temp;
 
             buffer >> temp;
 
-            while (buffer.atEnd()) {
-                buffer >> a;
-                unitarray.push_back(a);
+            while (!buffer.atEnd()) {
+                buffer >> temp;
+                if (temp == "?") {
+                    continue;
+                }
+                unitarray.push_back(temp.toDouble());
             }
 
             unitcheck = true;

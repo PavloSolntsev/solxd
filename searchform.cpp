@@ -160,16 +160,17 @@ void SearchForm::startSearch()
 //            qDebug() << crfile.beta();
 //            qDebug() << crfile.gama();
 //            qDebug() << crfile.getWavelength();
-
-              for (int var = 0; var < crfile.getSfacArray().size(); ++var) {
-                  qDebug() << "SFAC " <<
-                      crfile.getSfacArray().at(var) << " ";
-                }
         }
     }
 
     DBFile.close();
-
+    for (int var = 0; var < _results.size(); ++var) {
+        if(_results.at(var).getSfacArray().size() != _results.at(var).getUnitArray().size()){
+            qDebug() << "problem with " << _results.at(var).getPath();
+            qDebug() << "SFAC size = " << _results.at(var).getSfacArray().size();
+            qDebug() << "UNIT size = " << _results.at(var).getUnitArray().size();
+        }
+    }
     emit finished(_results);
 
 }
