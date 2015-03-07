@@ -28,6 +28,7 @@ public slots:
     void outputResults(const QList<Crystfile> &);
     void setToolbarIcons(const int &);
     void popupinformation(QListWidgetItem *item);
+    void crystinfowindow(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;

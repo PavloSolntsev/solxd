@@ -9,7 +9,8 @@
 #include <QInputDialog>
 #include <QListWidgetItem>
 #include <QLabel>
-#include <QCursor>
+//#include <QCursor>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-//    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(crystinfowindow(QListWidgetItem*)));
     connect(ui->listWidget,SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
     dia = NULL;
     sform = NULL;
@@ -189,7 +190,29 @@ void MainWindow::popupinformation(QListWidgetItem *item)
 //    QLabel label(tr("Hello, Dima"),this);
 //    popup->setLayout(layout);
 //    layout->addWidget(&label);
-//    popup->show();
-    qDebug() << "Bingo";
+    //    popup->show();
+}
+
+void MainWindow::crystinfowindow(QListWidgetItem *item)
+{
+        QVariant *qvr = new QVariant(item->data(Qt::UserRole));
+        Crystfile crfile(qvr->value<Crystfile>());
+        QString cellinfo;
+        cellinfo = QString("<b>Unit Cell:</b>\n%1\t%2\t%3\t%4\t%5\t%6>").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
+
+//        int ret = QMessageBox::information(this, tr("Information about file"),
+//                                        cellinfo,
+//                                        QMessageBox::Ok);
+        QMessageBox msgbox;
+        msgbox.setWindowTitle(tr("Information about file"));
+        msgbox.setText(QFileInfo(crfile.getPath()).fileName());
+        msgbox.setInformativeText(cellinfo);
+        msgbox.setStandardButtons(QMessageBox::Ok);
+        msgbox.setDefaultButton(QMessageBox::Ok);
+        msgbox.setDetailedText(tr("Put some text here"));
+//        msgbox.setGeometry(msgbox.pos().x(),msgbox.pos().y(),500,500);
+
+        msgbox.exec();
+
 }
 
