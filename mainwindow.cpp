@@ -177,22 +177,6 @@ void MainWindow::setToolbarIcons(const int &i)
     ui->mainToolBar->update();
 }
 
-void MainWindow::popupinformation(QListWidgetItem *item)
-{
-//    QCursor *qcur = new QCursor();
-//    QWidget *popup = new QWidget(this);
-//    popup->setWindowFlags(Qt::ToolTip);
-    QVariant *qvr = new QVariant(item->data(Qt::UserRole));
-    Crystfile crfile(qvr->value<Crystfile>());
-//    QString cellinfo("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
-    item->setToolTip(QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama()));
-//    QVBoxLayout *layout  = new QVBoxLayout(popup);
-//    QLabel label(tr("Hello, Dima"),this);
-//    popup->setLayout(layout);
-//    layout->addWidget(&label);
-    //    popup->show();
-}
-
 void MainWindow::crystinfowindow(QListWidgetItem *item)
 {
         QVariant *qvr = new QVariant(item->data(Qt::UserRole));
@@ -213,5 +197,21 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
 //        msgbox.setGeometry(msgbox.pos().x(),msgbox.pos().y(),500,500);
         msgbox.exec();
 
+}
+
+void MainWindow::on_listWidget_itemEntered(QListWidgetItem *item)
+{
+    //    QCursor *qcur = new QCursor();
+    //    QWidget *popup = new QWidget(this);
+    //    popup->setWindowFlags(Qt::ToolTip);
+        QVariant *qvr = new QVariant(item->data(Qt::UserRole));
+        Crystfile crfile(qvr->value<Crystfile>());
+    //    QString cellinfo("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
+        item->setToolTip(QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama()));
+    //    QVBoxLayout *layout  = new QVBoxLayout(popup);
+    //    QLabel label(tr("Hello, Dima"),this);
+    //    popup->setLayout(layout);
+    //    layout->addWidget(&label);
+        //    popup->show();
 }
 

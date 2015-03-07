@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     crystfile.cpp \
     unitcell.cpp \
     settings.cpp \
-    searchform.cpp
+    searchform.cpp \
+    mylistwidget.cpp
 
 HEADERS  += mainwindow.h \
     crystfile.h \
     unitcell.h \
     settings.h \
     solXd.h \
-    searchform.h
+    searchform.h \
+    mylistwidget.h
 
 FORMS    += mainwindow.ui \
     settings.ui \

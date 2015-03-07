@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QListWidget" name="listWidget"/>
+     <widget class="MyListWidget" name="listWidget"/>
     </item>
    </layout>
   </widget>
@@ -105,6 +105,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyListWidget</class>
+   <extends>QListWidget</extends>
+   <header>mylistwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>
@@ -126,4 +133,7 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>slot1()</slot>
+ </slots>
 </ui>
