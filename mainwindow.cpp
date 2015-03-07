@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QInputDialog>
 #include <QListWidgetItem>
+#include <QLabel>
+#include <QCursor>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
+//    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
+    connect(ui->listWidget,SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
     dia = NULL;
     sform = NULL;
     Settings *set = new Settings(this);
@@ -175,9 +178,18 @@ void MainWindow::setToolbarIcons(const int &i)
 
 void MainWindow::popupinformation(QListWidgetItem *item)
 {
+//    QCursor *qcur = new QCursor();
+//    QWidget *popup = new QWidget(this);
+//    popup->setWindowFlags(Qt::ToolTip);
     QVariant *qvr = new QVariant(item->data(Qt::UserRole));
     Crystfile crfile(qvr->value<Crystfile>());
+//    QString cellinfo("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
     item->setToolTip(QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama()));
+//    QVBoxLayout *layout  = new QVBoxLayout(popup);
+//    QLabel label(tr("Hello, Dima"),this);
+//    popup->setLayout(layout);
+//    layout->addWidget(&label);
+//    popup->show();
     qDebug() << "Bingo";
 }
 
