@@ -211,7 +211,6 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
         msgbox.setDefaultButton(QMessageBox::Ok);
         msgbox.setDetailedText(tr("Put some text here"));
 //        msgbox.setGeometry(msgbox.pos().x(),msgbox.pos().y(),500,500);
-
         msgbox.exec();
 
 }
