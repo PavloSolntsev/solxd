@@ -266,11 +266,14 @@ void Crystfile::parseCIF()
     }
 
     QTextStream inp(&file);
+    bool formulasumcheck(false);
+    QString lineformula;
+    int quatcount(0);
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 
-        if (line.indexOf("_cell_length_a",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_a",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -281,7 +284,7 @@ void Crystfile::parseCIF()
 //            qDebug() << "ParseCIF line is:\n" << line;
         }
 
-        if (line.indexOf("_cell_length_b",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_b",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -291,7 +294,7 @@ void Crystfile::parseCIF()
             this->_b = a;
         }
 
-        if (line.indexOf("_cell_length_c",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_c",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -301,7 +304,7 @@ void Crystfile::parseCIF()
             this->_c = a;
         }
 
-        if (line.indexOf("_cell_length_alpha",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_alpha",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -311,7 +314,7 @@ void Crystfile::parseCIF()
             this->_alpha = a;
         }
 
-        if (line.indexOf("_cell_length_beta",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_beta",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -321,7 +324,7 @@ void Crystfile::parseCIF()
             this->_beta = a;
         }
 
-        if (line.indexOf("_cell_length_gamma",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_cell_length_gamma",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -331,7 +334,7 @@ void Crystfile::parseCIF()
             this->_gama = a;
         }
 
-        if (line.indexOf("_diffrn_radiation_wavelength",0,Qt::CaseInsensitive) == 0)
+        if (line.contains("_diffrn_radiation_wavelength",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -340,9 +343,122 @@ void Crystfile::parseCIF()
             buffer >> temp >> a;
             this->_wavelength = a;
         }
+
+        if (line.indexOf("_chemical_formula_sum") != -1) {
+            quatcount = line.count('\'');
+//            qDebug() << "quatcount = " << quatcount;
+            if (quatcount == 2) {
+            // Formula on the same line
+
+                QTextStream buffer(&line.remove('\''));
+                QString temp;
+
+                while(!buffer.atEnd()){
+                    buffer >> temp;
+
+                    QString number, letter;
+
+                    for (int var = 0; var < temp.size(); ++var) {
+                        if(temp.at(var).isNumber()){
+                            number.append(temp.at(var));
+                            continue;
+                        }
+
+                        if (temp.at(var).isLetter()) {
+                            letter.append(temp.at(var));
+                            continue;
+                        }
+                        if (temp.at(var).isPunct()) {
+                            number.append(temp.at(var));
+                        }
+
+                    }// end for
+
+                    sfacarray.push_back(letter);
+                    unitarray.push_back(number.toDouble());
+
+                    qDebug() << "SFAC " << sfacarray.size();
+                    qDebug() << "UNIT " << unitarray.size();
+                    qDebug("======");
+
+                }
+
+                qDebug() << "Line1 is " << line;
+                formulasumcheck = false;
+                continue;
+            }
+
+            if (quatcount == 1) {
+                // Only part of the formula on the line
+                lineformula += line;
+                formulasumcheck = true; // Continue reading
+                qDebug() << "Line2 is " << line;
+                continue;
+            }
+
+            if (quatcount == 0) { // Next line contains all formula
+                formulasumcheck = true;
+                continue;
+            }
+        }
+
+        if (formulasumcheck) {
+            int i = line.count('\'');
+            if ((i+quatcount) < 2) {
+                lineformula += line;
+                quatcount += i;
+                qDebug() << "Lineformula1 is " << lineformula;
+                continue;
+            }
+            else
+            {
+                formulasumcheck = false;
+                lineformula += line;
+                quatcount = 0;
+                QTextStream buffer(&line.remove('\''));
+                QString temp;
+
+                while(!buffer.atEnd()){
+                    buffer >> temp;
+
+                    QString number, letter;
+
+                    for (int var = 0; var < temp.size(); ++var) {
+                        if(temp.at(var).isNumber()){
+                            number.append(temp.at(var));
+                            continue;
+                        }
+
+                        if (temp.at(var).isLetter()) {
+                            letter.append(temp.at(var));
+                            continue;
+                        }
+                        if (temp.at(var).isPunct()) {
+                            number.append(temp.at(var));
+                        }
+
+                    }// end for
+
+                    sfacarray.push_back(letter);
+                    unitarray.push_back(number.toDouble());
+
+                    qDebug() << "SFAC " << sfacarray.size();
+                    qDebug() << "UNIT " << unitarray.size();
+                    qDebug("======");
+
+                }
+                continue;
+
+//                qDebug() << "Lineformula2 is " << lineformula;
+            }
+
+
+        }
     }
 
     file.close();
+
+
 
 }
 

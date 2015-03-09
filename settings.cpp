@@ -7,16 +7,19 @@ Settings::Settings(QWidget *parent) :
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
+    hide();
 
     connect(ui->pushButtonAdd1,SIGNAL(clicked()),this,SLOT(addPath1()));
     connect(ui->pushButtonAdd2,SIGNAL(clicked()),this,SLOT(addPath2()));
     connect(ui->pushButtonAdd3,SIGNAL(clicked()),this,SLOT(addPath3()));
     connect(ui->pushButtonDBAdd,SIGNAL(clicked()),this,SLOT(addDBPath()));
+    connect(ui->pushButton_addviewwr,SIGNAL(clicked()),this,SLOT(addviewer()));
 
     connect(ui->pushButtonDelete1,SIGNAL(clicked()),this,SLOT(deletePath1()));
     connect(ui->pushButtonDelete2,SIGNAL(clicked()),this,SLOT(deletePath2()));
     connect(ui->pushButtonDelete3,SIGNAL(clicked()),this,SLOT(deletePath3()));
     connect(ui->pushButtonDBDelete,SIGNAL(clicked()),this,SLOT(deleteDBPath()));
+    connect(ui->pushButton_deleteviewer,SIGNAL(clicked()),this,SLOT(deleteviewer()));
 
     connect(ui->lineeditPath1,SIGNAL(textChanged(QString)),this,SLOT(path1manualchange(QString)));
     connect(ui->lineeditPath2,SIGNAL(textChanged(QString)),this,SLOT(path2manualchange(QString)));
@@ -26,8 +29,10 @@ Settings::Settings(QWidget *parent) :
     connect(ui->pushButtonCancel,SIGNAL(clicked()),this,SLOT(close()));
     connect(ui->spinBox_iconsize,SIGNAL(valueChanged(int)),parent,SLOT(setToolbarIcons(int)));
 
-    settings = new QSettings( QSettings::IniFormat, QSettings::UserScope ,PROGRAM_NAME,PROGRAM_NAME ,this);
+    connect(ui->checkBox_shelxle,SIGNAL(stateChanged(int)),this,SLOT(shelxlecheckchanged(int)));
+    connect(ui->lineEdit_viewer,SIGNAL(textChanged(QString)),this,SLOT(viewerpathchanged(QString)));
 
+    settings = new QSettings( QSettings::IniFormat, QSettings::UserScope ,PROGRAM_NAME,PROGRAM_NAME ,this);
 
     if(settings->contains("IndexPath1"))
     {
@@ -50,6 +55,11 @@ Settings::Settings(QWidget *parent) :
         listpath.append(path3);
     }
 
+    if (settings->contains("ShelXle")) {
+        shelxlecheck = settings->value("ShelXle").toBool();
+        ui->checkBox_shelxle->setChecked(shelxlecheck);
+    }
+
     if(settings->contains("PathDB"))
     {
         pathDB = settings->value("PathDB").toString();
@@ -57,6 +67,11 @@ Settings::Settings(QWidget *parent) :
     }
     else
         ui->lineEditDB->setText(QDir::homePath());
+
+    if (settings->contains("ViewerPath")) {
+        viewerpath = settings->value("ViewerPath").toString();
+        ui->lineEdit_viewer->setText(viewerpath);
+    }
 
     if (settings->contains("ToolBarSize")) {
         toolbarsize = settings->value("ToolBarSize").toInt();
@@ -95,12 +110,16 @@ void Settings::ok_button_clicked()
     if(!pathDB.isEmpty())
         settings->setValue("PathDB", pathDB);
 
+    if (!viewerpath.isEmpty()) {
+        settings->setValue("ViewerPath",viewerpath);
+    }
+
     int tbsize(ui->spinBox_iconsize->value());
 
     if (tbsize != toolbarsize)
         settings->setValue("ToolBarSize",tbsize);
 
-
+    settings->setValue("ShelXle",shelxlecheck);
     settings->sync();
     close();
 }
@@ -140,10 +159,19 @@ void Settings::addPath3()
 void Settings::addDBPath()
 {
     pathDB = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home",
+                                                    QDir::homePath(),
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
     ui->lineEditDB->setText(pathDB);
+
+}
+
+void Settings::addviewer()
+{
+    viewerpath = QFileDialog::getOpenFileName(this, tr("Viewer Path"),
+                                                    QDir::homePath(),
+                                                    tr(""));
+    ui->lineEdit_viewer->setText(viewerpath);
 
 }
 
@@ -174,5 +202,21 @@ void Settings::deleteDBPath()
     ui->lineEditDB->clear();
     pathDB.clear();
     settings->remove("PathDB");
+}
+
+void Settings::deleteviewer()
+{
+    ui->lineEdit_viewer->clear();
+    viewerpath.clear();
+    settings->remove("ViewerPath");
+}
+
+void Settings::shelxlecheckchanged(int i)
+{
+    if (i == Qt::Checked) {
+        shelxlecheck = true;
+    } else {
+        shelxlecheck = false;
+    }
 }
 

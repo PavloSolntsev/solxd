@@ -25,21 +25,27 @@ public:
     QString dbpath(void)const{return pathDB;}
     QStringList indexpath(void)const{return listpath;}
     const int &getToolbarSize(void)const{return toolbarsize;}
+    bool excludeshelxlefolders(void)const{return shelxlecheck;}
+    const QString &getViewer(void)const{return viewerpath;}
 
 public slots:
     void addPath1();
     void addPath2();
     void addPath3();
     void addDBPath();
+    void addviewer();
 
     void deletePath1();
     void deletePath2();
     void deletePath3();
     void deleteDBPath();
+    void deleteviewer();
 
     void path1manualchange(const QString &a){path1 = a;}
     void path2manualchange(const QString &a){path2 = a;}
     void path3manualchange(const QString &a){path3 = a;}
+    void shelxlecheckchanged(int i);
+    void viewerpathchanged(const QString &a){viewerpath = a;}
 
     void ok_button_clicked();
 signals:
@@ -53,8 +59,10 @@ private:
     QString path2;
     QString path3;
     QString pathDB;
+    QString viewerpath;
 
     QStringList listpath;
+    bool shelxlecheck;
 
     int toolbarsize;
 

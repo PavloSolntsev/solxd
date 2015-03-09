@@ -6,6 +6,8 @@
 #include "unitcell.h"
 #include <QListWidget>
 #include "searchform.h"
+#include "mylistwidget.h"
+#include <QToolTip>
 
 namespace Ui {
 class MainWindow;
@@ -27,21 +29,13 @@ public slots:
     void startSearch();
     void outputResults(const QList<Crystfile> &);
     void setToolbarIcons(const int &);
-//    void popupinformation(QListWidgetItem *item);
     void crystinfowindow(QListWidgetItem *item);
-
-private slots:
-    void on_listWidget_itemEntered(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
     Settings *dia;
     SearchForm *sform;
     QString DBpath;
-
-
-
-
 };
 
 #endif // MAINWINDOW_H

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>605</width>
-    <height>455</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -119,6 +119,16 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_shelxle">
+        <property name="text">
+         <string>Exclude ShelXle autosave files from indexing (Recommended)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -133,7 +143,7 @@
      <property name="title">
       <string>Databse folder</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -179,17 +189,17 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_viewer"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushButton_addviewwr">
         <property name="text">
          <string>Add</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="pushButton_deleteviewer">
         <property name="text">
          <string>Delete</string>
         </property>

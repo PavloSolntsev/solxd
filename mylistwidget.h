@@ -2,12 +2,17 @@
 #define MYLISTWIDGET_H
 
 #include <QListWidget>
+#include <QEvent>
+#include <QPaintEvent>
 
-class MyListwidget : public QListWidget
+class MyListWidget : public QListWidget
 {
     Q_OBJECT
 public:
-    explicit MyListwidget(QObject *parent = 0);
+    explicit MyListWidget(QWidget *parent = 0);
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
     
 signals:
     

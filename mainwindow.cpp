@@ -12,25 +12,24 @@
 //#include <QCursor>
 #include <QMessageBox>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
     connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(crystinfowindow(QListWidgetItem*)));
-    connect(ui->listWidget,SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(popupinformation(QListWidgetItem*)));
-    dia = NULL;
     sform = NULL;
-    Settings *set = new Settings(this);
-    DBpath = QDir(set->dbpath()).filePath("solxd.database");
+    dia = new Settings(this);
+    DBpath = QDir(dia->dbpath()).filePath("solxd.database");
 // Read information about Toolbar icon size
-    ui->mainToolBar->setIconSize(QSize(set->getToolbarSize(),set->getToolbarSize()));
-    connect(set,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
-    delete set;
-    ui->listWidget->setMouseTracking(true);
+    ui->mainToolBar->setIconSize(QSize(dia->getToolbarSize(),dia->getToolbarSize()));
+    connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
+
 }
 
 MainWindow::~MainWindow()
@@ -46,8 +45,8 @@ void MainWindow::indexDatabase()
 // Read database folder path
     ui->statusBar->showMessage(tr("Indexing strated..."));
 
-    Settings *set = new Settings(this);
-    DBpath = QDir(set->dbpath()).filePath("solxd.database");
+    DBpath = QDir(dia->dbpath()).filePath("solxd.database");
+    bool includeshelxle = dia->excludeshelxlefolders();
 
     if (QFile(DBpath).exists()) {
         try {
@@ -60,11 +59,7 @@ void MainWindow::indexDatabase()
         }
     }
 
-    QStringList searchfolders = set->indexpath();
-    delete set;
-
-//    qDebug() << "DB file is " << DBpath;
- //   QStringList searchresults;
+    QStringList searchfolders = dia->indexpath();
 
     QMap<QString,FileType> filetypemap;
 
@@ -72,7 +67,6 @@ void MainWindow::indexDatabase()
     filetypemap["res"] = RES;
     filetypemap["cif"] = CIF;
 
-//    QList<Crystfile> database;
 
     ui->listWidget->clear();
 
@@ -95,6 +89,9 @@ void MainWindow::indexDatabase()
         QDirIterator dirIt(*it,QDirIterator::Subdirectories);
         while (dirIt.hasNext()) {
             dirIt.next();
+
+            if(includeshelxle && dirIt.filePath().contains("shelXlesaves",Qt::CaseInsensitive))
+                continue;
 
             if (dirIt.fileInfo().isFile())
               {
@@ -124,7 +121,6 @@ void MainWindow::indexDatabase()
 
 void MainWindow::runSettings()
 {
-    dia = new Settings(this);
     dia->setWindowFlags(Qt::Window);
     dia->show();
 }
@@ -134,7 +130,7 @@ void MainWindow::openfile(QListWidgetItem *iteam)
     qDebug() << "open file function is working ok";
     qDebug() << iteam->text();
 
-    QString program = "/home/pavlo/bin/mercury";
+    QString program = dia->getViewer();
     QStringList arguments;
     arguments << iteam->text();
 
@@ -198,20 +194,3 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
         msgbox.exec();
 
 }
-
-void MainWindow::on_listWidget_itemEntered(QListWidgetItem *item)
-{
-    //    QCursor *qcur = new QCursor();
-    //    QWidget *popup = new QWidget(this);
-    //    popup->setWindowFlags(Qt::ToolTip);
-        QVariant *qvr = new QVariant(item->data(Qt::UserRole));
-        Crystfile crfile(qvr->value<Crystfile>());
-    //    QString cellinfo("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
-        item->setToolTip(QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama()));
-    //    QVBoxLayout *layout  = new QVBoxLayout(popup);
-    //    QLabel label(tr("Hello, Dima"),this);
-    //    popup->setLayout(layout);
-    //    layout->addWidget(&label);
-        //    popup->show();
-}
-
