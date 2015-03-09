@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>612</width>
-        <height>468</height>
+        <width>604</width>
+        <height>462</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -214,7 +214,7 @@
         </widget>
        </item>
        <item row="10" column="1">
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="comboBox_latt">
          <item>
           <property name="text">
            <string>Primitive</string>
@@ -305,7 +305,7 @@
   <tabstop>checkBox_elements</tabstop>
   <tabstop>lineEdit_volume</tabstop>
   <tabstop>checkBox_volume</tabstop>
-  <tabstop>comboBox</tabstop>
+  <tabstop>comboBox_latt</tabstop>
   <tabstop>checkBox_latt</tabstop>
   <tabstop>pushButton_start</tabstop>
   <tabstop>pushButton_cancel</tabstop>

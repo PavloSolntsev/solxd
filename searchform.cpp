@@ -149,6 +149,57 @@ void SearchForm::startSearch()
                 boolresults.push_back(false);
 
         }
+
+        if(ui->checkBox_latt->isChecked()){
+            CellType item = static_cast<CellType>(ui->comboBox_latt->currentIndex());
+            switch (item) {
+            case PRIMITIVE:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case ICENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case FCENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case ACENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case BCENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case CCENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case RHOMBOHIDRAL:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            default:
+                break;
+            }// end of switch
+        } // end if
+
         if (!boolresults.contains(false))
         {
             _results.push_back(crfile);
@@ -161,6 +212,7 @@ void SearchForm::startSearch()
 //            qDebug() << crfile.gama();
 //            qDebug() << crfile.getWavelength();
         }
+
     }
 
     DBFile.close();

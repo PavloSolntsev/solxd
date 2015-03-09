@@ -61,16 +61,24 @@ MyListWidget::MyListWidget(QWidget *parent) :
 
 void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 {
-
     QListWidgetItem *index;
     index = NULL;
     index = itemAt(event->pos());
 
     if (index != NULL) {
+        QMap<CellType,QString> celltypemap;
+        celltypemap[PRIMITIVE] = "Primitive";
+        celltypemap[ACENTERED] = "A-Centered";
+        celltypemap[BCENTERED] = "B-Centered";
+        celltypemap[CCENTERED] = "C-Centered";
+        celltypemap[ICENTERED] = "I-Centered";
+        celltypemap[FCENTERED] = "F-Centered";
+        celltypemap[RHOMBOHIDRAL] = "Rhombohidral";
+
         QVariant *qvr = new QVariant(index->data(Qt::UserRole));
         Crystfile crfile(qvr->value<Crystfile>());
         QString text = QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
-
+        text += QString("\nLATT: %1").arg(celltypemap[crfile.getCellType()]);
         QToolTip::showText(QCursor::pos(), text);
     } else {
         QToolTip::hideText();

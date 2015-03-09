@@ -37,6 +37,7 @@ public:
     const bool &isCenter()const{return _center;}
     const QList<QString> &getSfacArray()const{return sfacarray;}
     const QList<double> &getUnitArray()const{return unitarray;}
+    const CellType &getBrave()const{return _ctype;}
 
     void setPath(const QString &path){_path=path;}
     void setFileType(const FileType &a){_type = a;}

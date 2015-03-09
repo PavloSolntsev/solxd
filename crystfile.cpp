@@ -349,13 +349,12 @@ void Crystfile::parseCIF()
 //            qDebug() << "quatcount = " << quatcount;
             if (quatcount == 2) {
             // Formula on the same line
-
                 QTextStream buffer(&line.remove('\''));
-                QString temp;
+//                QString temp;
 
                 while(!buffer.atEnd()){
+                    QString temp;
                     buffer >> temp;
-
                     QString number, letter;
 
                     for (int var = 0; var < temp.size(); ++var) {
@@ -368,31 +367,32 @@ void Crystfile::parseCIF()
                             letter.append(temp.at(var));
                             continue;
                         }
-                        if (temp.at(var).isPunct()) {
+                        if (temp.at(var).isPunct())
                             number.append(temp.at(var));
-                        }
 
                     }// end for
 
                     sfacarray.push_back(letter);
                     unitarray.push_back(number.toDouble());
 
-                    qDebug() << "SFAC " << sfacarray.size();
-                    qDebug() << "UNIT " << unitarray.size();
-                    qDebug("======");
+                    if (sfacarray.size() != unitarray.size()) {
+                        qDebug() << "SFAC " << sfacarray.size();
+                        qDebug() << "UNIT " << unitarray.size();
+                        qDebug("======");
+                    }
 
-                }
+                }// end while
 
-                qDebug() << "Line1 is " << line;
+//                qDebug() << "Line1 is " << line;
                 formulasumcheck = false;
                 continue;
-            }
+            }// end if quatcount ==  2
 
             if (quatcount == 1) {
                 // Only part of the formula on the line
                 lineformula += line;
                 formulasumcheck = true; // Continue reading
-                qDebug() << "Line2 is " << line;
+//                qDebug() << "Line2 is " << line;
                 continue;
             }
 
@@ -457,11 +457,7 @@ void Crystfile::parseCIF()
     }
 
     file.close();
-
-
-
 }
-
 
 bool Crystfile::findBrave(const CellType &ctype)
 {
