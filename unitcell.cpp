@@ -13,16 +13,21 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
     _beta(betacell),
     _gama(gamacell)
 {
-    alcos = cos(RAD2DEG(_alpha));
-    becos = cos(RAD2DEG(_beta));
-    gacos = cos(RAD2DEG(_gama));
 
-    alsin = sin(RAD2DEG(_alpha));
-    besin = sin(RAD2DEG(_beta));
-    gasin = sin(RAD2DEG(_gama));
+}
 
+const double &Unitcell::volume()
+{
+    alcos = cos(DEG2RAD(_alpha));
+    becos = cos(DEG2RAD(_beta));
+    gacos = cos(DEG2RAD(_gama));
 
-    _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
+    alsin = sin(DEG2RAD(_alpha));
+    besin = sin(DEG2RAD(_beta));
+    gasin = sin(DEG2RAD(_gama));
+
+    _volume = _a*_b*_c*sqrt((1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos))+2*(alcos*becos*gacos));
+    return _volume;
 }
 
 const Unitcell Unitcell::reciprocal()

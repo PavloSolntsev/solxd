@@ -8,11 +8,9 @@
 Crystfile::Crystfile():
     _path(""),
     _type(NONE),
-    _ctype(UNKNOWN)
+    _ctype(UNKNOWN),
+    _wavelength(0)
 {
-    _wavelength = 0;
-
-
 }
 
 
@@ -442,9 +440,12 @@ void Crystfile::parseCIF()
                     sfacarray.push_back(letter);
                     unitarray.push_back(number.toDouble());
 
-                    qDebug() << "SFAC " << sfacarray.size();
-                    qDebug() << "UNIT " << unitarray.size();
-                    qDebug("======");
+                    if (sfacarray.size() != unitarray.size()) {
+                        qDebug() << "Debug in " << __FILE__ << " at " << __LINE__;
+                        qDebug() << "SFAC " << sfacarray.size();
+                        qDebug() << "UNIT " << unitarray.size();
+                        qDebug("======");
+                    }
 
                 }
                 continue;
@@ -520,6 +521,15 @@ bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
 bool Crystfile::findCellGamma(const double &cellGamma, const double &error)
 {
     if(100*qAbs(_gama - cellGamma) < error*_gama)
+        return true;
+    else
+        return false;
+}
+
+bool Crystfile::findVolume(const double &vol, const double &error)
+{
+    double myvol = volume();
+    if(100*qAbs(myvol - vol) < error*myvol)
         return true;
     else
         return false;

@@ -36,7 +36,7 @@ public:
     inline double beta()const{return _beta;}
     inline double gama()const{return _gama;}
 
-    inline double volume(void)const{return _volume;}
+    const double &volume(void);
 
     const Unitcell reciprocal(void);
 

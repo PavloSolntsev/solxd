@@ -199,6 +199,13 @@ void SearchForm::startSearch()
                 break;
             }// end of switch
         } // end if
+        if(ui->checkBox_volume->isChecked())
+        {
+            if(crfile.findVolume(ui->lineEdit_volume->text().toDouble(),error))
+                boolresults.push_back(true);
+            else
+                boolresults.push_back(false);
+        }
 
         if (!boolresults.contains(false))
         {

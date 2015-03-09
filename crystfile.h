@@ -28,6 +28,7 @@ public:
     bool findCellAlpha(const double &cellAlpha,const double &error);
     bool findCellBeta(const double &cellBeta,const double &error);
     bool findCellGamma(const double &cellGamma,const double &error);
+    bool findVolume(const double &vol, const double &error);
 
 
     const QString &getPath()const {return _path;}

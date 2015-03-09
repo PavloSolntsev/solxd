@@ -77,8 +77,9 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 
         QVariant *qvr = new QVariant(index->data(Qt::UserRole));
         Crystfile crfile(qvr->value<Crystfile>());
-        QString text = QString("Unit Cell: %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
-        text += QString("\nLATT: %1").arg(celltypemap[crfile.getCellType()]);
+        QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
+        text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
+        text += QString("\n<b>Volume:</b> %1").arg(crfile.volume());
         QToolTip::showText(QCursor::pos(), text);
     } else {
         QToolTip::hideText();
