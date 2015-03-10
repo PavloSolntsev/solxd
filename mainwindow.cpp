@@ -22,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(crystinfowindow(QListWidgetItem*)));
+//    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(crystinfowindow(QListWidgetItem*)));
+    connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
     sform = NULL;
     dia = new Settings(this);
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");

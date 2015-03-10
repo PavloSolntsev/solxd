@@ -28,19 +28,25 @@ public:
     virtual ~Unitcell(){}
 
 // Get functions
-    inline double a()const{return _a;}
-    inline double b()const{return _b;}
-    inline double c()const{return _c;}
+    inline const double &a()const{return _a;}
+    inline const double &b()const{return _b;}
+    inline const double &c()const{return _c;}
 
-    inline double alpha()const{return _alpha;}
-    inline double beta()const{return _beta;}
-    inline double gama()const{return _gama;}
+    inline const double &alpha()const{return _alpha;}
+    inline const double &beta()const{return _beta;}
+    inline const double &gama()const{return _gama;}
 
-    const double &volume(void);
+    inline const double &volume(void)const{return _volume;}
 
     const Unitcell reciprocal(void);
+// Set function
+    void set_cell(const double &acell,
+                  const double &bcell,
+                  const double &ccell,
+                  const double &alphacell,
+                  const double &betacell,
+                  const double &gamacell);
 
-// Set functions
 protected:
     double _a;
     double _b;
@@ -57,31 +63,8 @@ protected:
     double alsin;
     double besin;
     double gasin;
+    void sync_volume();
 
 };
-/*
-class Unitcell : public Cell
-{
-public:
-    enum CellType{
-        PRIMITIVE,
-        ACEMTERED,
-        BCENTERED,
-        CCENTERED,
-        ICENTERED,
-        FCENTERED,
-        HEXAGONAL,
-        TRIGONAL,
-        RHOMBOHIDRAL
-    };
-    Unitcell();
-    Unitcell(Cell &cell, CellType type = PRIMITIVE);
 
-    inline CellType Brave(void)const{return _type;}
-
-private:
-// Cell type
-    CellType _type;
-};
-*/
 #endif // UNITCELL_H

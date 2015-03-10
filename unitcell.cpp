@@ -13,11 +13,6 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
     _beta(betacell),
     _gama(gamacell)
 {
-
-}
-
-const double &Unitcell::volume()
-{
     alcos = cos(DEG2RAD(_alpha));
     becos = cos(DEG2RAD(_beta));
     gacos = cos(DEG2RAD(_gama));
@@ -27,7 +22,7 @@ const double &Unitcell::volume()
     gasin = sin(DEG2RAD(_gama));
 
     _volume = _a*_b*_c*sqrt((1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos))+2*(alcos*becos*gacos));
-    return _volume;
+
 }
 
 const Unitcell Unitcell::reciprocal()
@@ -41,4 +36,39 @@ const Unitcell Unitcell::reciprocal()
     double rgacos = (alcos*becos-gacos)/(alsin*besin);
 
     return Unitcell(ra,rb,rc,RAD2DEG(acos(ralcos)),RAD2DEG(acos(rbecos)),RAD2DEG(acos(rgacos)));
+}
+
+void Unitcell::set_cell(const double &acell, const double &bcell, const double &ccell, const double &alphacell, const double &betacell, const double &gamacell)
+{
+    _a = acell;
+    _b = bcell;
+    _c = ccell;
+    _alpha = alphacell;
+    _beta = betacell;
+    _gama = gamacell;
+
+    alcos = cos(DEG2RAD(_alpha));
+    becos = cos(DEG2RAD(_beta));
+    gacos = cos(DEG2RAD(_gama));
+
+    alsin = sin(DEG2RAD(_alpha));
+    besin = sin(DEG2RAD(_beta));
+    gasin = sin(DEG2RAD(_gama));
+
+    _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
+
+}
+
+void Unitcell::sync_volume()
+{
+    alcos = cos(DEG2RAD(_alpha));
+    becos = cos(DEG2RAD(_beta));
+    gacos = cos(DEG2RAD(_gama));
+
+    alsin = sin(DEG2RAD(_alpha));
+    besin = sin(DEG2RAD(_beta));
+    gasin = sin(DEG2RAD(_gama));
+
+    _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
+
 }

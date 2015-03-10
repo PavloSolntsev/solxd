@@ -111,31 +111,34 @@ void Crystfile::parseINS()
     bool lattcheck(false);
     bool sfaccheck(false);
     bool unitcheck(false);
+    bool endcheck(false);
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 //        qDebug() << "ParseINS \n" << line;
 
-        if (line.startsWith("cell",Qt::CaseInsensitive))
+        if (line.startsWith("cell ",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
             double a,b,c,d,e,f,g;
             QString temp;
+            // CELL Wavelength cella cellb cellc alpha beta gamma
             buffer >> temp >> g >> a >> b >> c >> d >> e >> f;
             this->_wavelength = g;
-            this->_a = a;
-            this->_b = b;
-            this->_c = c;
-            this->_alpha = d;
-            this->_beta = e;
-            this->_gama = f;
+//            this->_a = a;
+//            this->_b = b;
+//            this->_c = c;
+//            this->_alpha = d;
+//            this->_beta = e;
+//            this->_gama = f;
+            set_cell(a,b,c,d,e,f);
 
             cellcheck = true;
             continue;
         }
 
-        if (line.startsWith("latt",Qt::CaseInsensitive))
+        if (line.startsWith("latt ",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -178,7 +181,7 @@ void Crystfile::parseINS()
             continue;
         }
 
-        if (line.startsWith("sfac",Qt::CaseInsensitive) && !sfaccheck)
+        if (line.startsWith("sfac ",Qt::CaseInsensitive) && !sfaccheck)
         {
             QTextStream buffer(&line);
             QString a;
@@ -214,11 +217,12 @@ void Crystfile::parseINS()
             }
         }
 
-        if (line.startsWith("END",Qt::CaseInsensitive)) {
+        if (line.startsWith("END ",Qt::CaseInsensitive)) {
             sfaccheck = true; // There is no way SFAC group behind this point
+            break;
         }
 
-        if (line.startsWith("unit",Qt::CaseInsensitive))
+        if (line.startsWith("unit ",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
@@ -249,6 +253,10 @@ void Crystfile::parseINS()
                 index = unitarray.indexOf(0);
             }
 
+            continue;
+        }
+
+        if (endcheck) {
             break;
         }
     }
@@ -268,6 +276,8 @@ void Crystfile::parseCIF()
     QString lineformula;
     int quatcount(0);
 
+    double a(0),b(0),c(0),d(0),e(0),f(0); // unit cell variables
+
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 
@@ -275,10 +285,10 @@ void Crystfile::parseCIF()
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
             buffer >> temp >> a;
             this->_a = a;
+            continue;
 //            qDebug() << "ParseCIF line is:\n" << line;
         }
 
@@ -286,50 +296,59 @@ void Crystfile::parseCIF()
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_b = a;
+            buffer >> temp >> b;
+            this->_b = b;
+            continue;
         }
 
         if (line.contains("_cell_length_c",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_c = a;
+            buffer >> temp >> c;
+            this->_c = c;
+            continue;
         }
 
         if (line.contains("_cell_length_alpha",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_alpha = a;
+            buffer >> temp >> d;
+            this->_alpha = d;
+            continue;
         }
 
         if (line.contains("_cell_length_beta",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_beta = a;
+            buffer >> temp >> e;
+            this->_beta = e;
+            continue;
         }
 
         if (line.contains("_cell_length_gamma",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
 
-            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_gama = a;
+            buffer >> temp >> f;
+            this->_gama = f;
+            continue;
+        }
+
+        if (a != 0 &&
+            b != 0 &&
+            c != 0 &&
+            d != 0 &&
+            e != 0 &&
+            f != 0 ){
+            set_cell(a,b,c,d,e,f);
         }
 
         if (line.contains("_diffrn_radiation_wavelength",Qt::CaseInsensitive))
@@ -342,7 +361,7 @@ void Crystfile::parseCIF()
             this->_wavelength = a;
         }
 
-        if (line.indexOf("_chemical_formula_sum") != -1) {
+        if (line.contains("_chemical_formula_sum",Qt::CaseInsensitive)) {
             quatcount = line.count('\'');
 //            qDebug() << "quatcount = " << quatcount;
             if (quatcount == 2) {
@@ -572,6 +591,7 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);
+    crfile.sync_volume(); // recalculate volume
 
     return in;
 }
