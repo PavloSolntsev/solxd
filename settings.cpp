@@ -30,6 +30,8 @@ Settings::Settings(QWidget *parent) :
     connect(ui->spinBox_iconsize,SIGNAL(valueChanged(int)),parent,SLOT(setToolbarIcons(int)));
 
     connect(ui->checkBox_shelxle,SIGNAL(stateChanged(int)),this,SLOT(shelxlecheckchanged(int)));
+    connect(ui->checkBox_olex2,SIGNAL(stateChanged(int)),this,SLOT(olex2checkchanged(int)));
+
     connect(ui->lineEdit_viewer,SIGNAL(textChanged(QString)),this,SLOT(viewerpathchanged(QString)));
 
     settings = new QSettings( QSettings::IniFormat, QSettings::UserScope ,PROGRAM_NAME,PROGRAM_NAME ,this);
@@ -58,6 +60,11 @@ Settings::Settings(QWidget *parent) :
     if (settings->contains("ShelXle")) {
         shelxlecheck = settings->value("ShelXle").toBool();
         ui->checkBox_shelxle->setChecked(shelxlecheck);
+    }
+
+    if (settings->contains("Olex2")) {
+        olex2check = settings->value("Olex2").toBool();
+        ui->checkBox_olex2->setChecked(olex2check);
     }
 
     if(settings->contains("PathDB"))
@@ -120,6 +127,7 @@ void Settings::ok_button_clicked()
         settings->setValue("ToolBarSize",tbsize);
 
     settings->setValue("ShelXle",shelxlecheck);
+    settings->setValue("Olex2",olex2check);
     settings->sync();
     close();
 }
@@ -217,6 +225,15 @@ void Settings::shelxlecheckchanged(int i)
         shelxlecheck = true;
     } else {
         shelxlecheck = false;
+    }
+}
+
+void Settings::olex2checkchanged(int i)
+{
+    if (i == Qt::Checked) {
+        olex2check = true;
+    } else {
+        olex2check = false;
     }
 }
 

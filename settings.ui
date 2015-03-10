@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>605</width>
-    <height>459</height>
+    <width>635</width>
+    <height>489</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -123,6 +123,16 @@
        <widget class="QCheckBox" name="checkBox_shelxle">
         <property name="text">
          <string>Exclude ShelXle autosave files from indexing (Recommended)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_olex2">
+        <property name="text">
+         <string>Exclude Olex2 autosave files from indexing (Recommended)</string>
         </property>
         <property name="checked">
          <bool>true</bool>

@@ -22,10 +22,11 @@ public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
     void sync();
-    QString dbpath(void)const{return pathDB;}
+    const QString &dbpath(void)const{return pathDB;}
     QStringList indexpath(void)const{return listpath;}
     const int &getToolbarSize(void)const{return toolbarsize;}
-    bool excludeshelxlefolders(void)const{return shelxlecheck;}
+    const bool &excludeshelxlefolders(void)const{return shelxlecheck;}
+    const bool &excludeolex2folders(void)const{return olex2check;}
     const QString &getViewer(void)const{return viewerpath;}
 
 public slots:
@@ -45,6 +46,7 @@ public slots:
     void path2manualchange(const QString &a){path2 = a;}
     void path3manualchange(const QString &a){path3 = a;}
     void shelxlecheckchanged(int i);
+    void olex2checkchanged(int i);
     void viewerpathchanged(const QString &a){viewerpath = a;}
 
     void ok_button_clicked();
@@ -63,6 +65,7 @@ private:
 
     QStringList listpath;
     bool shelxlecheck;
+    bool olex2check;
 
     int toolbarsize;
 

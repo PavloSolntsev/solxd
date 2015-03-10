@@ -47,7 +47,8 @@ void MainWindow::indexDatabase()
     ui->statusBar->showMessage(tr("Indexing strated..."));
 
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
-    bool includeshelxle = dia->excludeshelxlefolders();
+    bool excludeshelxle = dia->excludeshelxlefolders();
+    bool excludeolex2 = dia->excludeolex2folders();
 
     if (QFile(DBpath).exists()) {
         try {
@@ -91,7 +92,10 @@ void MainWindow::indexDatabase()
         while (dirIt.hasNext()) {
             dirIt.next();
 
-            if(includeshelxle && dirIt.filePath().contains("shelXlesaves",Qt::CaseInsensitive))
+            if(excludeshelxle && dirIt.filePath().contains("shelXlesaves",Qt::CaseInsensitive))
+                continue;
+
+            if(excludeolex2 && dirIt.filePath().contains(".olex",Qt::CaseInsensitive))
                 continue;
 
             if (dirIt.fileInfo().isFile())
