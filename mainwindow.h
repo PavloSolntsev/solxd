@@ -30,6 +30,7 @@ public slots:
     void outputResults(const QList<Crystfile> &);
     void setToolbarIcons(const int &);
     void crystinfowindow(QListWidgetItem *item);
+    void checktime();
 
 private:
     Ui::MainWindow *ui;

@@ -4,6 +4,7 @@
 #include <QDataStream>
 #include <QDebug>
 #include "crystfile.h"
+#include <QDateTime>
 
 SearchForm::SearchForm(QWidget *parent) :
     QWidget(parent),
@@ -37,7 +38,9 @@ void SearchForm::startSearch()
     qDebug() << "Reading from database " << _dbfile;
     quint32 magic;
     quint16 version;
+
     in >> magic >> version;
+
     try {
         if (magic != quint32(0x12345678))
             throw "Wrong file format. Database file has been broken. Reindex the database.";
@@ -53,6 +56,9 @@ void SearchForm::startSearch()
     }
 
     in.setVersion(version);
+
+    QDateTime time;
+    in >> time;
 
     if (in.status() != QDataStream::Ok) {
         qDebug() << "in is bad. Fix it";

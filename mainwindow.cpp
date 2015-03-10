@@ -11,6 +11,8 @@
 #include <QLabel>
 //#include <QCursor>
 #include <QMessageBox>
+#include <QDateTime>
+#include "solXd.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 // Read information about Toolbar icon size
     ui->mainToolBar->setIconSize(QSize(dia->getToolbarSize(),dia->getToolbarSize()));
     connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
+    checktime();
 
 }
 
@@ -69,7 +72,6 @@ void MainWindow::indexDatabase()
     filetypemap["res"] = RES;
     filetypemap["cif"] = CIF;
 
-
     ui->listWidget->clear();
 
     connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
@@ -80,6 +82,7 @@ void MainWindow::indexDatabase()
 
     out << quint32(0x12345678);
     out << quint16(out.version());
+    out << QDateTime::currentDateTime();
 
     out.setVersion(out.version());
 /**
@@ -198,4 +201,65 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
 //        msgbox.setGeometry(msgbox.pos().x(),msgbox.pos().y(),500,500);
         msgbox.exec();
 
+}
+
+void MainWindow::checktime()
+{
+    QSettings tset(PROGRAM_NAME,PROGRAM_NAME);
+    QString dbfile = QDir(dia->dbpath()).filePath("solxd.database");
+    QDateTime dtfromfile;
+
+    if (QFileInfo(dbfile).isFile()) {
+        QFile DBFile(dbfile);
+        DBFile.open(QIODevice::ReadOnly);
+        QDataStream in(&DBFile);
+
+//        qDebug() << "Reading from database " << _dbfile;
+        quint32 magic;
+        quint16 version;
+
+        in >> magic >> version;
+
+        try {
+            if (magic != quint32(0x12345678))
+                throw "Wrong file format. Database file has been broken. Reindex the database.";
+            else
+            {
+                if (version > in.version())
+                    throw "File is from a more recent version of the application";
+                else
+                    qDebug() << "Version was passed sussecfully";
+            }
+        } catch (const char *s) {
+            qDebug() << s;
+        }
+
+        in.setVersion(version);
+        in >> dtfromfile;
+
+        QMap<int,QString> monthmap;
+        monthmap[1] = "Jan";
+        monthmap[2] = "Feb";
+        monthmap[3] = "Mar";
+        monthmap[4] = "Apr";
+        monthmap[5] = "May";
+        monthmap[6] = "Jun";
+        monthmap[7] = "Jul";
+        monthmap[8] = "Aug";
+        monthmap[9] = "Sep";
+        monthmap[10] = "Oct";
+        monthmap[11] = "Nov";
+        monthmap[12] = "Dec";
+
+        int year(dtfromfile.date().year());
+        int day(dtfromfile.date().day());
+        int hour(dtfromfile.time().hour());
+        int minute(dtfromfile.time().minute());
+
+        QString text("Database file was created ");
+        text += monthmap[dtfromfile.date().month()];
+        text.append(QString("%1, %2, %3:%4").arg(day).arg(year).arg(hour).arg(minute));
+
+        ui->statusBar->showMessage(text);
+    }
 }
