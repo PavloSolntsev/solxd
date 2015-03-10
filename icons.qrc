@@ -3,5 +3,6 @@
         <file>icons/index.png</file>
         <file>icons/settings.png</file>
         <file>icons/start.png</file>
+        <file>icons/solxd.png</file>
     </qresource>
 </RCC>
