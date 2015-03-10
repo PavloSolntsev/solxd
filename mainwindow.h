@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    const Unitcell parseINS(const QString &);
+//    const Unitcell parseINS(const QString &);
 
 public slots:
     void indexDatabase();
@@ -31,12 +31,18 @@ public slots:
     void setToolbarIcons(const int &);
     void crystinfowindow(QListWidgetItem *item);
     void checktime();
+    void openlistwidgetfiles();
+    void openbrowsfiles();
+protected:
+    void contextMenuEvent(QContextMenuEvent * event);
 
 private:
     Ui::MainWindow *ui;
     Settings *dia;
     SearchForm *sform;
     QString DBpath;
+    QMenu *contextmenu;
+    QAction *aopenfiles,*browsfiles;
 };
 
 #endif // MAINWINDOW_H

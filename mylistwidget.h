@@ -13,6 +13,7 @@ public:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
+
     
 signals:
     

@@ -81,10 +81,6 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
         text += QString("\n<b>Volume:</b> %1").arg(crfile.volume());
 
-
-
-
-
         QToolTip::showText(QCursor::pos(), text);
     } else {
         QToolTip::hideText();

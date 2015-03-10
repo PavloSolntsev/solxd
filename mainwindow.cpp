@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include "solXd.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -261,5 +263,47 @@ void MainWindow::checktime()
         text.append(QString("%1, %2, %3:%4").arg(day).arg(year).arg(hour).arg(minute));
 
         ui->statusBar->showMessage(text);
+        DBFile.close();
     }
+}
+
+void MainWindow::openlistwidgetfiles()
+{
+    QString program = dia->getViewer();
+    QStringList arguments;
+
+    for(int i=0; i<ui->listWidget->selectedItems().size();i++)
+        arguments << ui->listWidget->selectedItems().at(i)->text();
+
+    QProcess *myProcess = new QProcess(this);
+    myProcess->start(program, arguments);
+}
+
+void MainWindow::openbrowsfiles()
+{
+//    QString program = dia->getViewer();
+    QStringList arguments;
+
+    for(int i=0; i<ui->listWidget->selectedItems().size();i++){
+//        arguments << ui->listWidget->selectedItems().at(i)->text();
+        QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
+        QDesktopServices::openUrl(QUrl("file:///" + path));
+    }
+}
+
+void MainWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    contextmenu = new QMenu(this);
+
+    aopenfiles = new QAction(tr("&Open with viewer"),contextmenu);
+    aopenfiles->setStatusTip(tr("Open selected file(s) with viewer"));
+    connect(aopenfiles,SIGNAL(triggered()),this,SLOT(openlistwidgetfiles()));
+
+    browsfiles = new QAction(tr("&Locate files"),contextmenu);
+    browsfiles->setStatusTip(tr("Open files in default file browser"));
+    connect(browsfiles,SIGNAL(triggered()),this,SLOT(openbrowsfiles()));
+
+    contextmenu->addAction(aopenfiles);
+    contextmenu->addAction(browsfiles);
+    contextmenu->exec(event->globalPos());
 }

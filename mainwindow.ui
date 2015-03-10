@@ -20,7 +20,11 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="MyListWidget" name="listWidget"/>
+     <widget class="MyListWidget" name="listWidget">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -31,9 +35,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionIndex_Files"/>
    <addaction name="actionSettings"/>
+   <addaction name="actionIndex_Files"/>
    <addaction name="actionStart"/>
+   <addaction name="action_Exit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
