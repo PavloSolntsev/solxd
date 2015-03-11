@@ -33,6 +33,8 @@ public slots:
     void checktime();
     void openlistwidgetfiles();
     void openbrowsfiles();
+    void openfilesastext();
+
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
 
@@ -42,7 +44,7 @@ private:
     SearchForm *sform;
     QString DBpath;
     QMenu *contextmenu;
-    QAction *aopenfiles,*browsfiles;
+    QAction *aopenfiles,*browsfiles,*openastext;
 };
 
 #endif // MAINWINDOW_H

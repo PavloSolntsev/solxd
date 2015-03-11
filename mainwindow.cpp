@@ -170,8 +170,10 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         QListWidgetItem *listiteam = new QListWidgetItem();
         listiteam->setText(it->getPath());
         listiteam->setData(Qt::UserRole,qv);
+        listiteam->setFont(QFont("monospace",12));
         ui->listWidget->addItem(listiteam);
 //        ui->listWidget->addItem(it->getPath());
+//        qDebug() << "listWidgetSize = " << listiteam->sizeHint().rheight() << " " << listiteam->sizeHint().rwidth();
     }
     ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
 
@@ -287,8 +289,20 @@ void MainWindow::openbrowsfiles()
     for(int i=0; i<ui->listWidget->selectedItems().size();i++){
 //        arguments << ui->listWidget->selectedItems().at(i)->text();
         QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
-        QDesktopServices::openUrl(QUrl("file:///" + path));
+        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo(path).dir().absolutePath()));
     }
+}
+
+void MainWindow::openfilesastext()
+{
+    //    QString program = dia->getViewer();
+        QStringList arguments;
+
+        for(int i=0; i<ui->listWidget->selectedItems().size();i++){
+    //        arguments << ui->listWidget->selectedItems().at(i)->text();
+            QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
+            QDesktopServices::openUrl(QUrl("file:///" + path));
+        }
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
@@ -303,7 +317,12 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     browsfiles->setStatusTip(tr("Open files in default file browser"));
     connect(browsfiles,SIGNAL(triggered()),this,SLOT(openbrowsfiles()));
 
+    openastext = new QAction(tr("&Open file(s) in editor"),contextmenu);
+    openastext->setStatusTip(tr("Open files in default text editor"));
+    connect(openastext,SIGNAL(triggered()),this,SLOT(openfilesastext()));
+
     contextmenu->addAction(aopenfiles);
+    contextmenu->addAction(openastext);
     contextmenu->addAction(browsfiles);
     contextmenu->exec(event->globalPos());
 }
