@@ -34,12 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
 // Read information about Toolbar icon size
     ui->mainToolBar->setIconSize(QSize(dia->getToolbarSize(),dia->getToolbarSize()));
-
     ui->listWidget->setFont(dia->get_lwfont());
-    qDebug() << __FILE__ << " " << __LINE__ << " = " << dia->get_lwfont().pointSize() ;
+    qDebug() << "File " << __FILE__ << " Line " << __LINE__;
     connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
-
-    connect(dia,SIGNAL(fontChenged(QFont)),this,SLOT(changelwfont(QFont)));
+    connect(dia,SIGNAL(fontChanged(QFont)),this,SLOT(changelwfont(QFont)));
 
     checktime();
 }
@@ -314,9 +312,10 @@ void MainWindow::openfilesastext()
 
 void MainWindow::changelwfont(const QFont &font)
 {
+    qDebug("START changelwfont() function");
     ui->listWidget->setFont(font);
-    qDebug() << __FILE__ << " font size is " << font.pointSize();
-
+    qDebug() << "File " <<  __FILE__ << " Line " << __LINE__  << " font size is " << font.pointSize();
+    qDebug("END changelwfont() function");
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)

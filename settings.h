@@ -6,6 +6,7 @@
 #include <QString>
 #include "solXd.h"
 #include <QFont>
+#include <QDebug>
 
 namespace Ui {
 class Settings;
@@ -50,14 +51,12 @@ public slots:
     void shelxlecheckchanged(int i);
     void olex2checkchanged(int i);
     void viewerpathchanged(const QString &a){viewerpath = a;}
-
     void ok_button_clicked();
+    void font_button_clicked();
+
 signals:
     void toolbarIconsChanged(const int &);
-    void fontChenged(const QFont &);
-
-private slots:
-    void on_pushButton_font_clicked();
+    void fontChanged(const QFont &);
 
 private:
     Ui::Settings *ui;

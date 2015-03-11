@@ -30,6 +30,7 @@ Settings::Settings(QWidget *parent) :
     connect(ui->pushButtonOk,SIGNAL(clicked()),this,SLOT(ok_button_clicked()));
     connect(ui->pushButtonCancel,SIGNAL(clicked()),this,SLOT(close()));
     connect(ui->spinBox_iconsize,SIGNAL(valueChanged(int)),parent,SLOT(setToolbarIcons(int)));
+    connect(ui->pushButton_font,SIGNAL(clicked()),this,SLOT(font_button_clicked()));
 
     connect(ui->checkBox_shelxle,SIGNAL(stateChanged(int)),this,SLOT(shelxlecheckchanged(int)));
     connect(ui->checkBox_olex2,SIGNAL(stateChanged(int)),this,SLOT(olex2checkchanged(int)));
@@ -91,13 +92,13 @@ Settings::Settings(QWidget *parent) :
     if (settings->contains("item.font.family")) {
         lwfont.setFamily(settings->value("item.font.family").toString());
         lwfont.setPointSize(settings->value("item.font.size").toInt());
-        qDebug() << "Point size = " << settings->value("item.font.size").toInt();
-        lwfont.setPointSize(settings->value("item.font.bold").toBool());
-        lwfont.setPointSize(settings->value("item.font.italic").toBool());
-        ui->pushButton_font->setText(lwfont.family()+", "+QString::number(lwfont.pointSize()));
-        emit fontChenged(lwfont);
+ //       qDebug() << "File = " << __FILE__ << " Line " << __LINE__ << "Point size = " << settings->value("item.font.size").toInt();
+        lwfont.setBold(settings->value("item.font.bold").toBool());
+        lwfont.setItalic(settings->value("item.font.italic").toBool());
     }
 
+    ui->pushButton_font->setText(lwfont.family()+", "+QString::number(lwfont.pointSize()));
+    emit fontChanged(lwfont);
 }
 
 Settings::~Settings()
@@ -256,17 +257,21 @@ void Settings::olex2checkchanged(int i)
 }
 
 
-void Settings::on_pushButton_font_clicked()
+void Settings::font_button_clicked()
 {
+    qDebug("START on_pushButton_font_clicked() function");
     bool ok;
-    QFontDialog fontdialog(lwfont,this);
+    QFont temp(lwfont);
+//    QFontDialog fontdialog(lwfont,this);
 
-    lwfont = QFontDialog::getFont(&ok, lwfont, this);
+    lwfont = QFontDialog::getFont(&ok, temp, this);
 
     if (ok) {
         ui->pushButton_font->setText(lwfont.family()+", "+QString::number(lwfont.pointSize()));
-        emit fontChenged(lwfont);
+        emit fontChanged(lwfont);
+        qDebug("Call inside IF");
     }
 
+    qDebug("END on_pushButton_font_clicked() function");
 
 }
