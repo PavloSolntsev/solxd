@@ -11,54 +11,6 @@ MyListWidget::MyListWidget(QWidget *parent) :
     setMouseTracking(true);
 }
 
-//bool MyListWidget::event(QEvent *event)
-//{
-//    if (event->type() == QEvent::ToolTip) {
-//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-//        QListWidgetItem *index;
-//        index = NULL;
-//        index = itemAt(helpEvent->pos());
-//        if (index != NULL) {
-//            QToolTip::showText(helpEvent->globalPos(), "Hello World!");
-//        } else {
-//            QToolTip::hideText();
-//            event->ignore();
-//        }
-
-//        return true;
-//    }
-//    return QWidget::event(event);
-//}
-
-//void MyListWidget::paintEvent(QPaintEvent *event)
-//{
-//    QPainter painter(this);
-//    painter.setRenderHint(QPainter::Antialiasing);
-//    foreach (ShapeItem shapeItem, shapeItems) {
-//        painter.translate(shapeItem.position());
-//        painter.setBrush(shapeItem.color());
-//        painter.drawPath(shapeItem.path());
-//        painter.translate(-shapeItem.position());
-//    }
-//}
-
-//void MyListWidget::enterEvent(QEvent *event)
-//{
-//    if (event->type() == QEvent::ToolTip) {
-//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-//        QListWidgetItem *index;
-//        index = NULL;
-//        index = itemAt(helpEvent->pos());
-//        if (index != NULL) {
-//            QToolTip::showText(helpEvent->globalPos(), "Hello World!");
-//        } else {
-//            QToolTip::hideText();
-//            event->ignore();
-//        }
-//    }
-
-//}
-
 void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QListWidgetItem *index;
@@ -79,7 +31,13 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
         Crystfile crfile(qvr->value<Crystfile>());
         QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
+        text += QString("\n<b>Formula</b>");
+        for (int var = 0; var < crfile.getSfacArray().size(); ++var) {
+            text += QString(" %1 %2").arg(crfile.getSfacArray().at(var)).arg(crfile.getUnitArray().at(var));
+        }
+
         text += QString("\n<b>Volume:</b> %1").arg(crfile.volume());
+
 
         QToolTip::showText(QCursor::pos(), text);
     } else {
