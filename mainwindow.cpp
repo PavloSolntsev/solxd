@@ -15,6 +15,7 @@
 #include "solXd.h"
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFontDialog>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -33,9 +34,14 @@ MainWindow::MainWindow(QWidget *parent) :
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
 // Read information about Toolbar icon size
     ui->mainToolBar->setIconSize(QSize(dia->getToolbarSize(),dia->getToolbarSize()));
-    connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
-    checktime();
 
+    ui->listWidget->setFont(dia->get_lwfont());
+    qDebug() << __FILE__ << " " << __LINE__ << " = " << dia->get_lwfont().pointSize() ;
+    connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
+
+    connect(dia,SIGNAL(fontChenged(QFont)),this,SLOT(changelwfont(QFont)));
+
+    checktime();
 }
 
 MainWindow::~MainWindow()
@@ -170,11 +176,12 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         QListWidgetItem *listiteam = new QListWidgetItem();
         listiteam->setText(it->getPath());
         listiteam->setData(Qt::UserRole,qv);
-        listiteam->setFont(QFont("monospace",12));
+//        listiteam->setFont(QFont("monospace",12));
         ui->listWidget->addItem(listiteam);
 //        ui->listWidget->addItem(it->getPath());
 //        qDebug() << "listWidgetSize = " << listiteam->sizeHint().rheight() << " " << listiteam->sizeHint().rwidth();
     }
+//    ui->listWidget->setFont(QFont("monospace",12));
     ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
 
 }
@@ -303,6 +310,13 @@ void MainWindow::openfilesastext()
             QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
             QDesktopServices::openUrl(QUrl("file:///" + path));
         }
+}
+
+void MainWindow::changelwfont(const QFont &font)
+{
+    ui->listWidget->setFont(font);
+    qDebug() << __FILE__ << " font size is " << font.pointSize();
+
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)

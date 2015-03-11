@@ -223,7 +223,7 @@
      <property name="title">
       <string>Interface Settings</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
@@ -244,6 +244,13 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_font">
+        <property name="text">
+         <string>Select Font for Items</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

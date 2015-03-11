@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QString>
 #include "solXd.h"
+#include <QFont>
 
 namespace Ui {
 class Settings;
@@ -28,6 +29,7 @@ public:
     const bool &excludeshelxlefolders(void)const{return shelxlecheck;}
     const bool &excludeolex2folders(void)const{return olex2check;}
     const QString &getViewer(void)const{return viewerpath;}
+    const QFont &get_lwfont()const{return lwfont;}
 
 public slots:
     void addPath1();
@@ -52,6 +54,10 @@ public slots:
     void ok_button_clicked();
 signals:
     void toolbarIconsChanged(const int &);
+    void fontChenged(const QFont &);
+
+private slots:
+    void on_pushButton_font_clicked();
 
 private:
     Ui::Settings *ui;
@@ -66,6 +72,7 @@ private:
     QStringList listpath;
     bool shelxlecheck;
     bool olex2check;
+    QFont lwfont;
 
     int toolbarsize;
 

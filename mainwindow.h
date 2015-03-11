@@ -34,6 +34,7 @@ public slots:
     void openlistwidgetfiles();
     void openbrowsfiles();
     void openfilesastext();
+    void changelwfont(const QFont &);
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event);

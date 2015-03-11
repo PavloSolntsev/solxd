@@ -1,6 +1,8 @@
 #include "settings.h"
 #include "ui_settings.h"
 #include <QFileDialog>
+#include <QFontDialog>
+#include <QDebug>
 
 Settings::Settings(QWidget *parent) :
     QWidget(parent),
@@ -86,6 +88,16 @@ Settings::Settings(QWidget *parent) :
         emit toolbarIconsChanged(toolbarsize);
     }
 
+    if (settings->contains("item.font.family")) {
+        lwfont.setFamily(settings->value("item.font.family").toString());
+        lwfont.setPointSize(settings->value("item.font.size").toInt());
+        qDebug() << "Point size = " << settings->value("item.font.size").toInt();
+        lwfont.setPointSize(settings->value("item.font.bold").toBool());
+        lwfont.setPointSize(settings->value("item.font.italic").toBool());
+        ui->pushButton_font->setText(lwfont.family()+", "+QString::number(lwfont.pointSize()));
+        emit fontChenged(lwfont);
+    }
+
 }
 
 Settings::~Settings()
@@ -128,6 +140,12 @@ void Settings::ok_button_clicked()
 
     settings->setValue("ShelXle",shelxlecheck);
     settings->setValue("Olex2",olex2check);
+// Save font for QListWidget
+    settings->setValue("item.font.family", lwfont.family());
+    settings->setValue("item.font.size", lwfont.pointSize());
+    settings->setValue("item.font.bold", lwfont.bold());
+    settings->setValue("item.font.italic", lwfont.italic());
+// End font saving
     settings->sync();
     close();
 }
@@ -237,3 +255,18 @@ void Settings::olex2checkchanged(int i)
     }
 }
 
+
+void Settings::on_pushButton_font_clicked()
+{
+    bool ok;
+    QFontDialog fontdialog(lwfont,this);
+
+    lwfont = QFontDialog::getFont(&ok, lwfont, this);
+
+    if (ok) {
+        ui->pushButton_font->setText(lwfont.family()+", "+QString::number(lwfont.pointSize()));
+        emit fontChenged(lwfont);
+    }
+
+
+}
