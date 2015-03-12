@@ -29,30 +29,29 @@ public:
     bool findCellBeta(const double &cellBeta,const double &error);
     bool findCellGamma(const double &cellGamma,const double &error);
     bool findVolume(const double &vol, const double &error);
-    bool isBad()const{
+
+    inline const QString &getPath()const {return _path;}
+    inline const FileType &getFileType()const{return _type;}
+    inline const CellType &getCellType()const{return _ctype;}
+    inline const double &getWavelength()const{return _wavelength;}
+    inline const bool &isCenter()const{return _center;}
+    inline const QList<QString> &getSfacArray()const{return sfacarray;}
+    inline const QList<double> &getUnitArray()const{return unitarray;}
+    inline const CellType &getBrave()const{return _ctype;}
+    inline bool isBad()const{
         if (_a == 1 || _b == 1 || _c == 1)
             return true;
         else
             return false;
     }
 
-
-    const QString &getPath()const {return _path;}
-    const FileType &getFileType()const{return _type;}
-    const CellType &getCellType()const{return _ctype;}
-    const double &getWavelength()const{return _wavelength;}
-    const bool &isCenter()const{return _center;}
-    const QList<QString> &getSfacArray()const{return sfacarray;}
-    const QList<double> &getUnitArray()const{return unitarray;}
-    const CellType &getBrave()const{return _ctype;}
-
-    void setPath(const QString &path){_path=path;}
-    void setFileType(const FileType &a){_type = a;}
-    void setCellType(const CellType &a){_ctype = a;}
-    void setWavelength(const double &a){_wavelength = a;}
-    void setCenter(const bool &a){_center = a;}
-    void setSfacArray(const QList<QString> &a){sfacarray = a;}
-    void setUnitArray(const QList<double> &a){unitarray = a;}
+    inline void setPath(const QString &path){_path=path;}
+    inline void setFileType(const FileType &a){_type = a;}
+    inline void setCellType(const CellType &a){_ctype = a;}
+    inline void setWavelength(const double &a){_wavelength = a;}
+    inline void setCenter(const bool &a){_center = a;}
+    inline void setSfacArray(const QList<QString> &a){sfacarray = a;}
+    inline void setUnitArray(const QList<double> &a){unitarray = a;}
 
     friend QDataStream& operator<<(QDataStream& out, const Crystfile& crfile);
     friend QDataStream& operator>>(QDataStream& in, Crystfile& crfile);

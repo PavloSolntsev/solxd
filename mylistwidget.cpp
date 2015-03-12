@@ -42,6 +42,7 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 //                qDebug() << "Before :" << sfacstring << " After :" << sfacstring.replace(0,2,sfacstring.at(0).toUpper());
 
             }
+
             if(crfile.getSfacArray().at(var).size() == 1)
             {
                 text += QString(" %1 %2").arg(crfile.getSfacArray().at(var).toUpper()).arg(crfile.getUnitArray().at(var));

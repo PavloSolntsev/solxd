@@ -17,7 +17,6 @@
 #include <QUrl>
 #include <QFontDialog>
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -27,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-//    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(crystinfowindow(QListWidgetItem*)));
     connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
     sform = NULL;
     dia = new Settings(this);
@@ -109,13 +107,11 @@ void MainWindow::indexDatabase()
 
             if (dirIt.fileInfo().isFile())
               {
-//                qDebug() << dirIt.next();
                 QString suffix = dirIt.fileInfo().suffix().toLower();
 
                 if (suffix == "ins" || suffix == "res" || suffix == "cif")
                 {
                     QString filepath = dirIt.filePath();
-//                    database.push_back(Crystfile(filetypemap[suffix],filepath));
                     ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
                     Crystfile crf(filetypemap[suffix],filepath);
                     out << crf;
@@ -178,17 +174,12 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         QListWidgetItem *listiteam = new QListWidgetItem();
         listiteam->setText(it->getPath());
         listiteam->setData(Qt::UserRole,qv);
-//        listiteam->setFont(QFont("monospace",12));
         ui->listWidget->addItem(listiteam);
         if (it->isBad()) {
             listiteam->setForeground(Qt::red);
         }
-//        ui->listWidget->addItem(it->getPath());
-//        qDebug() << "listWidgetSize = " << listiteam->sizeHint().rheight() << " " << listiteam->sizeHint().rwidth();
     }
-//    ui->listWidget->setFont(QFont("monospace",12));
     ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
-
 }
 
 void MainWindow::setToolbarIcons(const int &i)
@@ -204,9 +195,6 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
         QString cellinfo;
         cellinfo = QString("<b>Unit Cell:</b>\n%1\t%2\t%3\t%4\t%5\t%6>").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
 
-//        int ret = QMessageBox::information(this, tr("Information about file"),
-//                                        cellinfo,
-//                                        QMessageBox::Ok);
         QMessageBox msgbox;
         msgbox.setWindowTitle(tr("Information about file"));
         msgbox.setText(QFileInfo(crfile.getPath()).fileName());
@@ -214,7 +202,6 @@ void MainWindow::crystinfowindow(QListWidgetItem *item)
         msgbox.setStandardButtons(QMessageBox::Ok);
         msgbox.setDefaultButton(QMessageBox::Ok);
         msgbox.setDetailedText(tr("Put some text here"));
-//        msgbox.setGeometry(msgbox.pos().x(),msgbox.pos().y(),500,500);
         msgbox.exec();
 
 }
@@ -230,7 +217,6 @@ void MainWindow::checktime()
         DBFile.open(QIODevice::ReadOnly);
         QDataStream in(&DBFile);
 
-//        qDebug() << "Reading from database " << _dbfile;
         quint32 magic;
         quint16 version;
 
@@ -295,11 +281,9 @@ void MainWindow::openlistwidgetfiles()
 
 void MainWindow::openbrowsfiles()
 {
-//    QString program = dia->getViewer();
     QStringList arguments;
 
     for(int i=0; i<ui->listWidget->selectedItems().size();i++){
-//        arguments << ui->listWidget->selectedItems().at(i)->text();
         QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
         QDesktopServices::openUrl(QUrl("file:///" + QFileInfo(path).dir().absolutePath()));
     }
@@ -307,11 +291,9 @@ void MainWindow::openbrowsfiles()
 
 void MainWindow::openfilesastext()
 {
-    //    QString program = dia->getViewer();
         QStringList arguments;
 
         for(int i=0; i<ui->listWidget->selectedItems().size();i++){
-    //        arguments << ui->listWidget->selectedItems().at(i)->text();
             QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
             QDesktopServices::openUrl(QUrl("file:///" + path));
         }
@@ -319,10 +301,7 @@ void MainWindow::openfilesastext()
 
 void MainWindow::changelwfont(const QFont &font)
 {
-    qDebug("START changelwfont() function");
     ui->listWidget->setFont(font);
-    qDebug() << "File " <<  __FILE__ << " Line " << __LINE__  << " font size is " << font.pointSize();
-    qDebug("END changelwfont() function");
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
