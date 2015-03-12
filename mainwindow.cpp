@@ -123,6 +123,10 @@ void MainWindow::indexDatabase()
                     qv.setValue(crf);
                     QListWidgetItem *listiteam = new QListWidgetItem();
                     listiteam->setText(filepath);
+                    if (crf.isBad()) {
+                        listiteam->setForeground(Qt::red);
+                    }
+
                     listiteam->setData(Qt::UserRole,qv);
                     ui->listWidget->addItem(listiteam);
                 }
@@ -176,6 +180,9 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         listiteam->setData(Qt::UserRole,qv);
 //        listiteam->setFont(QFont("monospace",12));
         ui->listWidget->addItem(listiteam);
+        if (it->isBad()) {
+            listiteam->setForeground(Qt::red);
+        }
 //        ui->listWidget->addItem(it->getPath());
 //        qDebug() << "listWidgetSize = " << listiteam->sizeHint().rheight() << " " << listiteam->sizeHint().rwidth();
     }

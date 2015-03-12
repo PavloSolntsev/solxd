@@ -29,6 +29,12 @@ public:
     bool findCellBeta(const double &cellBeta,const double &error);
     bool findCellGamma(const double &cellGamma,const double &error);
     bool findVolume(const double &vol, const double &error);
+    bool isBad()const{
+        if (_a == 1 || _b == 1 || _c == 1)
+            return true;
+        else
+            return false;
+    }
 
 
     const QString &getPath()const {return _path;}
