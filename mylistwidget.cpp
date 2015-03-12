@@ -4,6 +4,7 @@
 #include <QHelpEvent>
 #include <QListWidgetItem>
 #include <crystfile.h>
+#include <QDebug>
 
 MyListWidget::MyListWidget(QWidget *parent) :
     QListWidget(parent)
@@ -33,7 +34,19 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
         text += QString("\n<b>Formula</b>");
         for (int var = 0; var < crfile.getSfacArray().size(); ++var) {
-            text += QString(" %1 %2").arg(crfile.getSfacArray().at(var)).arg(crfile.getUnitArray().at(var));
+
+            if (crfile.getSfacArray().at(var).size() == 2) {
+                QString sfacstring;
+                sfacstring = crfile.getSfacArray().at(var);
+                text += QString(" %1 %2").arg(sfacstring.replace(0,2,sfacstring.at(0).toUpper())).arg(crfile.getUnitArray().at(var));
+//                qDebug() << "Before :" << sfacstring << " After :" << sfacstring.replace(0,2,sfacstring.at(0).toUpper());
+
+            }
+            if(crfile.getSfacArray().at(var).size() == 1)
+            {
+                text += QString(" %1 %2").arg(crfile.getSfacArray().at(var).toUpper()).arg(crfile.getUnitArray().at(var));
+
+            }
         }
 
         text += QString("\n<b>Volume:</b> %1").arg(crfile.volume());
