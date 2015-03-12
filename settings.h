@@ -16,10 +16,6 @@ class Settings : public QWidget
 {
     Q_OBJECT
     
-    struct PathLabel{
-        QString path;
-        QString label;
-    };
 public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
