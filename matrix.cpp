@@ -1,6 +1,6 @@
 /**************************************************************************
 **
-** This main.cpp file is part of SolXd software.
+** This matrix.cpp file is part of SolXd software.
 **
 ** Copyright (C) 2015 Pavlo Solntsev
 **
@@ -19,14 +19,13 @@
 **
 **************************************************************************/
 
-#include <QApplication>
-#include "mainwindow.h"
+#include "matrix.h"
 
-int main(int argc, char *argv[])
+Matrix::Matrix():
+    m11(1),m12(0),m13(0),
+    m21(0),m22(1),m23(0),
+    m31(0),m32(0),m33(1)
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    
-    return a.exec();
+
+
 }

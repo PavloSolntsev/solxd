@@ -1,3 +1,24 @@
+/**************************************************************************
+**
+** This crystfile.cpp file is part of SolXd software.
+**
+** Copyright (C) 2015 Pavlo Solntsev
+**
+** SolXd is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** Foobar is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+**
+**************************************************************************/
+
 #include "crystfile.h"
 #include <QTextStream>
 #include <QFile>
@@ -104,7 +125,7 @@ bool Crystfile::findSfac(const QString &sfac)
 
 void Crystfile::parseINS()
 {
-//    _state = true;
+    _state = CRGOOD;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::information(0, "error", file.errorString());
@@ -227,8 +248,6 @@ void Crystfile::parseINS()
             }
         }
 
-
-
         if (line.startsWith("unit ",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
@@ -274,7 +293,7 @@ void Crystfile::parseINS()
 
 void Crystfile::parseCIF()
 {
-//    _state = true;
+    _state = CRGOOD;
 //    qDeug() << "Parsing CIF file" << _path;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

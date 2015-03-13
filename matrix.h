@@ -1,8 +1,8 @@
 /**************************************************************************
 **
-** This main.cpp file is part of SolXd software.
+** This matrix.h file is part of SolXd software.
 **
-** Copyright (C) 2015 Pavlo Solntsev
+** Copyright (C) 2015 pavlo
 **
 ** SolXd is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,14 +19,18 @@
 **
 **************************************************************************/
 
-#include <QApplication>
-#include "mainwindow.h"
+#ifndef MATRIX_H
+#define MATRIX_H
 
-int main(int argc, char *argv[])
+class Matrix
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    
-    return a.exec();
-}
+public:
+    Matrix();
+private:
+    double m11,m12,m13,
+           m21,m22,m23,
+           m31,m32,m33;
+
+};
+
+#endif // MATRIX_H
