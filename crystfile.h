@@ -38,13 +38,16 @@ public:
     inline const QList<QString> &getSfacArray()const{return sfacarray;}
     inline const QList<double> &getUnitArray()const{return unitarray;}
     inline const CellType &getBrave()const{return _ctype;}
-    inline bool isBad()const{
-        if (_a == 1 || _b == 1 || _c == 1 || !_state)
-            return true;
-        else
-            return false;
-    }
+//    inline bool isBad()const{
+//        if (_a == 1 || _b == 1 || _c == 1 || !_state)
+//            return true;
+//        else
+//            return false;
+//    }
     inline bool state()const{return _state;}
+    inline const int &cifblock()const{return _cifblock;}
+
+
     inline void setPath(const QString &path){_path=path;}
     inline void setFileType(const FileType &a){_type = a;}
     inline void setCellType(const CellType &a){_ctype = a;}
@@ -70,6 +73,7 @@ private:
     void parseCIF();
 
     bool _state;
+    int _cifblock;
 };
 
 Q_DECLARE_METATYPE(Crystfile)

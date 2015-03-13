@@ -119,9 +119,12 @@ void MainWindow::indexDatabase()
                     qv.setValue(crf);
                     QListWidgetItem *listiteam = new QListWidgetItem();
                     listiteam->setText(filepath);
-                    if (crf.isBad()) {
+                    if (!crf.state())
                         listiteam->setForeground(Qt::red);
-                    }
+
+                    if (crf.cifblock() > 1)
+                        listiteam->setForeground(Qt::blue);
+
 
                     listiteam->setData(Qt::UserRole,qv);
                     ui->listWidget->addItem(listiteam);
@@ -176,9 +179,13 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         listiteam->setText(it->getPath());
         listiteam->setData(Qt::UserRole,qv);
         ui->listWidget->addItem(listiteam);
-        if (it->isBad()) {
+
+        if (!it->state())
             listiteam->setForeground(Qt::red);
-        }
+
+        if (it->cifblock() > 1)
+            listiteam->setForeground(Qt::blue);
+
     }
     ui->statusBar->showMessage(tr("%1 files have been found").arg(res.size()));
 }
