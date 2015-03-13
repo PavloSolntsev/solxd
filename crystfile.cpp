@@ -9,7 +9,8 @@ Crystfile::Crystfile():
     _path(""),
     _type(NONE),
     _ctype(UNKNOWN),
-    _wavelength(0)
+    _wavelength(0),
+    _state(false)
 {
 }
 
@@ -19,6 +20,7 @@ Crystfile::Crystfile(FileType type, const QString &path)
     _type = type;
     _path = path;
     _center = false;
+    _state = false;
 
     switch (_type) {
     case INS:
@@ -111,11 +113,21 @@ void Crystfile::parseINS()
     bool lattcheck(false);
     bool sfaccheck(false);
     bool unitcheck(false);
-    bool endcheck(false);
+//    bool endcheck(false);
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 //        qDebug() << "ParseINS \n" << line;
+        if (line.startsWith("END ",Qt::CaseInsensitive)) {
+            //sfaccheck = true; // There is no way SFAC group behind this point
+            //endcheck = true;
+            break;
+        }
+
+        if (line.startsWith("HKLF ",Qt::CaseInsensitive)) {
+            _state = true; // if HKLF instruction is presen VERY high chance this is true RES or INS file
+            continue;
+        }
 
         if (line.startsWith("cell ",Qt::CaseInsensitive))
         {
@@ -126,12 +138,6 @@ void Crystfile::parseINS()
             // CELL Wavelength cella cellb cellc alpha beta gamma
             buffer >> temp >> g >> a >> b >> c >> d >> e >> f;
             this->_wavelength = g;
-//            this->_a = a;
-//            this->_b = b;
-//            this->_c = c;
-//            this->_alpha = d;
-//            this->_beta = e;
-//            this->_gama = f;
             set_cell(a,b,c,d,e,f);
 
             cellcheck = true;
@@ -186,20 +192,17 @@ void Crystfile::parseINS()
             QTextStream buffer(&line);
             QString a;
             buffer >> a; // Reading SFAC keyword
-            //            QString temp;
 
             if (!line.contains('=')) { // Normal SFAC  C Cu CL N O
                 while (!buffer.atEnd()) {
                     buffer >> a;
 
-                    if (a.isEmpty()) {
+                    if (a.isEmpty())
                         continue;
-                    }
                     if (a == "?") {
                         sfaccheck = true;
                         break;
                     }
-//                    qDebug() << "reading SFAC " << a;
 
                     sfacarray.push_back(a.toLower());
                 }
@@ -217,10 +220,7 @@ void Crystfile::parseINS()
             }
         }
 
-        if (line.startsWith("END ",Qt::CaseInsensitive)) {
-            sfaccheck = true; // There is no way SFAC group behind this point
-            break;
-        }
+
 
         if (line.startsWith("unit ",Qt::CaseInsensitive))
         {
@@ -256,9 +256,9 @@ void Crystfile::parseINS()
             continue;
         }
 
-        if (endcheck) {
-            break;
-        }
+//        if (endcheck) {
+//            break;
+//        }
     }
 
     file.close();
@@ -277,9 +277,15 @@ void Crystfile::parseCIF()
     int quatcount(0);
 
     double a(0),b(0),c(0),d(0),e(0),f(0); // unit cell variables
+    int datablockcount(0);
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
+
+        if (line.contains("data_",Qt::CaseSensitive))
+        {
+            datablockcount++;
+        }
 
         if (line.contains("_cell_length_a",Qt::CaseInsensitive))
         {
@@ -476,6 +482,10 @@ void Crystfile::parseCIF()
         }
     }
 
+    if (datablockcount > 1) {
+        qDebug() << "More then 2 block detected in file " << _path;
+    }
+
     file.close();
 }
 
@@ -568,7 +578,8 @@ QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
         << crfile.c()
         << crfile.alpha()
         << crfile.beta()
-        << crfile.gama();
+        << crfile.gama()
+        << crfile.state();
     return out;
 }
 
@@ -587,11 +598,12 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
         >> crfile._c
         >> crfile._alpha
         >> crfile._beta
-        >> crfile._gama;
+        >> crfile._gama
+        >> crfile._state;
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);
-    crfile.sync_volume(); // recalculate volume
+    crfile.sync_data(); // recalculate volume
 
     return in;
 }

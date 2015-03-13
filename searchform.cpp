@@ -35,7 +35,7 @@ void SearchForm::startSearch()
     DBFile.open(QIODevice::ReadOnly);
     QDataStream in(&DBFile);
 
-    qDebug() << "Reading from database " << _dbfile;
+    emit massage("Looking for files....");
     quint32 magic;
     quint16 version;
 
@@ -71,7 +71,7 @@ void SearchForm::startSearch()
         QList<bool> boolresults;
         Crystfile crfile;
         in >> crfile;
-//        qDebug() << "File in database " << crfile.getPath();
+
         if (crfile.getPath() == "")
             break;
 

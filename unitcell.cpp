@@ -59,7 +59,7 @@ void Unitcell::set_cell(const double &acell, const double &bcell, const double &
 
 }
 
-void Unitcell::sync_volume()
+void Unitcell::sync_data()
 {
     alcos = cos(DEG2RAD(_alpha));
     becos = cos(DEG2RAD(_beta));

@@ -63,7 +63,7 @@ protected:
     double alsin;
     double besin;
     double gasin;
-    void sync_volume();
+    void sync_data();
 
 };
 

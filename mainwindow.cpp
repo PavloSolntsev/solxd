@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-    connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
+    connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));    
     sform = NULL;
     dia = new Settings(this);
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
@@ -159,6 +159,7 @@ void MainWindow::startSearch()
     } else {
         sform = new SearchForm(this);
         connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
+        connect(sform,SIGNAL(massage(QString)),this,SLOT(displaymassage(QString)));
         sform->setWindowFlags(Qt::Window);
         sform->setDBfile(DBpath);
         sform->show();
@@ -302,6 +303,11 @@ void MainWindow::openfilesastext()
 void MainWindow::changelwfont(const QFont &font)
 {
     ui->listWidget->setFont(font);
+}
+
+void MainWindow::displaymassage(const QString &text)
+{
+    ui->statusBar->showMessage(text);
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)

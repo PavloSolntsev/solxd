@@ -35,6 +35,7 @@ public slots:
     void openbrowsfiles();
     void openfilesastext();
     void changelwfont(const QFont &font);
+    void displaymassage(const QString &);
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
