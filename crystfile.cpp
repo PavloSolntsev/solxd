@@ -601,6 +601,18 @@ bool Crystfile::findVolume(const double &vol, const double &error)
         return false;
 }
 
+const Unitcell &Crystfile::niggli()
+{
+    Unitcell a;
+
+    cctbx::uctbx::fast_minimum_reduction mytest;
+    if (mytest.termination_due_to_significant_change_test()) {
+        qDebug() << "I was terminated succesfully";
+    }
+
+    return a;
+}
+
 QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
 {
     out << crfile._path

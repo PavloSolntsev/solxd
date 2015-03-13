@@ -25,7 +25,7 @@
 #include <QString>
 #include <QList>
 #include <QMetaType>
-//#include <cctbx/uctbx/fast_minimum_reduction.h>
+#include <cctbx/uctbx/fast_minimum_reduction.h>
 
 
 class Crystfile : public Unitcell
@@ -77,6 +77,7 @@ public:
 //    }
     inline const CrystfileState &state()const{return _state;}
     inline const int &cifblock()const{return _cifblock;}
+    const Unitcell &niggli();
 
     inline void setPath(const QString &path){_path=path;}
     inline void setFileType(const FileType &a){_type = a;}

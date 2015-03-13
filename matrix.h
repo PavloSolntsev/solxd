@@ -2,7 +2,7 @@
 **
 ** This matrix.h file is part of SolXd software.
 **
-** Copyright (C) 2015 pavlo
+** Copyright (C) 2015 Pavlo Solntsev
 **
 ** SolXd is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ class Matrix
 {
 public:
     Matrix();
+
 private:
     double m11,m12,m13,
            m21,m22,m23,

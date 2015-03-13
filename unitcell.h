@@ -84,7 +84,7 @@ protected:
     double alsin;
     double besin;
     double gasin;
-    void sync_data();
+    void sync_data(); // recalculate volume and other numberic parameters if any
 
 };
 
