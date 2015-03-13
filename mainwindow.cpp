@@ -180,10 +180,10 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         listiteam->setData(Qt::UserRole,qv);
         ui->listWidget->addItem(listiteam);
 
-        if (!it->state())
+        if (it->state() == Crystfile::CRGOOD)
             listiteam->setForeground(Qt::red);
 
-        if (it->cifblock() > 1)
+        if (it->cifblock() > 1 && it->getFileType() == CIF)
             listiteam->setForeground(Qt::blue);
 
     }

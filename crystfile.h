@@ -10,6 +10,16 @@
 class Crystfile : public Unitcell
 {
 public:
+    enum CrystfileState{
+        CRINITIAL =0,
+        CRGOOD,
+        CRBAD,
+        CRCELLERORR,
+        CRFORMULAERROR,
+        CRHKLFERROR,
+        CRLATTERROR
+
+    };
     Crystfile();
     Crystfile(FileType type, const QString &path);
 //    void setPath(const char *path){_path=path;}
@@ -44,9 +54,8 @@ public:
 //        else
 //            return false;
 //    }
-    inline bool state()const{return _state;}
+    inline const CrystfileState &state()const{return _state;}
     inline const int &cifblock()const{return _cifblock;}
-
 
     inline void setPath(const QString &path){_path=path;}
     inline void setFileType(const FileType &a){_type = a;}
@@ -72,7 +81,7 @@ private:
     void parseINS();
     void parseCIF();
 
-    bool _state;
+    CrystfileState _state;
     int _cifblock;
 };
 

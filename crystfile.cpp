@@ -10,7 +10,7 @@ Crystfile::Crystfile():
     _type(NONE),
     _ctype(UNKNOWN),
     _wavelength(0),
-    _state(false),
+    _state(CRINITIAL),
     _cifblock(0)
 {
 }
@@ -21,7 +21,7 @@ Crystfile::Crystfile(FileType type, const QString &path)
     _type = type;
     _path = path;
     _center = false;
-    _state = false;
+    _state = CRINITIAL;
     _cifblock = 0;
 
     switch (_type) {
@@ -104,7 +104,7 @@ bool Crystfile::findSfac(const QString &sfac)
 
 void Crystfile::parseINS()
 {
-    _state = true;
+//    _state = true;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::information(0, "error", file.errorString());
@@ -128,7 +128,7 @@ void Crystfile::parseINS()
         }
 
         if (line.startsWith("HKLF ",Qt::CaseInsensitive)) {
-            _state = true; // if HKLF instruction is presen VERY high chance this is true RES or INS file
+            _state = CRHKLFERROR; // if HKLF instruction is presen VERY high chance this is true RES or INS file
             continue;
         }
 
@@ -145,8 +145,8 @@ void Crystfile::parseINS()
 
             cellcheck = true;
 
-            if(a == 1 || b ==1 || c == 1)
-                _state = false;
+            if(a <= 1 || b <=1 || c <= 1)
+                _state = CRCELLERORR;
             continue;
         }
 
@@ -187,7 +187,7 @@ void Crystfile::parseINS()
                 this->_ctype = CCENTERED;
                 break;
             default:
-                _state = false;
+                _state = CRLATTERROR;
                 break;
             }
             lattcheck = true;
@@ -241,6 +241,7 @@ void Crystfile::parseINS()
             while (!buffer.atEnd()) {
                 buffer >> temp;
                 if (temp == "?") {
+                    _state = CRFORMULAERROR;
                     continue;
                 }
                 unitarray.push_back(temp.toDouble());
@@ -273,7 +274,7 @@ void Crystfile::parseINS()
 
 void Crystfile::parseCIF()
 {
-    _state = true;
+//    _state = true;
 //    qDeug() << "Parsing CIF file" << _path;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -291,20 +292,19 @@ void Crystfile::parseCIF()
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 
-        QString *temp = new QString(line);
-        if (temp->remove(' ').startsWith("data_"))
+// Remove spaces at the begining of the line
+        while (line.startsWith(' '))
+                line.remove(0,1);
+
+        if (line.startsWith("data_"))
         {
             _cifblock++;
             if (_cifblock >1)
-                break;
+                break; // Read only first block from cif file if more them 2 blocks are present.
             else
                 continue;
         }
-        delete temp;
-// Remove spaces at the begining of the line
-        while (line.startsWith(' ')) {
-                line.remove(0,1);
-            }
+
 
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
@@ -483,11 +483,11 @@ void Crystfile::parseCIF()
                     unitarray.push_back(number.toDouble());
 
                     if (sfacarray.size() != unitarray.size()) {
-                        qDebug() << "Debug in " << __FILE__ << " at " << __LINE__;
-                        qDebug() << "SFAC " << sfacarray.size();
-                        qDebug() << "UNIT " << unitarray.size();
-                        qDebug("======");
-                        _state = false;
+//                        qDebug() << "Debug in " << __FILE__ << " at " << __LINE__;
+//                        qDebug() << "SFAC " << sfacarray.size();
+//                        qDebug() << "UNIT " << unitarray.size();
+//                        qDebug("======");
+                        _state = CRFORMULAERROR;
                     }
 
                 }
@@ -502,7 +502,7 @@ void Crystfile::parseCIF()
     } // end while
 
     if (_a == 1 || _b == 1 || _c == 1)
-        _state = false;
+        _state = CRCELLERORR;
 
     file.close();
 } // end cifparser
@@ -603,7 +603,7 @@ QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
 
 QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
 {
-    int a,b;
+    int a,b,c;
     in >> crfile._path
         >> a
         >> b
@@ -617,10 +617,11 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
         >> crfile._alpha
         >> crfile._beta
         >> crfile._gama
-        >> crfile._state;
+        >> c;
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);
+    crfile._state = static_cast<Crystfile::CrystfileState>(c);
     crfile.sync_data(); // recalculate volume
 
     return in;
