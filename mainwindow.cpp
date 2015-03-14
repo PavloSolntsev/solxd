@@ -135,6 +135,7 @@ void MainWindow::indexDatabase()
                     QString filepath = dirIt.filePath();
                     ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
                     Crystfile crf(filetypemap[suffix],filepath);
+                    crf.niggli();
                     out << crf;
                     QVariant qv;
                     qv.setValue(crf);
@@ -199,6 +200,7 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         QListWidgetItem *listiteam = new QListWidgetItem();
         listiteam->setText(it->getPath());
         listiteam->setData(Qt::UserRole,qv);
+//        it->niggli();
         ui->listWidget->addItem(listiteam);
 
         if (it->state() == Crystfile::CRGOOD)

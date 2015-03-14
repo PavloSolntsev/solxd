@@ -601,13 +601,14 @@ bool Crystfile::findVolume(const double &vol, const double &error)
         return false;
 }
 
-const Unitcell &Crystfile::niggli()
+const Unitcell Crystfile::niggli()
 {
     Unitcell a;
 
-    cctbx::uctbx::fast_minimum_reduction mytest;
+    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
+
     if (mytest.termination_due_to_significant_change_test()) {
-        qDebug() << "I was terminated succesfully";
+        qDebug() << "Cell A = " << mytest.as_unit_cell().parameters().at(0);
     }
 
     return a;
