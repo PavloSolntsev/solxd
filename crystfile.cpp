@@ -605,12 +605,18 @@ const Unitcell Crystfile::niggli()
 {
     Unitcell a;
 
-    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(af::double6(_a,_b,_c,_alpha,_beta,_gama));
+    if(_a > 0 && _b > 0 && _c > 0 && _alpha > 0 && _beta > 0 && _gama > 0){
+    cctbx::uctbx::unit_cell ucell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
 
-    if (mytest.termination_due_to_significant_change_test()) {
-        qDebug() << "Cell A = " << mytest.as_unit_cell().parameters().at(0);
+    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(ucell);
+
+        qDebug() << "Cell A  = " << mytest.as_unit_cell().parameters().at(0);
+        qDebug() << "Cell B  = " << mytest.as_unit_cell().parameters().at(1);
+        qDebug() << "Cell C  = " << mytest.as_unit_cell().parameters().at(2);
+        qDebug() << "Cell Al = " << mytest.as_unit_cell().parameters().at(3);
+        qDebug() << "Cell Be = " << mytest.as_unit_cell().parameters().at(4);
+        qDebug() << "Cell Ga = " << mytest.as_unit_cell().parameters().at(5);
     }
-
     return a;
 }
 

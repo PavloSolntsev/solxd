@@ -135,14 +135,18 @@ void MainWindow::indexDatabase()
                     QString filepath = dirIt.filePath();
                     ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
                     Crystfile crf(filetypemap[suffix],filepath);
+                    if (crf.state())
                     crf.niggli();
                     out << crf;
                     QVariant qv;
                     qv.setValue(crf);
                     QListWidgetItem *listiteam = new QListWidgetItem();
                     listiteam->setText(filepath);
-                    if (!crf.state())
+
+                    if (crf.state() != Crystfile::CRGOOD)
                         listiteam->setForeground(Qt::red);
+                    else
+                        crf.niggli();
 
                     if (crf.cifblock() > 1)
                         listiteam->setForeground(Qt::blue);
