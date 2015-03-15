@@ -605,7 +605,7 @@ const Unitcell Crystfile::niggli()
 {
     Unitcell a;
 
-    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
+    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(af::double6(_a,_b,_c,_alpha,_beta,_gama));
 
     if (mytest.termination_due_to_significant_change_test()) {
         qDebug() << "Cell A = " << mytest.as_unit_cell().parameters().at(0);
