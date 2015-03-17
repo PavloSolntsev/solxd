@@ -135,15 +135,16 @@ void MainWindow::indexDatabase()
                     QString filepath = dirIt.filePath();
                     ui->statusBar->showMessage(tr("Indexing file: %1").arg(filepath));
                     Crystfile crf(filetypemap[suffix],filepath);
-                    if (crf.state())
-                    crf.niggli();
+//                    if (crf.error().size() == 0)
+//                        crf.niggli();
+
                     out << crf;
                     QVariant qv;
                     qv.setValue(crf);
                     QListWidgetItem *listiteam = new QListWidgetItem();
                     listiteam->setText(filepath);
 
-                    if (crf.state() != Crystfile::CRGOOD)
+                    if (crf.error().size() != 0)
                         listiteam->setForeground(Qt::red);
                     else
                         crf.niggli();
@@ -151,6 +152,16 @@ void MainWindow::indexDatabase()
                     if (crf.cifblock() > 1)
                         listiteam->setForeground(Qt::blue);
 
+                    QList<Crystfile::CrystfileErrors> errors = crf.error();
+
+//                    qDebug() << "0Unit a =" << crf.a();
+
+                    for (int var = 0; var < errors.size(); ++var) {
+                        if (errors.at(var) == Crystfile::CRCELLERORR){
+                            listiteam->setForeground(Qt::green);
+
+                        }
+                    }
 
                     listiteam->setData(Qt::UserRole,qv);
                     ui->listWidget->addItem(listiteam);
@@ -207,7 +218,7 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
 //        it->niggli();
         ui->listWidget->addItem(listiteam);
 
-        if (it->state() == Crystfile::CRGOOD)
+        if (it->error().size() != 0)
             listiteam->setForeground(Qt::red);
 
         if (it->cifblock() > 1 && it->getFileType() == CIF)

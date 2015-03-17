@@ -34,7 +34,7 @@ public:
         CRFILEOPENERROR = 0,
         CRCELLERORR,
         CRFORMULAERROR,
-        CRHKLFERROR,
+        CRINSERROR,
         CRLATTERROR
     };
     Crystfile();
@@ -73,7 +73,7 @@ public:
 //    }
 //    inline const CrystfileState &state()const{return _state;}
     inline const int &cifblock()const{return _cifblock;}
-    inline const QList<CrystfileErrors> &get_errors()const{return _errors;}
+    inline const QList<CrystfileErrors> &error()const{return _errors;}
 
     const Unitcell niggli();
 
@@ -87,6 +87,9 @@ public:
 
     friend QDataStream& operator<<(QDataStream& out, const Crystfile& crfile);
     friend QDataStream& operator>>(QDataStream& in, Crystfile& crfile);
+
+    friend QDataStream& operator<<(QDataStream& out, const CrystfileErrors& error);
+    friend QDataStream& operator>>(QDataStream& in, CrystfileErrors& error);
 
 private:
     QString _path;

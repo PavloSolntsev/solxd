@@ -51,6 +51,8 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 
         QVariant *qvr = new QVariant(index->data(Qt::UserRole));
         Crystfile crfile(qvr->value<Crystfile>());
+
+//        qDebug() << "Under mouse A = " << crfile.a();
         QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
         text += QString("\n<b>Formula</b>");
