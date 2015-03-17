@@ -27,19 +27,15 @@
 #include <QMetaType>
 #include <cctbx/uctbx/fast_minimum_reduction.h>
 
-
 class Crystfile : public Unitcell
 {
 public:
-    enum CrystfileState{
-        CRINITIAL =0,
-        CRGOOD,
-        CRBAD,
+    enum CrystfileErrors{
+        CRFILEOPENERROR = 0,
         CRCELLERORR,
         CRFORMULAERROR,
         CRHKLFERROR,
         CRLATTERROR
-
     };
     Crystfile();
     Crystfile(FileType type, const QString &path);
@@ -75,8 +71,10 @@ public:
 //        else
 //            return false;
 //    }
-    inline const CrystfileState &state()const{return _state;}
+//    inline const CrystfileState &state()const{return _state;}
     inline const int &cifblock()const{return _cifblock;}
+    inline const QList<CrystfileErrors> &get_errors()const{return _errors;}
+
     const Unitcell niggli();
 
     inline void setPath(const QString &path){_path=path;}
@@ -103,8 +101,9 @@ private:
     void parseINS();
     void parseCIF();
 
-    CrystfileState _state;
+//    CrystfileState _state;
     int _cifblock;
+    QList<CrystfileErrors> _errors;
 };
 
 Q_DECLARE_METATYPE(Crystfile)

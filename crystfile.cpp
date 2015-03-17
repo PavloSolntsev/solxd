@@ -125,9 +125,20 @@ bool Crystfile::findSfac(const QString &sfac)
 
 void Crystfile::parseINS()
 {
-    _state = CRGOOD;
+//    _state = CRGOOD;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        switch (file.error()) {
+        case QFile::ReadError:
+        case QFile::FatalError:
+        case QFile::FatalError:
+        case QFile::PermissionsError:
+            QMessageBox::information(0, "error", file.errorString());
+            _errors.push_back(CRFILEOPENERROR);
+            break;
+        default:
+            break;
+        }
         QMessageBox::information(0, "error", file.errorString());
     }
 
@@ -137,6 +148,7 @@ void Crystfile::parseINS()
     bool lattcheck(false);
     bool sfaccheck(false);
     bool unitcheck(false);
+    bool hklftest(false);
 //    bool endcheck(false);
 
     while(!inp.atEnd()) {
@@ -149,7 +161,7 @@ void Crystfile::parseINS()
         }
 
         if (line.startsWith("HKLF ",Qt::CaseInsensitive)) {
-            _state = CRHKLFERROR; // if HKLF instruction is presen VERY high chance this is true RES or INS file
+            hklftest = true; // if HKLF instruction is presen VERY high chance this is true RES or INS file
             continue;
         }
 
@@ -157,18 +169,26 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
 
-            double a,b,c,d,e,f,g;
+            double a(0),b(0),c(0),d(0),e(0),f(0),g(0);
             QString temp;
             // CELL Wavelength cella cellb cellc alpha beta gamma
             buffer >> temp >> g >> a >> b >> c >> d >> e >> f;
             this->_wavelength = g;
-            set_cell(a,b,c,d,e,f);
 
-            cellcheck = true;
-
-            if(a <= 1 || b <=1 || c <= 1)
-                _state = CRCELLERORR;
-            continue;
+            if(     a > 1 &&
+                    b > 1 &&
+                    c > 1 &&
+                    d > 1 &&
+                    e > 1 &&
+                    f > 1 )
+            {
+                cellcheck = true;
+                set_cell(a,b,c,d,e,f);
+                continue;
+            }
+            else {
+                _errors.push_back(CRCELLERORR);
+            }
         }
 
         if (line.startsWith("latt ",Qt::CaseInsensitive))
@@ -208,7 +228,7 @@ void Crystfile::parseINS()
                 this->_ctype = CCENTERED;
                 break;
             default:
-                _state = CRLATTERROR;
+                _errors.push_back(CRLATTERROR);
                 break;
             }
             lattcheck = true;
@@ -280,12 +300,10 @@ void Crystfile::parseINS()
                 index = unitarray.indexOf(0);
             }
 
+            if(unitarray.size() != sfacarray.size())
+                _errors.push_back(CRFORMULAERROR);
             continue;
         }
-
-//        if (endcheck) {
-//            break;
-//        }
     }
 
     file.close();
@@ -293,11 +311,21 @@ void Crystfile::parseINS()
 
 void Crystfile::parseCIF()
 {
-    _state = CRGOOD;
 //    qDeug() << "Parsing CIF file" << _path;
     QFile file(_path);
+
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::information(0, "error", file.errorString());
+        switch (file.error()) {
+        case QFile::ReadError:
+        case QFile::FatalError:
+        case QFile::FatalError:
+        case QFile::PermissionsError:
+            QMessageBox::information(0, "error", file.errorString());
+            _errors.push_back(CRFILEOPENERROR);
+            break;
+        default:
+            break;
+        }
     }
 
     QTextStream inp(&file);
@@ -323,7 +351,6 @@ void Crystfile::parseCIF()
             else
                 continue;
         }
-
 
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
@@ -384,13 +411,17 @@ void Crystfile::parseCIF()
             continue;
         }
 
-        if (a != 0 &&
-            b != 0 &&
-            c != 0 &&
-            d != 0 &&
-            e != 0 &&
-            f != 0 ){
+        if (a > 1 &&
+            b > 1 &&
+            c > 1 &&
+            d > 1 &&
+            e > 1 &&
+            f > 1 ){
             set_cell(a,b,c,d,e,f);
+        }
+        else {
+            // Error with reading unit cell parameters
+            _errors.push_back(CRCELLERORR);
         }
 
         if (line.startsWith("_diffrn_radiation_wavelength",Qt::CaseInsensitive))
@@ -520,8 +551,8 @@ void Crystfile::parseCIF()
 
     } // end while
 
-    if (_a == 1 || _b == 1 || _c == 1)
-        _state = CRCELLERORR;
+//    if (_a == 1 || _b == 1 || _c == 1)
+//        _state = CRCELLERORR;
 
     file.close();
 } // end cifparser
@@ -635,13 +666,13 @@ QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
         << crfile.alpha()
         << crfile.beta()
         << crfile.gama()
-        << crfile.state();
+        << crfile.get_errors();
     return out;
 }
 
 QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
 {
-    int a,b,c;
+    int a,b;
     in >> crfile._path
         >> a
         >> b
@@ -655,11 +686,11 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
         >> crfile._alpha
         >> crfile._beta
         >> crfile._gama
-        >> c;
+        >> crfile._errors;
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);
-    crfile._state = static_cast<Crystfile::CrystfileState>(c);
+ //   crfile._state = static_cast<Crystfile::CrystfileState>(c);
     crfile.sync_data(); // recalculate volume
 
     return in;
