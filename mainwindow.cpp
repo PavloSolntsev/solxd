@@ -152,15 +152,11 @@ void MainWindow::indexDatabase()
                     if (crf.cifblock() > 1)
                         listiteam->setForeground(Qt::blue);
 
-                    QList<Crystfile::CrystfileErrors> errors = crf.error();
-
 //                    qDebug() << "0Unit a =" << crf.a();
 
-                    for (int var = 0; var < errors.size(); ++var) {
-                        if (errors.at(var) == Crystfile::CRCELLERORR){
-                            listiteam->setForeground(Qt::green);
 
-                        }
+                    if (crf.error().contains(Crystfile::CRCELLERORR)) {
+                        listiteam->setForeground(Qt::green);
                     }
 
                     listiteam->setData(Qt::UserRole,qv);

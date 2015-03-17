@@ -26,7 +26,7 @@
 #include <QDebug>
 
 
-Crystfile::Crystfile():
+Crystfile::Crystfile():Unitcell(),
     _path(""),
     _type(NONE),
     _ctype(UNKNOWN),
@@ -36,7 +36,7 @@ Crystfile::Crystfile():
 }
 
 
-Crystfile::Crystfile(FileType type, const QString &path)
+Crystfile::Crystfile(FileType type, const QString &path):Unitcell()
 {
     _type = type;
     _path = path;
@@ -331,15 +331,11 @@ void Crystfile::parseCIF()
 
     QTextStream inp(&file);
     bool formulasumcheck(false);
-    bool cellcheck(false);
+    QList<bool> cellcheck;
     QString lineformula;
     int quatcount(0);
-    double a(0),b(0),c(0),d(0),e(0),f(0); // unit cell variables
-
-//    int datablockcount(0);
 
     while(!inp.atEnd()) {
-
         QString line = inp.readLine();
 
 // Remove spaces at the begining of the line
@@ -357,89 +353,95 @@ void Crystfile::parseCIF()
 
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
+            double a(0);
             QTextStream buffer(&line);
             QString temp;
             buffer >> temp >> a;
-//            a = temp.section('(',0,0).toDouble();
-//            qDebug() << "Unit A = " << a;
             this->_a = a;
             continue;
         }
 
         if (line.startsWith("_cell_length_b",Qt::CaseInsensitive))
         {
+            double b(0);
             QTextStream buffer(&line);
 
             QString temp;
             buffer >> temp >> b;
-//            qDebug() << "Unit B = " << b;
             this->_b = b;
+            cellcheck.push_back(true);
             continue;
         }
 
         if (line.startsWith("_cell_length_c",Qt::CaseInsensitive))
         {
+            double c(0);
             QTextStream buffer(&line);
 
             QString temp;
             buffer >> temp >> c;
-//            qDebug() << "Unit C = " << c;
             this->_c = c;
             continue;
         }
 
         if (line.startsWith("_cell_angle_alpha",Qt::CaseInsensitive))
         {
+            double d(0);
             QTextStream buffer(&line);
 
             QString temp;
             buffer >> temp >> d;
-//            qDebug() << "Unit D = " << d;
             this->_alpha = d;
             continue;
         }
 
         if (line.startsWith("_cell_angle_beta",Qt::CaseInsensitive))
         {
+            double e(0);
             QTextStream buffer(&line);
 
             QString temp;
             buffer >> temp >> e;
-//            qDebug() << "Unit E = " << e;
             this->_beta = e;
             continue;
         }
 
         if (line.startsWith("_cell_angle_gamma",Qt::CaseInsensitive))
         {
+            double f(0);
             QTextStream buffer(&line);
 
             QString temp;
             buffer >> temp >> f;
-//            qDebug() << "Unit F = " << f;
             this->_gama = f;
             continue;
         }
 
         if (!cellcheck) {
-            if (_a > 0 &&
-                _b > 0 &&
-                _c > 0 &&
-                _alpha > 0 &&
-                _beta > 0 &&
-                _gama > 0 ){
-                qDebug() << "Before set _a = " << _a << " a = " << a;
-//                set_cell(a,b,c,d,e,f);
-                qDebug() << "After set  _a = " << _a << " a = " << a;
-                cellcheck = true;
+            if (_a > 1 &&
+                _b > 1 &&
+                _c > 1 &&
+                _alpha > 1 &&
+                _beta > 1 &&
+                _gama > 1 ){
+//                qDebug("Unit cell was passed");
                 continue;
             }
             else {
                 // Error with reading unit cell parameters
                 _errors.push_back(CRCELLERORR);
-                cellcheck = true;
+                qDebug("Unit cell ERROR");
+                qDebug() << _path;
+                qDebug() << "a = " << _a;
+                qDebug() << "b = " << _b;
+                qDebug() << "c = " << _c;
+                qDebug() << "alpha = " << _alpha;
+                qDebug() << "beta = " << _beta;
+                qDebug() << "gamma = " << _gama;
                 continue;
             }
+
+            cellcheck = true;
         }
 
         if (line.startsWith("_diffrn_radiation_wavelength",Qt::CaseInsensitive))
@@ -455,18 +457,15 @@ void Crystfile::parseCIF()
 
         if (line.startsWith("_chemical_formula_sum",Qt::CaseInsensitive)) {
             quatcount = line.count('\'');
-//            qDebug() << "quatcount = " << quatcount;
             if (quatcount == 2) {
             // Formula on the same line
                 QTextStream buffer(&line.remove('\''));
-//                QString temp;
+                QString temp;
 
                 while(!buffer.atEnd()){
-                    QString temp;
+//                    QString temp;
                     buffer >> temp;
                     QString number, letter;
-
-                    qDebug() << "Temp = " << temp;
 
                     for (int var = 0; var < temp.size(); ++var) {
                         if(temp.at(var).isNumber()){
@@ -486,19 +485,15 @@ void Crystfile::parseCIF()
 
                     }// end for
 
-                    qDebug() << "Done";
                     sfacarray.push_back(letter);
                     unitarray.push_back(number.toDouble());
 
                     if (sfacarray.size() != unitarray.size()) {
-                        qDebug() << "SFAC " << sfacarray.size();
-                        qDebug() << "UNIT " << unitarray.size();
-                        qDebug("======");
+                        _errors.push_back(CRFORMULAERROR);
                     }
 
                 }// end while
 
-//                qDebug() << "Line1 is " << line;
                 formulasumcheck = false;
                 continue;
             }// end if quatcount ==  2
@@ -507,7 +502,6 @@ void Crystfile::parseCIF()
                 // Only part of the formula on the line
                 lineformula += line;
                 formulasumcheck = true; // Continue reading
-//                qDebug() << "Line2 is " << line;
                 continue;
             }
 
@@ -528,7 +522,7 @@ void Crystfile::parseCIF()
             else
             {
                 formulasumcheck = false;
-                lineformula += line;
+//                lineformula += line;
                 quatcount = 0;
                 QTextStream buffer(&line.remove('\''));
                 QString temp;
@@ -541,32 +535,27 @@ void Crystfile::parseCIF()
                     for (int var = 0; var < temp.size(); ++var) {
                         if(temp.at(var).isNumber()){
                             number.append(temp.at(var));
-//                            qDebug() << "1temp.at(var) at var= " << var << " is: " << temp.at(var) ;
+                            qDebug() << "4temp.at(var) at var= " << var << " is: " << temp.at(var) ;
                             continue;
                         }
 
                         if (temp.at(var).isLetter()) {
                             letter.append(temp.at(var));
-//                            qDebug() << "2temp.at(var) at var= " << var << " is: " << temp.at(var) ;
+                            qDebug() << "5temp.at(var) at var= " << var << " is: " << temp.at(var) ;
                             continue;
                         }
 
                         if (temp.at(var).isPunct()) {
                             number.append(temp.at(var));
-//                            qDebug() << "3temp.at(var) at var= " << var << " is: " << temp.at(var) ;
+                            qDebug() << "6temp.at(var) at var= " << var << " is: " << temp.at(var) ;
                         }
 
                     }// end for
 
-//                    qDebug() << "Done";
                     sfacarray.push_back(letter);
                     unitarray.push_back(number.toDouble());
 
                     if (sfacarray.size() != unitarray.size()) {
-//                        qDebug() << "Debug in " << __FILE__ << " at " << __LINE__;
-//                        qDebug() << "SFAC " << sfacarray.size();
-//                        qDebug() << "UNIT " << unitarray.size();
-//                        qDebug("======");
                         _errors.push_back(CRFORMULAERROR);
                     }
 
@@ -581,16 +570,7 @@ void Crystfile::parseCIF()
 
     } // end while
 
-//    if (_a == 1 || _b == 1 || _c == 1)
-//        _state = CRCELLERORR;
-
-//                qDebug() << "Before If a = " << _a;
-//                qDebug() << "Before If b = " << _b;
-//                qDebug() << "Before If c = " << _c;
-//                qDebug() << "Before If d = " << _alpha;
-//                qDebug() << "Before If e = " << _beta;
-//                qDebug() << "Before If f = " << _gama;
-
+    sync_data(); // Sync all internal numeric parameters
     file.close();
 } // end cifparser
 
