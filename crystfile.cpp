@@ -342,15 +342,6 @@ void Crystfile::parseCIF()
         while (line.startsWith(' '))
                 line.remove(0,1);
 
-        if (line.startsWith("data_"))
-        {
-            _cifblock++;
-            if (_cifblock >1)
-                break; // Read only first block from cif file if more them 2 blocks are present.
-            else
-                continue;
-        }
-
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
 //            double a(0);
@@ -429,7 +420,6 @@ void Crystfile::parseCIF()
                 _alpha > 1 &&
                 _beta > 1 &&
                 _gama > 1 ){
-//                qDebug("Unit cell was passed");
                 cellcount++;
                 continue;
             }
@@ -453,10 +443,9 @@ void Crystfile::parseCIF()
         {
             QTextStream buffer(&line);
 
-            double a;
+//            double a;
             QString temp;
-            buffer >> temp >> a;
-            this->_wavelength = a;
+            buffer >> temp >> this->_wavelength;
             continue;
         }
 
@@ -467,12 +456,19 @@ void Crystfile::parseCIF()
                 QTextStream buffer(&line.remove('\''));
                 QString temp;
 
+                buffer >> temp; // reading _chemical_formula_sum
+
                 while(!buffer.atEnd()){
 //                    QString temp;
                     buffer >> temp;
                     QString number, letter;
 
                     for (int var = 0; var < temp.size(); ++var) {
+                        if (temp.at(0).isLetter() && temp.size() == 1) {
+                            number.append('0');
+                            continue;
+                        }
+
                         if(temp.at(var).isNumber()){
                             number.append(temp.at(var));
 //                            qDebug() << "1temp.at(var) at var= " << var << " is: " << temp.at(var) ;
@@ -532,12 +528,19 @@ void Crystfile::parseCIF()
                 QTextStream buffer(&line.remove('\''));
                 QString temp;
 
+                buffer >> temp; // reading _chemical_formula_sum
+
                 while(!buffer.atEnd()){
                     buffer >> temp;
 
                     QString number, letter;
 
                     for (int var = 0; var < temp.size(); ++var) {
+                        if (temp.at(0).isLetter() && temp.size() == 1) {
+                            number.append('0');
+                            continue;
+                        }
+
                         if(temp.at(var).isNumber()){
                             number.append(temp.at(var));
 //                            qDebug() << "4temp.at(var) at var= " << var << " is: " << temp.at(var) ;
@@ -573,7 +576,19 @@ void Crystfile::parseCIF()
 
         } // end if
 
+        if (cellcount > 6 && _wavelength > 0 && unitarray.size() > 0 && sfacarray.size() > 0) {
+            break;
+        }
+
     } // end while
+
+    if (sfacarray.size() == 0 || unitarray.size() == 0) {
+        _errors.push_back(CRFORMULAERROR);
+    }
+
+    if (_a <= 1 || _b <= 1 || _c <= 1) {
+        _errors.push_back(CRCELLERORR);
+    }
 
     sync_data(); // Sync all internal numeric parameters
     file.close();
@@ -657,6 +672,10 @@ bool Crystfile::findVolume(const double &vol, const double &error)
 const Unitcell Crystfile::niggli()
 {
     Unitcell a;
+
+    if (_errors.contains(CRCELLERORR)) {
+        return a;
+    }
 
     if(_a > 0 && _b > 0 && _c > 0 && _alpha > 0 && _beta > 0 && _gama > 0){
     cctbx::uctbx::unit_cell ucell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
