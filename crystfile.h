@@ -37,6 +37,7 @@ public:
         CRINSERROR,
         CRLATTERROR
     };
+
     Crystfile();
     Crystfile(FileType type, const QString &path);
 //    void setPath(const char *path){_path=path;}
