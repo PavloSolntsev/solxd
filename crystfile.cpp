@@ -57,6 +57,7 @@ Crystfile::Crystfile(FileType type, const QString &path):Unitcell()
     default:
         break;
     }
+
 }
 
 bool Crystfile::findCell(const Unitcell &cell, const double &error)
@@ -248,9 +249,6 @@ void Crystfile::parseINS()
                         break;
                     }
 
-//                    if (a.contains('B')) {
-//                        qDebug() << "Problem: " << a;
-//                    }
                     sfacarray.push_back(a.toLower());
                 }
                 sfaccheck = true;
@@ -600,50 +598,72 @@ bool Crystfile::findCellA(const double &cellA, const double &error)
 {
     if(100*qAbs(_a - cellA) < error*_a)
         return true;
-    else
-        return false;
+    else{
+        if (100*qAbs(_ra - cellA) < error*_ra)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findCellB(const double &cellB, const double &error)
 {
     if(100*qAbs(_b - cellB) < error*_b)
         return true;
-    else
-        return false;
+    else{
+        if(100*qAbs(_rb - cellB) < error*_rb)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findCellC(const double &cellC, const double &error)
 {
     if(100*qAbs(_c - cellC) < error*_c)
         return true;
-    else
-        return false;
+    else{
+        if(100*qAbs(_rc - cellC) < error*_rc)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error)
 {
     if(100*qAbs(_alpha - cellAlpha) < error*_alpha)
         return true;
-    else
-        return false;
-
+    else{
+        if(100*qAbs(_ralpha - cellAlpha) < error*_ralpha)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
 {
     if(100*qAbs(_beta - cellBeta) < error*_beta)
         return true;
-    else
-        return false;
-
+    else{
+        if(100*qAbs(_rbeta - cellBeta) < error*_rbeta)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findCellGamma(const double &cellGamma, const double &error)
 {
     if(100*qAbs(_gama - cellGamma) < error*_gama)
         return true;
-    else
-        return false;
+    else{
+        if(100*qAbs(_rgama - cellGamma) < error*_rgama)
+            return true;
+        else
+            return false;
+    }
 }
 
 bool Crystfile::findVolume(const double &vol, const double &error)
@@ -655,35 +675,6 @@ bool Crystfile::findVolume(const double &vol, const double &error)
         return false;
 }
 
-const Unitcell Crystfile::niggli()
-{
-    Unitcell a;
-
-    if (_errors.contains(CRCELLERORR)) {
-        return a;
-    }
-    else{
-//        cctbx::uctbx::unit_cell ucell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
-
-        cctbx::uctbx::fast_minimum_reduction<double,int> mytest(cctbx::uctbx::unit_cell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama)));
-
-//        qDebug() << "Cell A  = " << mytest.as_unit_cell().parameters().at(0);
-//        qDebug() << "Cell B  = " << mytest.as_unit_cell().parameters().at(1);
-//        qDebug() << "Cell C  = " << mytest.as_unit_cell().parameters().at(2);
-//        qDebug() << "Cell Al = " << mytest.as_unit_cell().parameters().at(3);
-//        qDebug() << "Cell Be = " << mytest.as_unit_cell().parameters().at(4);
-//        qDebug() << "Cell Ga = " << mytest.as_unit_cell().parameters().at(5);
-
-        a.set_cell(mytest.as_unit_cell().parameters().at(0),
-        mytest.as_unit_cell().parameters().at(1),
-        mytest.as_unit_cell().parameters().at(2),
-        mytest.as_unit_cell().parameters().at(3),
-        mytest.as_unit_cell().parameters().at(4),
-        mytest.as_unit_cell().parameters().at(5));
-    }
-
-    return a;
-}
 
 QDataStream &operator<<(QDataStream &out, const Crystfile::CrystfileErrors &error)
 {
@@ -714,7 +705,13 @@ QDataStream &operator <<(QDataStream &out, const Crystfile &crfile)
         << crfile.alpha()
         << crfile.beta()
         << crfile.gama()
-        << crfile.error();
+        << crfile.error()
+        << crfile.niggli().a()
+        << crfile.niggli().b()
+        << crfile.niggli().c()
+        << crfile.niggli().alpha()
+        << crfile.niggli().beta()
+        << crfile.niggli().gama();
     return out;
 }
 
@@ -734,7 +731,13 @@ QDataStream &operator >>(QDataStream &in, Crystfile &crfile)
         >> crfile._alpha
         >> crfile._beta
         >> crfile._gama
-        >> crfile._errors;
+        >> crfile._errors
+        >> crfile._ra
+        >> crfile._rb
+        >> crfile._rc
+        >> crfile._ralpha
+        >> crfile._rbeta
+        >> crfile._rgama;
 
     crfile._type = static_cast<FileType>(a);
     crfile._ctype = static_cast<CellType>(b);

@@ -34,16 +34,7 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
     _beta(betacell),
     _gama(gamacell)
 {
-    alcos = cos(DEG2RAD(_alpha));
-    becos = cos(DEG2RAD(_beta));
-    gacos = cos(DEG2RAD(_gama));
-
-    alsin = sin(DEG2RAD(_alpha));
-    besin = sin(DEG2RAD(_beta));
-    gasin = sin(DEG2RAD(_gama));
-
-    _volume = _a*_b*_c*sqrt((1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos))+2*(alcos*becos*gacos));
-
+    sync_data();
 }
 
 const Unitcell Unitcell::reciprocal()
@@ -68,16 +59,37 @@ void Unitcell::set_cell(const double &acell, const double &bcell, const double &
     _beta = betacell;
     _gama = gamacell;
 
-    alcos = cos(DEG2RAD(_alpha));
-    becos = cos(DEG2RAD(_beta));
-    gacos = cos(DEG2RAD(_gama));
+    if (_a>0 &&
+        _b>0 &&
+        _c>0 &&
+        _alpha >0 &&
+        _beta  >0 &&
+        _gama > 0)
+        sync_data();
+}
 
-    alsin = sin(DEG2RAD(_alpha));
-    besin = sin(DEG2RAD(_beta));
-    gasin = sin(DEG2RAD(_gama));
+const Unitcell Unitcell::niggli() const
+{
+    Unitcell res;
 
-    _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
+    if (_a>0 &&
+        _b>0 &&
+        _c>0 &&
+        _alpha >0 &&
+        _beta  >0 &&
+        _gama > 0) {
 
+        cctbx::uctbx::fast_minimum_reduction<double,int> mytest(cctbx::uctbx::unit_cell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama)));
+
+        res.set_cell(mytest.as_unit_cell().parameters().at(0),
+        mytest.as_unit_cell().parameters().at(1),
+        mytest.as_unit_cell().parameters().at(2),
+        mytest.as_unit_cell().parameters().at(3),
+        mytest.as_unit_cell().parameters().at(4),
+        mytest.as_unit_cell().parameters().at(5));
+    }
+
+    return res;
 }
 
 void Unitcell::sync_data()
@@ -93,3 +105,4 @@ void Unitcell::sync_data()
     _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
 
 }
+

@@ -22,6 +22,7 @@
 #ifndef UNITCELL_H
 #define UNITCELL_H
 #include <QString>
+#include <cctbx/uctbx/fast_minimum_reduction.h>
 
 enum FileType{
 NONE,
@@ -43,7 +44,13 @@ enum CellType{
 class Unitcell{
 public:
 
-    Unitcell():_a(0),_b(0),_c(0),_alpha(0),_beta(0),_gama(0){} // Default constructor
+    Unitcell():
+        _a(0),
+        _b(0),
+        _c(0),
+        _alpha(0),
+        _beta(0),
+        _gama(0){} // Default constructor
     Unitcell(double acell,double bcell,double ccell,double alphacell,double betacell,double gamacell);
 
     virtual ~Unitcell(){}
@@ -67,6 +74,7 @@ public:
                   const double &alphacell,
                   const double &betacell,
                   const double &gamacell);
+    const Unitcell niggli()const;
 
 protected:
     double _a;
@@ -84,6 +92,15 @@ protected:
     double alsin;
     double besin;
     double gasin;
+
+// Niggli cell values initialized after reading file from the disk
+    double _ra;
+    double _rb;
+    double _rc;
+    double _ralpha;
+    double _rbeta;
+    double _rgama;
+
     void sync_data(); // recalculate volume and other numberic parameters if any
 
 };

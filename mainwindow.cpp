@@ -146,14 +146,11 @@ void MainWindow::indexDatabase()
 
                     if (crf.error().size() != 0)
                         listiteam->setForeground(Qt::red);
-                    else
-                        crf.niggli();
 
                     if (crf.cifblock() > 1)
                         listiteam->setForeground(Qt::blue);
 
 //                    qDebug() << "0Unit a =" << crf.a();
-
 
                     if (crf.error().contains(Crystfile::CRCELLERORR)) {
                         listiteam->setForeground(Qt::green);
