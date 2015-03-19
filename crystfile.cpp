@@ -596,6 +596,12 @@ bool Crystfile::findWL(const double &wl, const double &error)
 
 bool Crystfile::findCellA(const double &cellA, const double &error)
 {
+    if (_a != _ra) {
+        qDebug() <<"A cells are different for normal and reduced cells";
+        qDebug() << "_a = " << _a << " _ra = " << _ra;
+    }
+
+
     if(100*qAbs(_a - cellA) < error*_a)
         return true;
     else{
@@ -608,6 +614,11 @@ bool Crystfile::findCellA(const double &cellA, const double &error)
 
 bool Crystfile::findCellB(const double &cellB, const double &error)
 {
+    if (_b != _rb) {
+        qDebug() <<"A cells are different for normal and reduced cells";
+        qDebug() << "_b = " << _b << " _rb = " << _rb;
+    }
+
     if(100*qAbs(_b - cellB) < error*_b)
         return true;
     else{
@@ -632,6 +643,11 @@ bool Crystfile::findCellC(const double &cellC, const double &error)
 
 bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error)
 {
+    if (_alpha != _ralpha) {
+        qDebug() <<"A cells are different for normal and reduced cells";
+        qDebug() << "_alpha = " << _alpha << " _raalpha = " << _ralpha;
+    }
+
     if(100*qAbs(_alpha - cellAlpha) < error*_alpha)
         return true;
     else{
@@ -644,6 +660,10 @@ bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error)
 
 bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
 {
+    if (_beta != _rbeta) {
+        qDebug() <<"A cells are different for normal and reduced cells";
+        qDebug() << "_beta = " << _beta << " _rbeta = " << _rbeta;
+    }
     if(100*qAbs(_beta - cellBeta) < error*_beta)
         return true;
     else{
@@ -656,6 +676,11 @@ bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
 
 bool Crystfile::findCellGamma(const double &cellGamma, const double &error)
 {
+    if (_gama != _rgama) {
+        qDebug() <<"A cells are different for normal and reduced cells";
+        qDebug() << "_gama = " << _gama << " _rgama = " << _rgama;
+    }
+
     if(100*qAbs(_gama - cellGamma) < error*_gama)
         return true;
     else{
