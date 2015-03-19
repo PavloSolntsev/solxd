@@ -43,7 +43,7 @@ enum CellType{
 class Unitcell{
 public:
 
-    Unitcell():_a(1),_b(1),_c(1),_alpha(90),_beta(90),_gama(90){} // Default constructor
+    Unitcell():_a(0),_b(0),_c(0),_alpha(0),_beta(0),_gama(0){} // Default constructor
     Unitcell(double acell,double bcell,double ccell,double alphacell,double betacell,double gamacell);
 
     virtual ~Unitcell(){}

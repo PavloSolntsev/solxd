@@ -26,12 +26,13 @@
 #include <QDebug>
 
 
-Crystfile::Crystfile():Unitcell(),
+Crystfile::Crystfile():
     _path(""),
     _type(NONE),
     _ctype(UNKNOWN),
     _wavelength(0),
-    _cifblock(0)
+    _cifblock(0),
+    _center(false)
 {
 }
 
@@ -152,11 +153,8 @@ void Crystfile::parseINS()
     while(!inp.atEnd()) {
         QString line = inp.readLine();
 //        qDebug() << "ParseINS \n" << line;
-        if (line.startsWith("END ",Qt::CaseInsensitive)) {
-            //sfaccheck = true; // There is no way SFAC group behind this point
-            //endcheck = true;
+        if (line.startsWith("END ",Qt::CaseInsensitive))
             break;
-        }
 
         if (line.startsWith("HKLF ",Qt::CaseInsensitive)) {
             hklftest = true; // if HKLF instruction is presen VERY high chance this is true RES or INS file
@@ -170,23 +168,23 @@ void Crystfile::parseINS()
             double a(0),b(0),c(0),d(0),e(0),f(0),g(0);
             QString temp;
             // CELL Wavelength cella cellb cellc alpha beta gamma
-            buffer >> temp >> g >> a >> b >> c >> d >> e >> f;
-            this->_wavelength = g;
+            buffer >> temp >> this->_wavelength >> _a >> _b >> _c >> _alpha >> _beta >> _gama;
+//            this->_wavelength = g;
 
-            if(     a > 1 &&
-                    b > 1 &&
-                    c > 1 &&
-                    d > 1 &&
-                    e > 1 &&
-                    f > 1 )
+            if(     _a > 0 &&
+                    _b > 0 &&
+                    _c > 0 &&
+                    _alpha > 0 &&
+                    _beta > 0 &&
+                   _gama > 0 )
             {
                 cellcheck = true;
-                set_cell(a,b,c,d,e,f);
+//                set_cell(a,b,c,d,e,f);
                 continue;
             }
-            else {
+            else
                 _errors.push_back(CRCELLERORR);
-            }
+
         }
 
         if (line.startsWith("latt ",Qt::CaseInsensitive))
@@ -197,9 +195,8 @@ void Crystfile::parseINS()
             QString temp;
             buffer >> temp >> a;
 
-            if (a>0) {
+            if (a>0)
                 _center = true;
-            }
 
             a = qAbs(a);
 
@@ -246,10 +243,14 @@ void Crystfile::parseINS()
                     if (a.isEmpty())
                         continue;
                     if (a == "?") {
-                        sfaccheck = true;
+//                        sfaccheck = true;
+                        _errors.push_back(CRFORMULAERROR);
                         break;
                     }
 
+//                    if (a.contains('B')) {
+//                        qDebug() << "Problem: " << a;
+//                    }
                     sfacarray.push_back(a.toLower());
                 }
                 sfaccheck = true;
@@ -273,7 +274,7 @@ void Crystfile::parseINS()
 //            double a;
             QString temp;
 
-            buffer >> temp;
+            buffer >> temp; // Reading UNIT keyword
 
             while (!buffer.atEnd()) {
                 buffer >> temp;
@@ -290,17 +291,21 @@ void Crystfile::parseINS()
 
         if(cellcheck && lattcheck && sfaccheck && unitcheck)
         {
-            int index = unitarray.indexOf(0);
-            while(index > 0)
-            {
-                unitarray.removeAt(index);
-                sfacarray.removeAt(index);
-                index = unitarray.indexOf(0);
-            }
 
-            if(unitarray.size() != sfacarray.size())
-                _errors.push_back(CRFORMULAERROR);
-            continue;
+            if(!_errors.contains(CRFORMULAERROR)){
+                int index = unitarray.indexOf(0);
+                while(index > 0)
+                {
+                    unitarray.removeAt(index);
+                    sfacarray.removeAt(index);
+                    index = unitarray.indexOf(0);
+                }
+
+                if(unitarray.size() != sfacarray.size())
+                    _errors.push_back(CRFORMULAERROR);
+                continue;
+
+            }
         }
     }
 
@@ -331,7 +336,7 @@ void Crystfile::parseCIF()
 
     QTextStream inp(&file);
     bool formulasumcheck(false);
-    int cellcount(0);
+    int cellcount(0); // count the number of unit cell constants, If 6, then all constants have been read
     QString lineformula;
     int quatcount(0);
 
@@ -344,82 +349,65 @@ void Crystfile::parseCIF()
 
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
-//            double a(0);
             QTextStream buffer(&line);
             QString temp;
             buffer >> temp >> this->_a;
-//            this->_a = a;
             cellcount++;
             continue;
         }
 
         if (line.startsWith("_cell_length_b",Qt::CaseInsensitive))
         {
-//            double b(0);
             QTextStream buffer(&line);
-
             QString temp;
             buffer >> temp >> this->_b;
-//            this->_b = b;
             cellcount++;
             continue;
         }
 
         if (line.startsWith("_cell_length_c",Qt::CaseInsensitive))
         {
-//            double c(0);
             QTextStream buffer(&line);
-
             QString temp;
             buffer >> temp >> this->_c;
-//            this->_c = c;
             cellcount++;
             continue;
         }
 
         if (line.startsWith("_cell_angle_alpha",Qt::CaseInsensitive))
         {
-//            double d(0);
             QTextStream buffer(&line);
-
             QString temp;
             buffer >> temp >> this->_alpha;
-//            this->_alpha = d;
             cellcount++;
             continue;
         }
 
         if (line.startsWith("_cell_angle_beta",Qt::CaseInsensitive))
         {
-//            double e(0);
             QTextStream buffer(&line);
-
             QString temp;
             buffer >> temp >> this->_beta;
-//            this->_beta = e;
             cellcount++;
             continue;
         }
 
         if (line.startsWith("_cell_angle_gamma",Qt::CaseInsensitive))
         {
-//            double f(0);
             QTextStream buffer(&line);
-
             QString temp;
             buffer >> temp >> this->_gama;
-//            this->_gama = f;
             cellcount++;
             continue;
         }
 
         if (cellcount == 6) {
-            if (_a > 1 &&
-                _b > 1 &&
-                _c > 1 &&
-                _alpha > 1 &&
-                _beta > 1 &&
-                _gama > 1 ){
+            if (_a > 0 &&
+                _b > 0 &&
+                _c > 0 &&
+                _alpha > 0 &&
+                _beta > 0 &&
+                _gama > 0 ){
                 cellcount++;
                 continue;
             }
@@ -442,8 +430,6 @@ void Crystfile::parseCIF()
         if (line.startsWith("_diffrn_radiation_wavelength",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
-
-//            double a;
             QString temp;
             buffer >> temp >> this->_wavelength;
             continue;
@@ -456,7 +442,7 @@ void Crystfile::parseCIF()
                 QTextStream buffer(&line.remove('\''));
                 QString temp;
 
-                buffer >> temp; // reading _chemical_formula_sum
+                buffer >> temp; // reading "_chemical_formula_sum"
 
                 while(!buffer.atEnd()){
 //                    QString temp;
@@ -465,6 +451,7 @@ void Crystfile::parseCIF()
 
                     for (int var = 0; var < temp.size(); ++var) {
                         if (temp.at(0).isLetter() && temp.size() == 1) {
+                            letter.append(temp.at(0));
                             number.append('0');
                             continue;
                         }
@@ -483,7 +470,6 @@ void Crystfile::parseCIF()
                         if (temp.at(var).isPunct())
                             number.append(temp.at(var));
 //                            qDebug() << "3temp.at(var) at var= " << var << " is: " << temp.at(var) ;
-
                     }// end for
 
                     sfacarray.push_back(letter);
@@ -495,7 +481,7 @@ void Crystfile::parseCIF()
 
                 }// end while
 
-                formulasumcheck = false;
+//                formulasumcheck = false;
                 continue;
             }// end if quatcount ==  2
 
@@ -513,19 +499,18 @@ void Crystfile::parseCIF()
         }
 
         if (formulasumcheck) {
-            int i = line.count('\'');
-            if ((i+quatcount) < 2) {
+            quatcount += line.count('\'');
+            if (quatcount < 2) {
                 lineformula += line;
-                quatcount += i;
                 qDebug() << "Lineformula1 is " << lineformula;
                 continue;
             }
             else
-            {
+            {// All formula line has been read
                 formulasumcheck = false;
-//                lineformula += line;
+                lineformula += line;
                 quatcount = 0;
-                QTextStream buffer(&line.remove('\''));
+                QTextStream buffer(&lineformula.remove('\''));
                 QString temp;
 
                 buffer >> temp; // reading _chemical_formula_sum
@@ -537,6 +522,7 @@ void Crystfile::parseCIF()
 
                     for (int var = 0; var < temp.size(); ++var) {
                         if (temp.at(0).isLetter() && temp.size() == 1) {
+                            letter.append(temp.at(0));
                             number.append('0');
                             continue;
                         }
@@ -586,7 +572,7 @@ void Crystfile::parseCIF()
         _errors.push_back(CRFORMULAERROR);
     }
 
-    if (_a <= 1 || _b <= 1 || _c <= 1) {
+    if (_a < 1 || _b < 1 || _c < 1 || _alpha < 1 || _beta < 1 || _gama < 1)  {
         _errors.push_back(CRCELLERORR);
     }
 
@@ -676,11 +662,10 @@ const Unitcell Crystfile::niggli()
     if (_errors.contains(CRCELLERORR)) {
         return a;
     }
+    else{
+//        cctbx::uctbx::unit_cell ucell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
 
-    if(_a > 0 && _b > 0 && _c > 0 && _alpha > 0 && _beta > 0 && _gama > 0){
-    cctbx::uctbx::unit_cell ucell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama));
-
-    cctbx::uctbx::fast_minimum_reduction<double,int> mytest(ucell);
+        cctbx::uctbx::fast_minimum_reduction<double,int> mytest(cctbx::uctbx::unit_cell(scitbx::af::double6(_a,_b,_c,_alpha,_beta,_gama)));
 
 //        qDebug() << "Cell A  = " << mytest.as_unit_cell().parameters().at(0);
 //        qDebug() << "Cell B  = " << mytest.as_unit_cell().parameters().at(1);
@@ -688,7 +673,15 @@ const Unitcell Crystfile::niggli()
 //        qDebug() << "Cell Al = " << mytest.as_unit_cell().parameters().at(3);
 //        qDebug() << "Cell Be = " << mytest.as_unit_cell().parameters().at(4);
 //        qDebug() << "Cell Ga = " << mytest.as_unit_cell().parameters().at(5);
+
+        a.set_cell(mytest.as_unit_cell().parameters().at(0),
+        mytest.as_unit_cell().parameters().at(1),
+        mytest.as_unit_cell().parameters().at(2),
+        mytest.as_unit_cell().parameters().at(3),
+        mytest.as_unit_cell().parameters().at(4),
+        mytest.as_unit_cell().parameters().at(5));
     }
+
     return a;
 }
 
