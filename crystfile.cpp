@@ -271,19 +271,21 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
 
-//            double a;
+            double a;
             QString temp;
 
             buffer >> temp; // Reading UNIT keyword
 
             while (!buffer.atEnd()) {
-                buffer >> temp;
-                if (temp == "?") {
-                    _errors.push_back(CRFORMULAERROR);
-                    continue;
-                }
+                buffer >> a;
+//                if (temp == "?") {
+//                    _errors.push_back(CRFORMULAERROR);
+//                    continue;
+//                }
 
-                unitarray.push_back(temp.toDouble());
+//                unitarray.push_back(temp.toDouble());
+                unitarray.push_back(a);
+
             }
 
             unitcheck = true;
@@ -318,7 +320,7 @@ void Crystfile::parseINS()
 
 void Crystfile::parseCIF()
 {
-//    qDeug() << "Parsing CIF file" << _path;
+    qDebug() << "Parsing CIF file" << _path;
     QFile file(_path);
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -343,6 +345,7 @@ void Crystfile::parseCIF()
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
+        qDebug() << line;
 
 // Remove spaces at the begining of the line
         while (line.startsWith(' '))
