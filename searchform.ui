@@ -266,6 +266,13 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="3">
+        <widget class="QCheckBox" name="checkBox_center">
+         <property name="text">
+          <string>Center?</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>

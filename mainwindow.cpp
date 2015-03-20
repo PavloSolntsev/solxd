@@ -363,7 +363,10 @@ void MainWindow::help()
     helpdialog=new QTextEdit(this);
     helpdialog->setWindowFlags(Qt::Window); //or Qt::Tool, Qt::Dialog if you like
     helpdialog->setReadOnly(true);
-    helpdialog->append("<h1>Help</h1>Welcom to my help.<br/> Hope you like it.");
+    helpdialog->append("<h2>Help</h2>Thank you for using SolXd, the crystallographic indexing database.");
+    helpdialog->append("Before you start, you need to define the location of indexing folder(s), place to store the database file etc.");
+    helpdialog->append("Go to <i>Settings</i> menu. After that you need to index all your crystallographic files (*.ins, *.res, *.cif) ");
+    helpdialog->append("by pressing the <i>Index Database</i> button");
     helpdialog->show();
 }
 
