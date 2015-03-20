@@ -36,7 +36,6 @@ Crystfile::Crystfile():
 {
 }
 
-
 Crystfile::Crystfile(FileType type, const QString &path):Unitcell()
 {
     _type = type;
@@ -165,7 +164,7 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
 
-            double a(0),b(0),c(0),d(0),e(0),f(0),g(0);
+//            double a(0),b(0),c(0),d(0),e(0),f(0),g(0);
             QString temp;
             // CELL Wavelength cella cellb cellc alpha beta gamma
             buffer >> temp >> this->_wavelength >> _a >> _b >> _c >> _alpha >> _beta >> _gama;
@@ -230,7 +229,7 @@ void Crystfile::parseINS()
             continue;
         }
 
-        if (line.startsWith("sfac ",Qt::CaseInsensitive) && !sfaccheck)
+        if (line.startsWith("sfac ",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
             QString a;
@@ -258,12 +257,13 @@ void Crystfile::parseINS()
 //                qDebug() << "SFAC debug " << _path;
 //                qDebug() << line;
                 buffer >> a; // Reading element
+//                qDebug() << "a: " << a;
                 if (a.isEmpty()) {
                     continue;
                 }
 
                 sfacarray.push_back(a.toLower());
-                sfaccheck = true;
+//                sfaccheck = true;
             }
         }
 
@@ -288,6 +288,10 @@ void Crystfile::parseINS()
 
             unitcheck = true;
             continue;
+        }
+
+        if (sfacarray.size()>0 && unitcheck) {
+            sfaccheck = true;
         }
 
         if(cellcheck && lattcheck && sfaccheck && unitcheck)

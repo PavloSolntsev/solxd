@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>380</width>
-        <height>468</height>
+        <width>382</width>
+        <height>475</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -263,9 +263,6 @@
         <widget class="QCheckBox" name="checkBox_advanced">
          <property name="text">
           <string>Advanced search?</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
