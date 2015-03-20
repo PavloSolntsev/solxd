@@ -51,12 +51,17 @@ public:
     bool findWL(const double &wl,const double &error);
     bool findSfac(const QString &sfac);
     bool findBrave(const CellType &ctype);
-    bool findCellA(const double &cellA,const double &error);
-    bool findCellB(const double &cellB,const double &error);
-    bool findCellC(const double &cellC,const double &error);
-    bool findCellAlpha(const double &cellAlpha,const double &error);
-    bool findCellBeta(const double &cellBeta,const double &error);
-    bool findCellGamma(const double &cellGamma,const double &error);
+
+    bool findCellA(const double &cellA,const double &error,const bool &niggli);
+    bool findCellB(const double &cellB,const double &error,const bool &niggli);
+    bool findCellC(const double &cellC,const double &error,const bool &niggli);
+    bool findCellAlpha(const double &cellAlpha,const double &error,const bool &niggli);
+    bool findCellBeta(const double &cellBeta,const double &error,const bool &niggli);
+    bool findCellGamma(const double &cellGamma,const double &error,const bool &niggli);
+
+    bool findCellABC(const double &Par,const double &error,const bool &niggli);
+    bool findAngleABC(const double &Par,const double &error,const bool &niggli);
+
     bool findVolume(const double &vol, const double &error);
 
     inline const QString &getPath()const {return _path;}

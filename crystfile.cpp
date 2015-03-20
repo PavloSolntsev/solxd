@@ -125,7 +125,6 @@ bool Crystfile::findSfac(const QString &sfac)
 
 void Crystfile::parseINS()
 {
-//    _state = CRGOOD;
     QFile file(_path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         switch (file.error()) {
@@ -244,7 +243,7 @@ void Crystfile::parseINS()
                     if (a.isEmpty())
                         continue;
                     if (a == "?") {
-//                        sfaccheck = true;
+                        sfaccheck = true;
                         _errors.push_back(CRFORMULAERROR);
                         break;
                     }
@@ -256,12 +255,15 @@ void Crystfile::parseINS()
             }
             else
             { // SFAC with scatering factors
+//                qDebug() << "SFAC debug " << _path;
+//                qDebug() << line;
                 buffer >> a; // Reading element
                 if (a.isEmpty()) {
                     continue;
                 }
 
                 sfacarray.push_back(a.toLower());
+                sfaccheck = true;
             }
         }
 
@@ -280,6 +282,7 @@ void Crystfile::parseINS()
                     _errors.push_back(CRFORMULAERROR);
                     continue;
                 }
+
                 unitarray.push_back(temp.toDouble());
             }
 
@@ -594,100 +597,160 @@ bool Crystfile::findWL(const double &wl, const double &error)
         return false;
 }
 
-bool Crystfile::findCellA(const double &cellA, const double &error)
+bool Crystfile::findCellA(const double &cellA, const double &error,const bool &niggli)
 {
-    if (_a != _ra) {
-        qDebug() <<"A cells are different for normal and reduced cells";
-        qDebug() << "_a = " << _a << " _ra = " << _ra;
-    }
-
-
+//    if (_a != _ra) {
+//        qDebug() <<"A cells are different for normal and reduced cells";
+//        qDebug() << "_a = " << _a << " _ra = " << _ra;
+//    }
     if(100*qAbs(_a - cellA) < error*_a)
         return true;
     else{
-        if (100*qAbs(_ra - cellA) < error*_ra)
-            return true;
+        if(niggli){
+            if (100*qAbs(_ra - cellA) < error*_ra)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
 }
 
-bool Crystfile::findCellB(const double &cellB, const double &error)
+bool Crystfile::findCellB(const double &cellB, const double &error,const bool &niggli)
 {
-    if (_b != _rb) {
-        qDebug() <<"A cells are different for normal and reduced cells";
-        qDebug() << "_b = " << _b << " _rb = " << _rb;
-    }
+//    if (_b != _rb) {
+//        qDebug() <<"A cells are different for normal and reduced cells";
+//        qDebug() << "_b = " << _b << " _rb = " << _rb;
+//    }
 
     if(100*qAbs(_b - cellB) < error*_b)
         return true;
     else{
-        if(100*qAbs(_rb - cellB) < error*_rb)
-            return true;
+        if(niggli){
+            if(100*qAbs(_rb - cellB) < error*_rb)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
 }
 
-bool Crystfile::findCellC(const double &cellC, const double &error)
+bool Crystfile::findCellC(const double &cellC, const double &error, const bool &niggli)
 {
     if(100*qAbs(_c - cellC) < error*_c)
         return true;
     else{
-        if(100*qAbs(_rc - cellC) < error*_rc)
-            return true;
+        if(niggli){
+            if(100*qAbs(_rc - cellC) < error*_rc)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
 }
 
-bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error)
+bool Crystfile::findCellAlpha(const double &cellAlpha, const double &error, const bool &niggli)
 {
-    if (_alpha != _ralpha) {
-        qDebug() <<"A cells are different for normal and reduced cells";
-        qDebug() << "_alpha = " << _alpha << " _raalpha = " << _ralpha;
-    }
+//    if (_alpha != _ralpha) {
+//        qDebug() <<"A cells are different for normal and reduced cells";
+//        qDebug() << "_alpha = " << _alpha << " _raalpha = " << _ralpha;
+//    }
 
     if(100*qAbs(_alpha - cellAlpha) < error*_alpha)
         return true;
     else{
-        if(100*qAbs(_ralpha - cellAlpha) < error*_ralpha)
-            return true;
+        if(niggli){
+            if(100*qAbs(_ralpha - cellAlpha) < error*_ralpha)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
 }
 
-bool Crystfile::findCellBeta(const double &cellBeta, const double &error)
+bool Crystfile::findCellBeta(const double &cellBeta, const double &error, const bool &niggli)
 {
-    if (_beta != _rbeta) {
-        qDebug() <<"A cells are different for normal and reduced cells";
-        qDebug() << "_beta = " << _beta << " _rbeta = " << _rbeta;
-    }
+//    if (qAbs(_beta - _rbeta) > 0.0001) {
+//        if (qAbs(_alpha - _ralpha) > 0.0001){
+//            qDebug() <<"A cells are different for normal and reduced cells";
+//            qDebug() << "_alpha = " << _alpha << " _ralpha = " << _ralpha;
+//            qDebug() << "_beta  = " << _beta << " _rbeta = " << _rbeta;
+//            qDebug() << "From file: " << _path;
+//            qDebug() << "====================================================";
+//        }
+//    }
+
     if(100*qAbs(_beta - cellBeta) < error*_beta)
         return true;
     else{
-        if(100*qAbs(_rbeta - cellBeta) < error*_rbeta)
-            return true;
+        if(niggli){
+            if(100*qAbs(_rbeta - cellBeta) < error*_rbeta)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
 }
 
-bool Crystfile::findCellGamma(const double &cellGamma, const double &error)
+bool Crystfile::findCellGamma(const double &cellGamma, const double &error, const bool &niggli)
 {
-    if (_gama != _rgama) {
-        qDebug() <<"A cells are different for normal and reduced cells";
-        qDebug() << "_gama = " << _gama << " _rgama = " << _rgama;
-    }
+//    if (_gama != _rgama) {
+//        qDebug() <<"A cells are different for normal and reduced cells";
+//        qDebug() << "_gama = " << _gama << " _rgama = " << _rgama;
+//    }
 
     if(100*qAbs(_gama - cellGamma) < error*_gama)
         return true;
     else{
-        if(100*qAbs(_rgama - cellGamma) < error*_rgama)
-            return true;
+        if(niggli){
+            if(100*qAbs(_rgama - cellGamma) < error*_rgama)
+                return true;
+            else
+                return false;
+        }
         else
             return false;
+    }
+}
+
+bool Crystfile::findCellABC(const double &Par, const double &error,const bool &niggli)
+{
+    if(findCellA(Par,error,niggli))
+        return true;
+    else{
+        if(findCellB(Par,error,niggli))
+            return true;
+        else{
+            if(findCellC(Par,error,niggli))
+                return true;
+            else
+                return false;
+        }
+    }
+}
+
+bool Crystfile::findAngleABC(const double &Par, const double &error,const bool &niggli)
+{
+    if(findCellAlpha(Par,error,niggli))
+        return true;
+    else{
+        if(findCellBeta(Par,error,niggli))
+            return true;
+        else{
+            if(findCellGamma(Par,error,niggli))
+                return true;
+            else
+                return false;
+        }
     }
 }
 

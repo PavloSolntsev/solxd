@@ -86,6 +86,9 @@ void SearchForm::startSearch()
         in.resetStatus();
     }
 
+
+    bool nigglicheck(ui->checkBox_reduces->isChecked()); // Check state for "reduce cell" check box
+
     const double error(ui->lineEdit_error->text().toDouble());
 
     while (!in.atEnd()) {
@@ -96,48 +99,99 @@ void SearchForm::startSearch()
         if (crfile.getPath() == "")
             break;
 
-        if(ui->checkBox_cellA->isChecked())
-        {
-            if(crfile.findCellA(ui->lineEdit_cellA->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
+        if (ui->checkBox_advanced->isChecked()) {
+            if(ui->checkBox_cellA->isChecked()){
+                if(crfile.findCellABC(ui->lineEdit_cellA->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                }
+
+            if(ui->checkBox_cellB->isChecked())
+            {
+                if(crfile.findCellABC(ui->lineEdit_cellB->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+
+            if(ui->checkBox_cellC->isChecked())
+            {
+                if(crfile.findCellABC(ui->lineEdit_cellC->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+
+            if(ui->checkBox_alpha->isChecked())
+            {
+                if(crfile.findAngleABC(ui->lineEdit_alpha->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+
+            if(ui->checkBox_beta->isChecked())
+            {
+                if(crfile.findAngleABC(ui->lineEdit_beta->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+
+            if(ui->checkBox_gamma->isChecked())
+            {
+                if(crfile.findAngleABC(ui->lineEdit_gamma->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+        } else {
+
+            if(ui->checkBox_cellA->isChecked())
+            {
+                if(crfile.findCellA(ui->lineEdit_cellA->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+            if(ui->checkBox_cellB->isChecked())
+            {
+                if(crfile.findCellB(ui->lineEdit_cellB->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+            if(ui->checkBox_cellC->isChecked())
+            {
+                if(crfile.findCellC(ui->lineEdit_cellC->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+            if(ui->checkBox_alpha->isChecked())
+            {
+                if(crfile.findCellAlpha(ui->lineEdit_alpha->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+            if(ui->checkBox_beta->isChecked())
+            {
+                if(crfile.findCellBeta(ui->lineEdit_beta->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
+            if(ui->checkBox_gamma->isChecked())
+            {
+                if(crfile.findCellGamma(ui->lineEdit_gamma->text().toDouble(),error,nigglicheck))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+            }
         }
-        if(ui->checkBox_cellB->isChecked())
-        {
-            if(crfile.findCellB(ui->lineEdit_cellB->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
-        }
-        if(ui->checkBox_cellC->isChecked())
-        {
-            if(crfile.findCellC(ui->lineEdit_cellC->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
-        }
-        if(ui->checkBox_alpha->isChecked())
-        {
-            if(crfile.findCellAlpha(ui->lineEdit_alpha->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
-        }
-        if(ui->checkBox_beta->isChecked())
-        {
-            if(crfile.findCellBeta(ui->lineEdit_beta->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
-        }
-        if(ui->checkBox_gamma->isChecked())
-        {
-            if(crfile.findCellGamma(ui->lineEdit_gamma->text().toDouble(),error))
-                boolresults.push_back(true);
-            else
-                boolresults.push_back(false);
-        }
+
         if (ui->checkBox_wl->isChecked())
         {
             if (crfile.findWL(ui->lineEdit_wl->text().toDouble(),error))
@@ -178,7 +232,8 @@ void SearchForm::startSearch()
         }
 
         if(ui->checkBox_latt->isChecked()){
-            CellType item = static_cast<CellType>(ui->comboBox_latt->currentIndex());
+            CellType item = static_cast<CellType>(ui->comboBox_latt->currentIndex()+1);
+             // we need to adjust indexes between widget and enum
             switch (item) {
             case PRIMITIVE:
                 if (crfile.findBrave(item))
@@ -187,6 +242,12 @@ void SearchForm::startSearch()
                     boolresults.push_back(false);
                 break;
             case ICENTERED:
+                if (crfile.findBrave(item))
+                    boolresults.push_back(true);
+                else
+                    boolresults.push_back(false);
+                break;
+            case RHOMBOHIDRAL:
                 if (crfile.findBrave(item))
                     boolresults.push_back(true);
                 else
@@ -216,16 +277,11 @@ void SearchForm::startSearch()
                 else
                     boolresults.push_back(false);
                 break;
-            case RHOMBOHIDRAL:
-                if (crfile.findBrave(item))
-                    boolresults.push_back(true);
-                else
-                    boolresults.push_back(false);
-                break;
             default:
                 break;
             }// end of switch
         } // end if
+
         if(ui->checkBox_volume->isChecked())
         {
             if(crfile.findVolume(ui->lineEdit_volume->text().toDouble(),error))
@@ -246,10 +302,10 @@ void SearchForm::startSearch()
 //            qDebug() << crfile.gama();
 //            qDebug() << crfile.getWavelength();
         }
-
     }
 
     DBFile.close();
+
     for (int var = 0; var < _results.size(); ++var) {
         if(_results.at(var).getSfacArray().size() != _results.at(var).getUnitArray().size()){
             qDebug() << "problem with " << _results.at(var).getPath();

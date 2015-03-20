@@ -54,6 +54,7 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
 
 //        qDebug() << "Under mouse A = " << crfile.a();
         QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
+//        text += QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6")
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
         text += QString("\n<b>Formula</b>");
         for (int var = 0; var < crfile.getSfacArray().size(); ++var) {

@@ -31,7 +31,7 @@ RES,
 CIF
 };
 enum CellType{
-    UNKNOWN,
+    UNKNOWN = 0,
     PRIMITIVE,
     ICENTERED,
     RHOMBOHIDRAL,
