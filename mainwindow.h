@@ -29,6 +29,7 @@
 #include "searchform.h"
 #include "mylistwidget.h"
 #include <QToolTip>
+#include <QTextEdit>
 
 namespace Ui {
 class MainWindow;
@@ -57,6 +58,8 @@ public slots:
     void openfilesastext();
     void changelwfont(const QFont &font);
     void displaymassage(const QString &);
+    void aboutQt();
+    void help();
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
@@ -68,6 +71,7 @@ private:
     QString DBpath;
     QMenu *contextmenu;
     QAction *aopenfiles,*browsfiles,*openastext;
+    QTextEdit* helpdialog;
 };
 
 #endif // MAINWINDOW_H

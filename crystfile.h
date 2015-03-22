@@ -102,7 +102,7 @@ private:
     CellType _ctype;
 
     double _wavelength;
-    bool _center;
+
     QList<QString> sfacarray;
     QList<double> unitarray;
 
@@ -111,6 +111,7 @@ private:
 
 //    CrystfileState _state;
     int _cifblock;
+    bool _center;
     QList<CrystfileErrors> _errors;
 };
 

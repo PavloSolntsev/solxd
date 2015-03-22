@@ -47,7 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
     connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
-    connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));    
+    connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
+    connect(ui->actionAbout_Qt,SIGNAL(activated()),this,SLOT(aboutQt()));
+    connect(ui->actionSolXd_help,SIGNAL(activated()),this,SLOT(help()));
+
     sform = NULL;
     dia = new Settings(this);
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
@@ -346,6 +349,25 @@ void MainWindow::changelwfont(const QFont &font)
 void MainWindow::displaymassage(const QString &text)
 {
     ui->statusBar->showMessage(text);
+}
+
+void MainWindow::aboutQt()
+{
+//    QApplication::aboutQt();
+    QMessageBox::aboutQt ( this, tr("SolXd about Qt dialog"));
+
+}
+
+void MainWindow::help()
+{
+    helpdialog=new QTextEdit(this);
+    helpdialog->setWindowFlags(Qt::Window); //or Qt::Tool, Qt::Dialog if you like
+    helpdialog->setReadOnly(true);
+    helpdialog->append("<h2>Help</h2>Thank you for using SolXd, the crystallographic indexing database.");
+    helpdialog->append("Before you start, you need to define the location of indexing folder(s), place to store the database file etc.");
+    helpdialog->append("Go to <i>Settings</i> menu. After that you need to index all your crystallographic files (*.ins, *.res, *.cif) ");
+    helpdialog->append("by pressing the <i>Index Database</i> button");
+    helpdialog->show();
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)

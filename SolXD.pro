@@ -19,9 +19,7 @@ SOURCES += main.cpp\
     unitcell.cpp \
     settings.cpp \
     searchform.cpp \
-    mylistwidget.cpp \
-    matrix.cpp \
-    parameter.cpp
+    mylistwidget.cpp
 
 HEADERS  += mainwindow.h \
     crystfile.h \
@@ -29,9 +27,7 @@ HEADERS  += mainwindow.h \
     settings.h \
     solXd.h \
     searchform.h \
-    mylistwidget.h \
-    matrix.h \
-    parameter.h
+    mylistwidget.h
 
 FORMS    += mainwindow.ui \
     settings.ui \

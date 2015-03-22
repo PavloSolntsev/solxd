@@ -282,13 +282,15 @@ void SearchForm::startSearch()
             }// end of switch
         } // end if
 
-        if(ui->checkBox_volume->isChecked())
+        if(ui->checkBox_center->isChecked())
         {
-            if(crfile.findVolume(ui->lineEdit_volume->text().toDouble(),error))
+            if(crfile.isCenter())
                 boolresults.push_back(true);
             else
                 boolresults.push_back(false);
         }
+
+
 
         if (!boolresults.contains(false))
         {
