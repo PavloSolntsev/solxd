@@ -121,18 +121,19 @@ void MainWindow::indexDatabase()
     {
         QDirIterator dirIt(*it,QDirIterator::Subdirectories);
         while (dirIt.hasNext()) {
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
+//            qDebug() << dirIt.filePath();
             dirIt.next();
-
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
             if(excludeshelxle && dirIt.filePath().contains("shelXlesaves",Qt::CaseInsensitive))
                 continue;
-
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
             if(excludeolex2 && dirIt.filePath().contains(".olex",Qt::CaseInsensitive))
                 continue;
-
-            if (dirIt.fileInfo().isFile())
-              {
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
+            if (dirIt.fileInfo().isFile()){
                 QString suffix = dirIt.fileInfo().suffix().toLower();
-
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
                 if (suffix == "ins" || suffix == "res" || suffix == "cif")
                 {
                     QString filepath = dirIt.filePath();
@@ -161,12 +162,15 @@ void MainWindow::indexDatabase()
 
                     listiteam->setData(Qt::UserRole,qv);
                     ui->listWidget->addItem(listiteam);
+//                    qDebug() << "Finished work on " << filepath;
                 }
             }
+//            qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
         } // end while
     } // end for loop
     DBFile.close();
     ui->statusBar->showMessage(tr("Indexing finished"));
+//    qDebug() << "File: "<< __FILE__ << " Line: " << __LINE__  ;
 }
 
 void MainWindow::runSettings()

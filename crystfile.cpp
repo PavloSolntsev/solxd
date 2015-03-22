@@ -56,7 +56,7 @@ Crystfile::Crystfile(FileType type, const QString &path):Unitcell()
     default:
         break;
     }
-
+//    qDebug("END of Crystfile contsructor");
 }
 
 bool Crystfile::findCell(const Unitcell &cell, const double &error)
@@ -271,20 +271,21 @@ void Crystfile::parseINS()
         {
             QTextStream buffer(&line);
 
-            double a;
+//            double a;
             QString temp;
 
             buffer >> temp; // Reading UNIT keyword
 
             while (!buffer.atEnd()) {
-                buffer >> a;
-//                if (temp == "?") {
-//                    _errors.push_back(CRFORMULAERROR);
-//                    continue;
-//                }
+                buffer >> temp;
+                if (temp == "?") {
+                    _errors.push_back(CRFORMULAERROR);
+                    unitcheck = true;
+                    break;
+                }
 
-//                unitarray.push_back(temp.toDouble());
-                unitarray.push_back(a);
+                unitarray.push_back(temp.toDouble());
+//                unitarray.push_back(a);
 
             }
 
@@ -324,7 +325,7 @@ void Crystfile::parseINS()
 
 void Crystfile::parseCIF()
 {
-    qDebug() << "Parsing CIF file" << _path;
+//    qDebug() << "Parsing CIF file" << _path;
     QFile file(_path);
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -349,7 +350,7 @@ void Crystfile::parseCIF()
 
     while(!inp.atEnd()) {
         QString line = inp.readLine();
-        qDebug() << line;
+//        qDebug() << line;
 
 // Remove spaces at the begining of the line
         while (line.startsWith(' '))
@@ -586,6 +587,7 @@ void Crystfile::parseCIF()
 
     sync_data(); // Sync all internal numeric parameters
     file.close();
+//    qDebug() << "END CIF PARSER";
 } // end cifparser
 
 bool Crystfile::findBrave(const CellType &ctype)

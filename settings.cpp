@@ -37,16 +37,20 @@ Settings::Settings(QWidget *parent) :
     connect(ui->pushButtonAdd3,SIGNAL(clicked()),this,SLOT(addPath3()));
     connect(ui->pushButtonDBAdd,SIGNAL(clicked()),this,SLOT(addDBPath()));
     connect(ui->pushButton_addviewwr,SIGNAL(clicked()),this,SLOT(addviewer()));
+    connect(ui->pushButton_addtexteditor,SIGNAL(clicked()),this,SLOT(addtexteditor()));
 
     connect(ui->pushButtonDelete1,SIGNAL(clicked()),this,SLOT(deletePath1()));
     connect(ui->pushButtonDelete2,SIGNAL(clicked()),this,SLOT(deletePath2()));
     connect(ui->pushButtonDelete3,SIGNAL(clicked()),this,SLOT(deletePath3()));
     connect(ui->pushButtonDBDelete,SIGNAL(clicked()),this,SLOT(deleteDBPath()));
     connect(ui->pushButton_deleteviewer,SIGNAL(clicked()),this,SLOT(deleteviewer()));
+    connect(ui->pushButton_deletetexteditor,SIGNAL(clicked()),this,SLOT(deletetexteditor()));
 
     connect(ui->lineeditPath1,SIGNAL(textChanged(QString)),this,SLOT(path1manualchange(QString)));
     connect(ui->lineeditPath2,SIGNAL(textChanged(QString)),this,SLOT(path2manualchange(QString)));
     connect(ui->lineeditPath3,SIGNAL(textChanged(QString)),this,SLOT(path3manualchange(QString)));
+    connect(ui->lineEdit_viewer,SIGNAL(textChanged(QString)),this,SLOT(viewerpathchanged(QString)));
+    connect(ui->lineEdit_texteditor,SIGNAL(textChanged(QString)),this,SLOT(texteditorchanged(QString)));
 
     connect(ui->pushButtonOk,SIGNAL(clicked()),this,SLOT(ok_button_clicked()));
     connect(ui->pushButtonCancel,SIGNAL(clicked()),this,SLOT(close()));
@@ -55,8 +59,6 @@ Settings::Settings(QWidget *parent) :
 
     connect(ui->checkBox_shelxle,SIGNAL(stateChanged(int)),this,SLOT(shelxlecheckchanged(int)));
     connect(ui->checkBox_olex2,SIGNAL(stateChanged(int)),this,SLOT(olex2checkchanged(int)));
-
-    connect(ui->lineEdit_viewer,SIGNAL(textChanged(QString)),this,SLOT(viewerpathchanged(QString)));
 
     settings = new QSettings( QSettings::IniFormat, QSettings::UserScope ,PROGRAM_NAME,PROGRAM_NAME ,this);
 
@@ -102,6 +104,11 @@ Settings::Settings(QWidget *parent) :
     if (settings->contains("ViewerPath")) {
         viewerpath = settings->value("ViewerPath").toString();
         ui->lineEdit_viewer->setText(viewerpath);
+    }
+
+    if (settings->contains("TextEditorPath")) {
+        texteditorpath = settings->value("TextEditorPath").toString();
+        ui->lineEdit_texteditor->setText(texteditorpath);
     }
 
     if (settings->contains("ToolBarSize")) {
@@ -153,6 +160,10 @@ void Settings::ok_button_clicked()
 
     if (!viewerpath.isEmpty()) {
         settings->setValue("ViewerPath",viewerpath);
+    }
+
+    if (!texteditorpath.isEmpty()) {
+        settings->setValue("TextEditorPath",texteditorpath);
     }
 
     int tbsize(ui->spinBox_iconsize->value());
@@ -223,6 +234,14 @@ void Settings::addviewer()
 
 }
 
+void Settings::addtexteditor()
+{
+    texteditorpath = QFileDialog::getOpenFileName(this, tr("Text Editor Path"),
+                                                    QDir::homePath(),
+                                                    tr(""));
+    ui->lineEdit_texteditor->setText(texteditorpath);
+}
+
 void Settings::deletePath1()
 {
     ui->lineeditPath1->clear();
@@ -257,6 +276,13 @@ void Settings::deleteviewer()
     ui->lineEdit_viewer->clear();
     viewerpath.clear();
     settings->remove("ViewerPath");
+}
+
+void Settings::deletetexteditor()
+{
+    ui->lineEdit_texteditor->clear();
+    texteditorpath.clear();
+    settings->remove("TextEditorPath");
 }
 
 void Settings::shelxlecheckchanged(int i)

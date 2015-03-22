@@ -47,6 +47,7 @@ public:
     const bool &excludeshelxlefolders(void)const{return shelxlecheck;}
     const bool &excludeolex2folders(void)const{return olex2check;}
     const QString &getViewer(void)const{return viewerpath;}
+    const QString &getTextEditor()const{return texteditorpath;}
     const QFont &get_lwfont()const{return lwfont;}
 
 public slots:
@@ -55,12 +56,14 @@ public slots:
     void addPath3();
     void addDBPath();
     void addviewer();
+    void addtexteditor();
 
     void deletePath1();
     void deletePath2();
     void deletePath3();
     void deleteDBPath();
     void deleteviewer();
+    void deletetexteditor();
 
     void path1manualchange(const QString &a){path1 = a;}
     void path2manualchange(const QString &a){path2 = a;}
@@ -68,6 +71,7 @@ public slots:
     void shelxlecheckchanged(int i);
     void olex2checkchanged(int i);
     void viewerpathchanged(const QString &a){viewerpath = a;}
+    void texteditorchanged(const QString &a){texteditorpath = a;}
     void ok_button_clicked();
     void font_button_clicked();
 
@@ -84,6 +88,7 @@ private:
     QString path3;
     QString pathDB;
     QString viewerpath;
+    QString texteditorpath;
 
     QStringList listpath;
     bool shelxlecheck;

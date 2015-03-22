@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>635</width>
-    <height>489</height>
+    <width>475</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,14 +50,14 @@
         <item>
          <widget class="QPushButton" name="pushButtonAdd2">
           <property name="text">
-           <string>Add</string>
+           <string>&amp;Add</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonDelete2">
           <property name="text">
-           <string>Delete</string>
+           <string>&amp;Delete</string>
           </property>
          </widget>
         </item>
@@ -78,14 +78,14 @@
         <item>
          <widget class="QPushButton" name="pushButtonAdd1">
           <property name="text">
-           <string>Add</string>
+           <string>&amp;Add</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonDelete1">
           <property name="text">
-           <string>Delete</string>
+           <string>&amp;Delete</string>
           </property>
          </widget>
         </item>
@@ -106,14 +106,14 @@
         <item>
          <widget class="QPushButton" name="pushButtonAdd3">
           <property name="text">
-           <string>Add</string>
+           <string>&amp;Add</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonDelete3">
           <property name="text">
-           <string>Delete</string>
+           <string>&amp;Delete</string>
           </property>
          </widget>
         </item>
@@ -169,14 +169,14 @@
         <item>
          <widget class="QPushButton" name="pushButtonDBAdd">
           <property name="text">
-           <string>Add</string>
+           <string>&amp;Add</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonDBDelete">
           <property name="text">
-           <string>Delete</string>
+           <string>&amp;Delete</string>
           </property>
          </widget>
         </item>
@@ -188,30 +188,54 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>External Viewer</string>
+      <string>External Programs</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Path</string>
+         <string>Model Viewer</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QLineEdit" name="lineEdit_viewer"/>
       </item>
-      <item>
+      <item row="0" column="2">
        <widget class="QPushButton" name="pushButton_addviewwr">
         <property name="text">
-         <string>Add</string>
+         <string>&amp;Add</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
        <widget class="QPushButton" name="pushButton_deleteviewer">
         <property name="text">
-         <string>Delete</string>
+         <string>&amp;Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Text Editor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_texteditor"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pushButton_addtexteditor">
+        <property name="text">
+         <string>&amp;Add</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QPushButton" name="pushButton_deletetexteditor">
+        <property name="text">
+         <string>&amp;Delete</string>
         </property>
        </widget>
       </item>
