@@ -10,8 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SolXD
 TEMPLATE = app
-INCLUDEPATH += /home/pavlo/progs/cctbx_sources \
-               /home/pavlo/progs/cctbx_build/include \
+INCLUDEPATH += ./cctbx \
+               ./cctbx/include
 
 SOURCES += main.cpp\
         mainwindow.cpp \
