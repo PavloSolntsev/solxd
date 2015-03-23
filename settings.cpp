@@ -185,9 +185,15 @@ void Settings::ok_button_clicked()
 
 void Settings::addPath1()
 {
+    QString startDir;
 
-    path1 = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home",
+    if (path1.isEmpty())
+        startDir = QDir::homePath();
+    else
+        startDir = path1;
+
+    path1 = QFileDialog::getExistingDirectory(this, tr("Select Indexing Directory"),
+                                                    startDir,
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
 
@@ -196,10 +202,15 @@ void Settings::addPath1()
 
 void Settings::addPath2()
 {
+    QString startDir;
 
+    if (path2.isEmpty())
+        startDir = QDir::homePath();
+    else
+        startDir = path2;
 
-    path2 = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home",
+    path2 = QFileDialog::getExistingDirectory(this, tr("Select Indexing Directory"),
+                                                    startDir,
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
     ui->lineeditPath2->setText(path2);
@@ -207,9 +218,16 @@ void Settings::addPath2()
 
 void Settings::addPath3()
 {
+    QString startDir;
 
-    path3 = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home",
+    if (path3.isEmpty())
+        startDir = QDir::homePath();
+    else
+        startDir = path3;
+
+
+    path3 = QFileDialog::getExistingDirectory(this, tr("Select Indexing Directory"),
+                                                    startDir,
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
     ui->lineeditPath3->setText(path3);
@@ -217,7 +235,7 @@ void Settings::addPath3()
 
 void Settings::addDBPath()
 {
-    pathDB = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+    pathDB = QFileDialog::getExistingDirectory(this, tr("Select location of the database "),
                                                     QDir::homePath(),
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);

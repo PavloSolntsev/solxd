@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>527</height>
+    <width>494</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>382</width>
-        <height>475</height>
+        <width>456</width>
+        <height>456</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -266,11 +266,26 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3">
-        <widget class="QCheckBox" name="checkBox_center">
-         <property name="text">
-          <string>Center?</string>
+       <item row="6" column="2" colspan="3">
+        <widget class="QComboBox" name="comboBox_center">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
+         <item>
+          <property name="text">
+           <string>Ignore center</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Center: Yes</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Center: No</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>

@@ -53,9 +53,13 @@ void MyListWidget::mouseMoveEvent(QMouseEvent *event)
         Crystfile crfile(qvr->value<Crystfile>());
 
 //        qDebug() << "Under mouse A = " << crfile.a();
-        QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
-//        text += QString("<p style='white-space:pre'><b>Unit Cell:</b> %1 %2 %3 %4 %5 %6")
+        QString text = QString("<p style='white-space:pre'><b>Unit Cell:</b> %1\t%2\t%3 \n\t %4\t%5\t%6").arg(crfile.a()).arg(crfile.b()).arg(crfile.c()).arg(crfile.alpha()).arg(crfile.beta()).arg(crfile.gama());
         text += QString("\n<b>LATT:</b> %1").arg(celltypemap[crfile.getCellType()]);
+        text += QString("\n<b>Center:</b> ");
+        if (crfile.isCenter())
+            text += "Yes";
+        else
+            text += "No";
         text += QString("\n<b>Formula</b>");
         for (int var = 0; var < crfile.getSfacArray().size(); ++var) {
             if (crfile.getSfacArray().at(var).size() == 2) {

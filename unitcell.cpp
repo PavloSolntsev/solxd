@@ -39,9 +39,12 @@ Unitcell::Unitcell(double acell, double bcell, double ccell, double alphacell, d
 
 const Unitcell Unitcell::reciprocal()
 {
-    double ra = _b*_c*alsin/_volume;
-    double rb = _a*_c*besin/_volume;
-    double rc = _a*_b*gasin/_volume;
+    if (_volume <= 0)
+        return Unitcell();
+
+    double ra (_b*_c*alsin/_volume);
+    double rb (_a*_c*besin/_volume);
+    double rc (_a*_b*gasin/_volume);
 
     double ralcos = (becos*gacos-alcos)/(besin*gasin);
     double rbecos = (alcos*gacos-becos)/(alsin*gasin);
@@ -103,6 +106,5 @@ void Unitcell::sync_data()
     gasin = sin(DEG2RAD(_gama));
 
     _volume = _a*_b*_c*sqrt(1-SQUARE(alcos)-SQUARE(becos)-SQUARE(gacos)+2*alcos*becos*gacos);
-
 }
 

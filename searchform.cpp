@@ -282,9 +282,10 @@ void SearchForm::startSearch()
             }// end of switch
         } // end if
 
-        if(ui->checkBox_center->isChecked())
+        if(ui->comboBox_center->currentIndex() != 0)
         {
-            if(crfile.isCenter())
+            if((crfile.isCenter() && ui->comboBox_center->currentIndex() == 1) ||
+                    (!crfile.isCenter() && ui->comboBox_center->currentIndex() == 2)    )
                 boolresults.push_back(true);
             else
                 boolresults.push_back(false);

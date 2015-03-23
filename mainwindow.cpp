@@ -328,7 +328,6 @@ void MainWindow::openlistwidgetfiles()
 void MainWindow::openbrowsfiles()
 {
     QStringList arguments;
-
     for(int i=0; i<ui->listWidget->selectedItems().size();i++){
         QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
         QDesktopServices::openUrl(QUrl("file:///" + QFileInfo(path).dir().absolutePath()));
@@ -337,12 +336,19 @@ void MainWindow::openbrowsfiles()
 
 void MainWindow::openfilesastext()
 {
-        QStringList arguments;
+//    QStringList arguments;
+//    for(int i=0; i<ui->listWidget->selectedItems().size();i++){
+//        QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
+//        QDesktopServices::openUrl(QUrl("file:///" + path));
+//    }
+    QString program = dia->getTextEditor();
+    QStringList arguments;
 
-        for(int i=0; i<ui->listWidget->selectedItems().size();i++){
-            QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
-            QDesktopServices::openUrl(QUrl("file:///" + path));
-        }
+    for(int i=0; i<ui->listWidget->selectedItems().size();i++)
+        arguments << ui->listWidget->selectedItems().at(i)->text();
+
+    QProcess *myProcess = new QProcess(this);
+    myProcess->start(program, arguments);
 }
 
 void MainWindow::changelwfont(const QFont &font)
