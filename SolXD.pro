@@ -34,6 +34,9 @@ FORMS    += mainwindow.ui \
     searchform.ui
 
 RESOURCES += \
-    icons.qrc
+    icons.qrc \
+    otherfiles.qrc
 
 unix:LIBS += -L/home/pavlo/progs/cctbx_build/lib -lcctbx
+
+OTHER_FILES +=

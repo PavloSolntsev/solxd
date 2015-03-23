@@ -56,6 +56,7 @@ public slots:
     void openlistwidgetfiles();
     void openbrowsfiles();
     void openfilesastext();
+    void deleteselectedfiles();
     void changelwfont(const QFont &font);
     void displaymassage(const QString &);
     void aboutQt();
@@ -70,7 +71,7 @@ private:
     SearchForm *sform;
     QString DBpath;
     QMenu *contextmenu;
-    QAction *aopenfiles,*browsfiles,*openastext;
+    QAction *aopenfiles,*browsfiles,*openastext, *deletefiles;
     QTextEdit* helpdialog;
 };
 

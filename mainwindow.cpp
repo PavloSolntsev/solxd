@@ -148,17 +148,23 @@ void MainWindow::indexDatabase()
                     QListWidgetItem *listiteam = new QListWidgetItem();
                     listiteam->setText(filepath);
 
-                    if (crf.error().size() != 0)
+                    if (crf.error().contains(Crystfile::CRFORMULAERROR))
                         listiteam->setForeground(Qt::red);
-
-                    if (crf.cifblock() > 1)
-                        listiteam->setForeground(Qt::blue);
-
-//                    qDebug() << "0Unit a =" << crf.a();
-
-                    if (crf.error().contains(Crystfile::CRCELLERORR)) {
-                        listiteam->setForeground(Qt::green);
+                    else {
+                        if (crf.error().contains(Crystfile::CRINSERROR))
+                            listiteam->setForeground(Qt::blue);
+                        else {
+                            if (crf.error().contains(Crystfile::CRLATTERROR))
+                                listiteam->setForeground(Qt::magenta);
+                            else{
+                                if (crf.error().contains(Crystfile::CRCELLERORR))
+                                    listiteam->setForeground(Qt::green);
+                            }
+                        }
                     }
+
+                    //                    qDebug() << "0Unit a =" << crf.a();
+
 
                     listiteam->setData(Qt::UserRole,qv);
                     ui->listWidget->addItem(listiteam);
@@ -351,6 +357,42 @@ void MainWindow::openfilesastext()
     myProcess->start(program, arguments);
 }
 
+void MainWindow::deleteselectedfiles()
+{
+    QStringList arguments;
+
+    for(int i=0; i<ui->listWidget->selectedItems().size();i++)
+        arguments << ui->listWidget->selectedItems().at(i)->text();
+
+    QMessageBox::StandardButton i = QMessageBox::warning(this,"Delete Files","Do you really wnat to delete these files:",QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::No);
+
+    switch (i) {
+    case QMessageBox::Yes:
+    {
+        QString badfiles;
+        QString goodfiles;
+        for (int var = 0; var < arguments.size(); ++var) {
+            if(!QFile::remove(arguments.at(var)))
+                badfiles.append(arguments.at(var)) +"\n";
+            else
+                goodfiles.append(arguments.at(var)) +"\n";
+        }
+
+        if(!badfiles.isEmpty())
+            QMessageBox::information(this,"Can't delete file(s)",badfiles,QMessageBox::Close);
+
+        if(!goodfiles.isEmpty())
+            QMessageBox::information(this,"Successfully delteted file(s)",goodfiles,QMessageBox::Close);
+    }
+        break;
+    case QMessageBox::No:
+    case QMessageBox::Cancel:
+        break;
+    default:
+        break;
+    }
+}
+
 void MainWindow::changelwfont(const QFont &font)
 {
     ui->listWidget->setFont(font);
@@ -372,11 +414,28 @@ void MainWindow::help()
 {
     helpdialog=new QTextEdit(this);
     helpdialog->setWindowFlags(Qt::Window); //or Qt::Tool, Qt::Dialog if you like
+
+//    QDir progdir(QDir::currentPath());
+
+//    QString manual(QDir(QDir::currentPath()).filePath("MANUAL"));
+
     helpdialog->setReadOnly(true);
-    helpdialog->append("<h2>Help</h2>Thank you for using SolXd, the crystallographic indexing database.");
-    helpdialog->append("Before you start, you need to define the location of indexing folder(s), place to store the database file etc.");
-    helpdialog->append("Go to <i>Settings</i> menu. After that you need to index all your crystallographic files (*.ins, *.res, *.cif) ");
-    helpdialog->append("by pressing the <i>Index Database</i> button");
+    helpdialog->append("<h2>Help</h2>");
+
+    QFile manual(":/doc/MANUAL");
+
+    if (QFileInfo(manual).exists()) {
+        if(!manual.open(QIODevice::ReadOnly | QIODevice::Text)){
+            helpdialog->append("Manual file can't be opened");
+        }
+        else{
+            QTextStream stream(&manual);
+            helpdialog->append(stream.readAll());
+        }
+    }
+    else
+        helpdialog->append("Manual file can't be found");
+
     helpdialog->show();
 }
 
@@ -396,8 +455,13 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     openastext->setStatusTip(tr("Open files in default text editor"));
     connect(openastext,SIGNAL(triggered()),this,SLOT(openfilesastext()));
 
+    deletefiles = new QAction(tr("&Delete file(s)"),contextmenu);
+    deletefiles->setStatusTip(tr("Delete file permanently from the disk"));
+    connect(deletefiles,SIGNAL(triggered()),this,SLOT(deleteselectedfiles()));
+
     contextmenu->addAction(aopenfiles);
     contextmenu->addAction(openastext);
     contextmenu->addAction(browsfiles);
+    contextmenu->addAction(deletefiles);
     contextmenu->exec(event->globalPos());
 }
