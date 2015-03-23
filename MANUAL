@@ -1,0 +1,13 @@
+Thank you for using SolXd, the crystallographic files (*.ins, *.res, *.cif) 
+indexing tool. Before you start, you need to define the location of indexing 
+folder(s), a folder where to keep the database file etc. "Seetings" button 
+should be the first button you press at the first start. When you are done 
+with the configuration, you can index your files. It may take some time. After 
+the indexing, you will see all files as a list. Normal files without anny 
+problem will be marked as a black color. Other colors indicate different 
+problem. You can eximine them using external text editor (should be defined 
+vis "Settings" menu) or external file viewer. You can also delete all this 
+files dirrectly from database. Just select one or many files (hold Ctrl for 
+mutiple file selection), then select delete file(s) via context menu. A 
+conformation dialog will show-up.
+
