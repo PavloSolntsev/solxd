@@ -348,14 +348,24 @@ void MainWindow::openfilesastext()
 //        QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
 //        QDesktopServices::openUrl(QUrl("file:///" + path));
 //    }
+
     QString program = dia->getTextEditor();
     QStringList arguments;
 
-    for(int i=0; i<ui->listWidget->selectedItems().size();i++)
-        arguments << ui->listWidget->selectedItems().at(i)->text();
 
-    QProcess *myProcess = new QProcess(this);
-    myProcess->start(program, arguments);
+    if (program.isEmpty()) {
+        for(int i=0; i<ui->listWidget->selectedItems().size();i++){
+                QString path = QDir::toNativeSeparators(ui->listWidget->selectedItems().at(i)->text());
+                QDesktopServices::openUrl(QUrl("file:///" + path));
+        }
+    } else {
+        for(int i=0; i<ui->listWidget->selectedItems().size();i++){
+                arguments << ui->listWidget->selectedItems().at(i)->text();
+        }
+
+        QProcess *myProcess = new QProcess(this);
+        myProcess->start(program, arguments);
+    }
 }
 
 void MainWindow::deleteselectedfiles()
