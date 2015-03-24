@@ -25,7 +25,7 @@
 #include <QString>
 #include <QList>
 #include <QMetaType>
-
+#include <cctbx/sgtbx/space_group.h>
 
 class Crystfile : public Unitcell
 {
@@ -36,7 +36,8 @@ public:
         CRFORMULAERROR,
         CRINSERROR,
         CRLATTERROR,
-        CRNIGGLEERROR
+        CRNIGGLEERROR,
+        CRCENTERERROR
     };
 
     Crystfile();

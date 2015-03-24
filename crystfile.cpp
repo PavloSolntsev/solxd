@@ -356,6 +356,27 @@ void Crystfile::parseCIF()
         while (line.startsWith(' '))
                 line.remove(0,1);
 
+        if (line.startsWith("_symmetry_space_group_name_H-M",Qt::CaseInsensitive))
+        {
+            QTextStream buffer(&line);
+            QString temp;
+            buffer >> temp >> temp;
+
+            if(temp != "?"){
+//                _center = cctbx::sgtbx::space_group(temp.remove('\'').remove("\"").toStdString()).is_centric();
+                try{
+                    _center = cctbx::sgtbx::space_group(temp.remove('\'').remove("\"").remove(' ').remove('(').remove(')').toStdString()).is_centric();
+                }catch(...){
+//                    qDebug() << line;
+//                    qDebug() << "temp = " << temp;
+                }
+            }
+            else
+                _errors.push_back(CRCENTERERROR);
+
+            continue;
+        }
+
         if (line.startsWith("_cell_length_a",Qt::CaseInsensitive))
         {
             QTextStream buffer(&line);
