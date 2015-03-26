@@ -26,6 +26,7 @@
 #include <QList>
 #include "crystfile.h"
 
+
 namespace Ui {
 class SearchForm;
 }

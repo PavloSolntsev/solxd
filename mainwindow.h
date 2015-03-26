@@ -30,6 +30,7 @@
 #include "mylistwidget.h"
 #include <QToolTip>
 #include <QTextEdit>
+#include <QDockWidget>
 
 namespace Ui {
 class MainWindow;
@@ -73,6 +74,8 @@ private:
     QMenu *contextmenu;
     QAction *aopenfiles,*browsfiles,*openastext, *deletefiles;
     QTextEdit* helpdialog;
+    QDockWidget *dock;
+    QAction *searchw;
 };
 
 #endif // MAINWINDOW_H

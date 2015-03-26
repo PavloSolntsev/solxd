@@ -40,8 +40,6 @@ SearchForm::SearchForm(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->pushButton_start,SIGNAL(clicked()),this,SLOT(startSearch()));
-    connect(ui->pushButton_cancel,SIGNAL(clicked()),this,SLOT(hide()));
-
 }
 
 SearchForm::~SearchForm()

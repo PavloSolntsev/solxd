@@ -301,13 +301,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_cancel">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
@@ -336,7 +329,6 @@
   <tabstop>comboBox_latt</tabstop>
   <tabstop>checkBox_latt</tabstop>
   <tabstop>pushButton_start</tabstop>
-  <tabstop>pushButton_cancel</tabstop>
  </tabstops>
  <resources/>
  <connections/>

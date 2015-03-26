@@ -37,6 +37,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFontDialog>
+#include <QDockWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -47,12 +48,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionIndex_Files,SIGNAL(activated()),this,SLOT(indexDatabase()));
     connect(ui->actionSettings,SIGNAL(activated()),this,SLOT(runSettings()));
-    connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
+//    connect(ui->actionStart,SIGNAL(activated()),this,SLOT(startSearch()));
     connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
     connect(ui->actionAbout_Qt,SIGNAL(activated()),this,SLOT(aboutQt()));
     connect(ui->actionSolXd_help,SIGNAL(activated()),this,SLOT(help()));
 
-    sform = NULL;
+//    sform = NULL;
     dia = new Settings(this);
     DBpath = QDir(dia->dbpath()).filePath("solxd.database");
 // Read information about Toolbar icon size
@@ -61,6 +62,26 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "File " << __FILE__ << " Line " << __LINE__;
     connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
     connect(dia,SIGNAL(fontChanged(QFont)),this,SLOT(changelwfont(QFont)));
+
+    dock = new QDockWidget(tr("Search criteria"),this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+
+    sform = new SearchForm(dock);
+    sform->setDBfile(DBpath);
+    dock->setWidget(sform);
+
+    addDockWidget(Qt::RightDockWidgetArea,dock);
+
+    searchw = new QAction(tr("Show/Hide search window"),this);
+    searchw->setCheckable(true);
+    ui->menu_View->addAction(searchw);
+    dock->setVisible(false);
+    connect(searchw,SIGNAL(toggled(bool)),dock,SLOT(setVisible(bool)));
+
+
+
+    connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
+    connect(sform,SIGNAL(massage(QString)),this,SLOT(displaymassage(QString)));
 
     checktime();
 }
