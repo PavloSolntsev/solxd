@@ -3,15 +3,41 @@
 # Project created by QtCreator 2015-01-12T23:18:04
 #
 #-------------------------------------------------
-
+TEMPLATE = app
 QT       += core gui
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = SolXD
-TEMPLATE = app
+TARGET = solxd
+
 INCLUDEPATH += /home/pavlo/progs/cctbx_build/include \
                /home/pavlo/progs/cctbx_sources
+
+win32 { 
+    LIBS += -fopenmp
+    TARGET = solxd
+    RC_FILE = solxd.rc
+}
+
+!mac{
+unix {
+TARGET = solxd
+target.path = /usr/bin
+INSTALLS += target
+data.path = /usr/share/solxd
+data.files = help/*
+INSTALLS += data
+icon.path = /usr/share/pixmaps
+icon.files = solxd.png
+INSTALLS += icon
+desktop.path = /usr/share/applications
+desktop.files = solxd.desktop
+INSTALLS += desktop
+LIBS += -L/home/pavlo/progs/cctbx_build/lib -lcctbx
+}}
+
+mac {
+TARGET = solxd
+}
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -37,6 +63,5 @@ RESOURCES += \
     icons.qrc \
     otherfiles.qrc
 
-unix:LIBS += -L/home/pavlo/progs/cctbx_build/lib -lcctbx
-
-OTHER_FILES +=
+OTHER_FILES += MANUAL
+               
