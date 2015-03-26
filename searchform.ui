@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Search Creterea</string>
+   <string>Search Criteria</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
