@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dia,SIGNAL(toolbarIconsChanged(int)),this,SLOT(setToolbarIcons(int)));
     connect(dia,SIGNAL(fontChanged(QFont)),this,SLOT(changelwfont(QFont)));
 
-    dock = new QDockWidget(tr("Search criteria"),this);
+    dock = new QDockWidget(tr("Search window"),this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 
     sform = new SearchForm(dock);
