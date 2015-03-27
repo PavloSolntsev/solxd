@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SolXd
+Comment=An indexing and search tool for crystallographic software
+GenericName=SolXd
+Exec=solxd
+Icon=solxd
+Terminal=false
+Categories=Qt;Science;Chemistry;Physics;Education
+Type=Application

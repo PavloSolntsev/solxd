@@ -23,9 +23,6 @@ unix {
 TARGET = solxd
 target.path = /usr/bin
 INSTALLS += target
-data.path = /usr/share/solxd
-data.files = help/*
-INSTALLS += data
 icon.path = /usr/share/pixmaps
 icon.files = solxd.png
 INSTALLS += icon
