@@ -29,7 +29,7 @@ INSTALLS += icon
 desktop.path = /usr/share/applications
 desktop.files = solxd.desktop
 INSTALLS += desktop
-LIBS += -L/home/pavlo/progs/cctbx_build/lib -lcctbx
+LIBS += -L/home/$USER/progs/cctbx_build/lib -lcctbx
 }}
 
 mac {
@@ -60,5 +60,5 @@ RESOURCES += \
     icons.qrc \
     otherfiles.qrc
 
-OTHER_FILES += MANUAL
+OTHER_FILES += 
                
