@@ -69,17 +69,16 @@ MainWindow::MainWindow(QWidget *parent) :
     sform = new SearchForm(dock);
     sform->setDBfile(DBpath);
     dock->setWidget(sform);
-
+    dock->setObjectName(tr("Search window"));
+    ui->menu_View->addAction(dock->toggleViewAction());
     addDockWidget(Qt::RightDockWidgetArea,dock);
 
-    searchw = new QAction(tr("Show/Hide search window"),this);
-    searchw->setCheckable(true);
-    ui->menu_View->addAction(searchw);
-    dock->setVisible(false);
-    connect(searchw,SIGNAL(toggled(bool)),dock,SLOT(setVisible(bool)));
+//    searchw = new QAction(tr("search window"),this);
+//    searchw->setCheckable(true);
 
-
-
+//    ui->menu_View->addAction(searchw);
+//    dock->setVisible(false);
+//    connect(searchw,SIGNAL(toggled(bool)),dock,SLOT(setVisible(bool)));
     connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
     connect(sform,SIGNAL(massage(QString)),this,SLOT(displaymassage(QString)));
 

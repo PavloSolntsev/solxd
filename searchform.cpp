@@ -26,6 +26,8 @@
 #include <QDebug>
 #include "crystfile.h"
 #include <QDateTime>
+#include <QMessageBox>
+#include <QFileInfo>
 
 SearchForm::SearchForm(QWidget *parent) :
     QWidget(parent),
@@ -49,7 +51,18 @@ SearchForm::~SearchForm()
 
 void SearchForm::startSearch()
 {
+    if(QFileInfo(_dbfile).exists())
+        doasearch();
+    else {
+        QMessageBox::warning(this,tr("Database file can't be located"),tr("You probably didn't create the database file. So, do this."),QMessageBox::Close);
+    }
+
+}
+
+void SearchForm::doasearch()
+{
     _results.clear();
+
     QFile DBFile(_dbfile);
     DBFile.open(QIODevice::ReadOnly);
     QDataStream in(&DBFile);

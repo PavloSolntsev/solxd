@@ -50,7 +50,7 @@ signals:
 
 private:
     Ui::SearchForm *ui;
-
+    void doasearch(); // this function does a search
     QString _dbfile;
     QList<Crystfile> _results;
 
