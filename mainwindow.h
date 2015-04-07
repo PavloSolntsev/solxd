@@ -31,6 +31,7 @@
 #include <QToolTip>
 #include <QTextEdit>
 #include <QDockWidget>
+#include "about.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,6 +62,7 @@ public slots:
     void changelwfont(const QFont &font);
     void displaymassage(const QString &);
     void aboutQt();
+    void aboutdialog();
     void help();
 
 protected:
@@ -76,6 +78,8 @@ private:
     QTextEdit* helpdialog;
     QDockWidget *dock;
     QAction *searchw;
+    About *about;
+
 };
 
 #endif // MAINWINDOW_H

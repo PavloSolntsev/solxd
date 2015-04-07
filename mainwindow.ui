@@ -47,7 +47,7 @@
      <x>0</x>
      <y>0</y>
      <width>809</width>
-     <height>29</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPreferences">
@@ -62,6 +62,7 @@
     </property>
     <addaction name="actionSolXd_help"/>
     <addaction name="actionAbout_Qt"/>
+    <addaction name="action_About"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -128,6 +129,11 @@
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About</string>
    </property>
   </action>
  </widget>

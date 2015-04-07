@@ -52,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(openfile(QListWidgetItem*)));
     connect(ui->actionAbout_Qt,SIGNAL(activated()),this,SLOT(aboutQt()));
     connect(ui->actionSolXd_help,SIGNAL(activated()),this,SLOT(help()));
+    connect(ui->action_About,SIGNAL(activated()),this,SLOT(aboutdialog()));
 
 //    sform = NULL;
     dia = new Settings(this);
@@ -82,7 +83,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
     connect(sform,SIGNAL(massage(QString)),this,SLOT(displaymassage(QString)));
 
+    about = new About(this);
+
+
     checktime();
+
 }
 
 MainWindow::~MainWindow()
@@ -90,6 +95,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete dia;
     delete sform;
+    delete about;
 }
 
 
@@ -439,6 +445,12 @@ void MainWindow::aboutQt()
 //    QApplication::aboutQt();
     QMessageBox::aboutQt ( this, tr("SolXd about Qt dialog"));
 
+}
+
+void MainWindow::aboutdialog()
+{
+
+    about->show();
 }
 
 void MainWindow::help()
