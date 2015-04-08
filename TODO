@@ -1,0 +1,11 @@
+Features that should be added:
+    - Ability to index files from FTP and possibly SSH remote resource.
+    - Support for passive and active FTP modes.
+    - Dynamic list of files to index.
+    - The database file should be read only on the same computer where it was created.
+    - Secure SolXd by a password. It means, only administrator can create the database.
+    - Develop internal viewer to view crystal structures.
+    - Parsing of different file: *.p4p, *.pdb.
+    - Represent all items as a tree list. That is, combine all files with the same path, base name and unit cell
+      into one item.
+
