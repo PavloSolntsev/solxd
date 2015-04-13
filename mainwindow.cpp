@@ -38,6 +38,8 @@
 #include <QUrl>
 #include <QFontDialog>
 #include <QDockWidget>
+#include "mymodel.h"
+#include <QStandardItemModel>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -236,6 +238,7 @@ void MainWindow::startSearch()
 void MainWindow::outputResults(const QList<Crystfile> &res)
 {
     ui->listWidget->clear();
+    int i(0);
     for (QList<Crystfile>::const_iterator it = res.begin(); it != res.end(); ++it) {
         QVariant qv;
         qv.setValue(*it);
@@ -244,6 +247,9 @@ void MainWindow::outputResults(const QList<Crystfile> &res)
         listiteam->setData(Qt::UserRole,qv);
 //        it->niggli();
         ui->listWidget->addItem(listiteam);
+
+        QStandardItemModel *model = new QStandardItemModel;
+        ui->treeView->setModel(model);
 
         if (it->error().size() != 0)
             listiteam->setForeground(Qt::red);

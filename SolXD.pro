@@ -29,7 +29,7 @@ INSTALLS += icon
 desktop.path = /usr/share/applications
 desktop.files = solxd.desktop
 INSTALLS += desktop
-LIBS += -L/home/$USER/progs/cctbx_build/lib -lcctbx
+LIBS += -L/home/pavlo/progs/cctbx_build/lib -lcctbx
 }}
 
 mac {
@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     unitcell.cpp \
     settings.cpp \
     searchform.cpp \
-    mylistwidget.cpp
+    mylistwidget.cpp \
+    mymodel.cpp
 
 HEADERS  += mainwindow.h \
     crystfile.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     settings.h \
     solXd.h \
     searchform.h \
-    mylistwidget.h
+    mylistwidget.h \
+    mymodel.h
 
 FORMS    += mainwindow.ui \
     settings.ui \
