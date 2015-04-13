@@ -40,7 +40,7 @@ SearchForm::SearchForm(QWidget *parent) :
 //    _cellgamma(0)
 {
     ui->setupUi(this);
-
+    setWindowFlags(Qt::Window);
     connect(ui->pushButton_start,SIGNAL(clicked()),this,SLOT(startSearch()));
 }
 

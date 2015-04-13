@@ -233,7 +233,6 @@ void MainWindow::startSearch()
         sform = new SearchForm(this);
         connect(sform,SIGNAL(finished(const QList<Crystfile>&)),this,SLOT(outputResults(const QList<Crystfile>&)));
         connect(sform,SIGNAL(massage(QString)),this,SLOT(displaymassage(QString)));
-        sform->setWindowFlags(Qt::Window);
         sform->setDBfile(DBpath);
         sform->show();
     }
