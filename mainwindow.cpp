@@ -67,7 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
     dock = new QDockWidget(tr("Search window"),this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 
-    sform = new SearchForm(dock);
+    //    sform = new SearchForm(dock);
+    sform = new SearchForm(this);
     sform->setDBfile(DBpath);
     dock->setWidget(sform);
     dock->setObjectName(tr("Search window"));
